@@ -1,45 +1,25 @@
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 export async function GET() {
-  try {
-    // 1. User prüfen (Anon Key)
-    const supabase = await createServerSupabaseClient()
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'FEHLT'
+  const keyRaw = process.env.SUPABASE_SERVICE_ROLE_KEY ?? 'FEHLT'
+  const keyPreview = keyRaw.length > 10 ? keyRaw.slice(0, 12) + '...' + keyRaw.slice(-6) : keyRaw
 
-    if (!user) {
-      return NextResponse.json({ step: 'auth', status: 'kein User eingeloggt', error: userError?.message })
-    }
+  // Service-Role-Verbindung ohne Cookie-Kontext testen
+  const serviceClient = createServerClient(url, keyRaw, {
+    cookies: { getAll: () => [], setAll: () => {} },
+  })
 
-    // 2. Service-Role-Verbindung prüfen
-    const serviceClient = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        cookies: {
-          getAll() { return [] },
-          setAll() {},
-        },
-      }
-    )
+  const { data, error } = await serviceClient
+    .from('user_profiles')
+    .select('id, subscription_status, trial_started_at')
+    .limit(3)
 
-    const { data: profile, error: profileError } = await serviceClient
-      .from('user_profiles')
-      .select('subscription_status, trial_started_at')
-      .eq('id', user.id)
-      .single()
-
-    return NextResponse.json({
-      step: 'komplett',
-      userId: user.id,
-      email: user.email,
-      profile,
-      profileError: profileError?.message ?? null,
-      serviceKeyPrefix: process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 20) + '...',
-    })
-  } catch (e: any) {
-    return NextResponse.json({ step: 'exception', error: e.message })
-  }
+  return NextResponse.json({
+    supabaseUrl: url,
+    serviceKeyPreview: keyPreview,
+    queryResult: data,
+    queryError: error?.message ?? null,
+  })
 }
