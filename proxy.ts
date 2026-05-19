@@ -12,7 +12,7 @@ function isTrialActive(trialStartedAt: string): boolean {
 const PUBLIC_PREFIXES = ['/impressum', '/datenschutz', '/paywall']
 const AUTH_PREFIX = '/auth'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next()
   const pathname = request.nextUrl.pathname
 
