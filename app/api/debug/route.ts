@@ -86,10 +86,13 @@ export async function GET() {
     authError = String(e)
   }
 
+  const anthropicKey = process.env.ANTHROPIC_API_KEY ?? ''
+
   return NextResponse.json({
     supabaseUrl: url,
     anonKeyLength: anonKey.length,
     serviceKeyLength: serviceKey.length,
+    anthropicKeySet: anthropicKey.length > 10 ? 'JA (' + anthropicKey.length + ' Zeichen)' : 'FEHLT',
     antjesProfil: antjesProfil ?? null,
     profileError: profileError?.message ?? null,
     authUser,

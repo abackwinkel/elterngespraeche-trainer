@@ -76,6 +76,16 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         body: JSON.stringify(body),
       })
 
+      if (!res.ok) {
+        const errMsg = `Serverfehler (${res.status}) – bitte Seite neu laden oder Support kontaktieren.`
+        setTurns(prev => {
+          const updated = [...prev]
+          updated[updated.length - 1] = { role: 'elternteil', content: errMsg, timestamp: new Date().toISOString() }
+          return updated
+        })
+        return
+      }
+
       const reader = res.body?.getReader()
       const decoder = new TextDecoder()
       if (!reader) return
