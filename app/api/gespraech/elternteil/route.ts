@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
 
   if (isOpening) {
     const openerInstruction = opener
-      ? `(Das Gespräch beginnt jetzt. Eröffne es mit folgendem Satz oder einer natürlichen Variation davon: "${opener}" – nicht mehr als 2-3 Sätze.)`
-      : '(Das Gespräch beginnt jetzt. Bitte eröffne es natürlich – als wärst du gerade eingetreten. Sage wer du bist und worum es dir geht. Nicht mehr als 2-3 Sätze.)'
+      ? `(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag" oder „Hallo" – und eröffne dann das Gespräch mit folgendem Satz oder einer natürlichen Variation davon: "${opener}" – nicht mehr als 2-3 Sätze insgesamt.)`
+      : '(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag" oder „Hallo" – und sage dann, wer du bist und worum es dir geht. Nicht mehr als 2-3 Sätze insgesamt.)'
 
     messagesForAPI = [{ role: 'user', content: openerInstruction }]
   } else {

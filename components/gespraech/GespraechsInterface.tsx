@@ -452,6 +452,38 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   )
 }
 
+function renderElternteilContent(content: string) {
+  // Körpersignal-Beschreibungen (*...*) kursiv mit Teal-Balken, Sprache normal
+  const parts = content.split(/\*([^*]+)\*/)
+  return parts.map((part, i) => {
+    if (!part.trim()) return null
+    if (i % 2 === 1) {
+      return (
+        <div
+          key={i}
+          style={{
+            borderLeft: '3px solid var(--c-teal)',
+            paddingLeft: '0.65rem',
+            marginBottom: '0.4rem',
+            marginTop: '0.2rem',
+            fontStyle: 'italic',
+            fontSize: '0.875em',
+            color: 'rgba(26,26,26,0.55)',
+            lineHeight: 1.5,
+          }}
+        >
+          {part.trim()}
+        </div>
+      )
+    }
+    return (
+      <p key={i} className="whitespace-pre-wrap" style={{ marginBottom: '0.25rem' }}>
+        {part.trim()}
+      </p>
+    )
+  })
+}
+
 function TurnBubble({ turn }: { turn: Turn }) {
   if (turn.role === 'situation') {
     return (
@@ -472,9 +504,12 @@ function TurnBubble({ turn }: { turn: Turn }) {
         }`}
       >
         {isElternteil && (
-          <div className="text-xs font-semibold text-[var(--c-gray)] mb-1">Elternteil</div>
+          <div className="text-xs font-semibold text-[var(--c-gray)] mb-2">Elternteil</div>
         )}
-        <p className="whitespace-pre-wrap">{turn.content}</p>
+        {isElternteil
+          ? renderElternteilContent(turn.content)
+          : <p className="whitespace-pre-wrap">{turn.content}</p>
+        }
       </div>
     </div>
   )
