@@ -42,11 +42,20 @@ export async function POST(req: NextRequest) {
 
   let feedback: FeedbackResponse
   try {
-    const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    feedback = JSON.parse(cleaned)
+    const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+    // Try direct parse, then fallback to extracting the first JSON object
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(stripped)
+    } catch {
+      const match = stripped.match(/\{[\s\S]*\}/)
+      if (!match) throw new Error('no JSON found')
+      parsed = JSON.parse(match[0])
+    }
+    feedback = parsed as FeedbackResponse
   } catch {
     feedback = {
-      gut: 'Auswertung konnte nicht verarbeitet werden.',
+      gut: 'Auswertung konnte nicht geladen werden – bitte erneut senden.',
       besser: null,
       alternativ: null,
     }

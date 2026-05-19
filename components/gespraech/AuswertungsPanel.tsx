@@ -27,7 +27,7 @@ export default function AuswertungsPanel({ feedback, isLoading }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-4 text-sm">
+    <div className="flex flex-col gap-4">
       <FeedbackItem
         icon="✓"
         iconColor="text-green-600"
@@ -77,10 +77,10 @@ function FeedbackItem({
 }) {
   return (
     <div className={`rounded-lg border ${bgColor} ${borderColor} p-3`}>
-      <div className={`font-semibold ${iconColor} mb-1`}>
+      <div className={`font-semibold ${iconColor} mb-1.5`} style={{ fontSize: '0.875rem' }}>
         {icon} {label}
       </div>
-      <p className="text-[var(--c-dark)] leading-relaxed">{text}</p>
+      <p className="text-[var(--c-dark)] leading-relaxed" style={{ fontSize: '0.875rem' }}>{text}</p>
     </div>
   )
 }

@@ -46,10 +46,10 @@ Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
 - "gut" darf nie leer sein – finde immer etwas Positives, auch wenn es nur die Haltung oder der Versuch ist
 - "besser" und "alternativ" dürfen null sein, wenn die Aussage gut war
 - Keine NLP- oder GFK-Fachbegriffe verwenden
-- Spreche die Lehrkraft direkt an: „Sie haben...", „Ihre Frage..."
+- Spreche die Lehrkraft direkt an: "Sie haben...", "Ihre Frage..."
 - Kurze, klare Sprache – keine langen Erklärungen
-- Ausschließlich Deutsch – keine englischen Wörter (z. B. „defensiv" statt „defensive")
-- Deutsche Anführungszeichen: „..." (öffnend unten, schließend oben)`
+- Ausschließlich Deutsch – keine englischen Wörter (z. B. "defensiv" statt "defensive")
+- Die Antwort muss exakt das JSON-Format erfüllen – kein weiterer Text davor oder danach`
 }
 
 // ─── Gesamtreflexion (Sonnet, am Ende des Gesprächs) ─────────────────────────
