@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import { Cormorant_Garamond, Inter } from "next/font/google";
+import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "Elterngespräche trainieren mit KI",
+  description: "Bereite dich gezielt auf Elterngespräche vor – mit KI-simulierten Eltern, Sofortfeedback und praxisnahen Szenarien für Gymnasiallehrkräfte.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="de"
+      className={`${cormorant.variable} ${inter.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">{children}</body>
+    </html>
+  );
+}
