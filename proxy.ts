@@ -22,22 +22,18 @@ export async function proxy(request: NextRequest) {
   const supabase = createMiddlewareClient(request, response)
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Nicht eingeloggt → /auth (außer öffentliche Routen)
   if (!user && !isAuthRoute && !isPublicRoute) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
 
-  // Eingeloggt auf /auth → Startseite
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // Öffentliche + Auth-Routen: kein Trial-Check nötig
   if (isPublicRoute || isAuthRoute || !user) {
     return response
   }
 
-  // Trial-Status via Service-Role prüfen
   const serviceClient = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
