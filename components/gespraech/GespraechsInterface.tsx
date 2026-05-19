@@ -49,12 +49,22 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
 
   async function fetchElternteilResponse(currentTurns: Turn[], sessionStart = false) {
     setIsStreaming(true)
-    const messages = currentTurns
+    let messages = currentTurns
       .filter(t => t.role !== 'situation')
       .map(t => ({
         role: t.role === 'elternteil' ? 'assistant' as const : 'user' as const,
         content: t.content,
       }))
+
+    // Anthropic requires the first message to be from 'user'.
+    // The opener turn maps to 'assistant' – prepend a neutral user message so the
+    // opener stays in the history but the alternation is valid.
+    if (!sessionStart && messages.length > 0 && messages[0].role === 'assistant') {
+      messages = [
+        { role: 'user' as const, content: '(Gesprächsbeginn – du hast soeben deine Eröffnung gesagt.)' },
+        ...messages,
+      ]
+    }
 
     const body = {
       messages,
@@ -238,10 +248,15 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
           children: [new TextRun({ text: `[${turn.content}]`, italics: true, color: '888888', size: 20 })],
           spacing: { before: 120, after: 120 },
         }))
-      } else {
-        const rolle = turn.role === 'elternteil' ? 'Elternteil' : 'Lehrkraft'
+      } else if (turn.role === 'elternteil') {
         children.push(new Paragraph({
-          children: [new TextRun({ text: `${rolle}:`, bold: true, size: 23 })],
+          children: [new TextRun({ text: 'Elternteil:', bold: true, size: 23 })],
+          spacing: { before: 240, after: 60 },
+        }))
+        children.push(...elternteilContentToDocxParagraphs(turn.content))
+      } else {
+        children.push(new Paragraph({
+          children: [new TextRun({ text: 'Lehrkraft:', bold: true, size: 23 })],
           spacing: { before: 240, after: 60 },
         }))
         for (const line of turn.content.split('\n')) {
@@ -470,6 +485,31 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       )}
     </div>
   )
+}
+
+function elternteilContentToDocxParagraphs(content: string): Paragraph[] {
+  const parts = content.split(/\*([^*]+)\*/)
+  const paragraphs: Paragraph[] = []
+  parts.forEach((part, i) => {
+    if (!part.trim()) return
+    if (i % 2 === 1) {
+      const capped = part.trim().charAt(0).toUpperCase() + part.trim().slice(1)
+      paragraphs.push(new Paragraph({
+        children: [new TextRun({ text: capped, italics: true, color: '666666', size: 21 })],
+        spacing: { before: 60, after: 60 },
+      }))
+    } else {
+      for (const line of part.trim().split('\n')) {
+        if (line.trim()) {
+          paragraphs.push(new Paragraph({
+            children: [new TextRun({ text: line, size: 23 })],
+            spacing: { after: 40 },
+          }))
+        }
+      }
+    }
+  })
+  return paragraphs
 }
 
 function triggerDownload(blob: Blob, filename: string) {

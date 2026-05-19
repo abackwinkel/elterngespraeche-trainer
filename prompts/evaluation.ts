@@ -108,7 +108,8 @@ Ein konkreter Tipp für das nächste Gespräch mit diesem Elterntyp.
 - Deutsch
 - Ca. 250-350 Wörter
 - Keine Dokumentüberschrift (z. B. "# Gesprächsreflexion") – beginne direkt mit dem ersten Abschnitt **Was gut gelungen ist**
-- Abschnittstitel als **fett** in einer eigenen Zeile, kein #`
+- Abschnittstitel als **fett** in einer eigenen Zeile, kein #
+- Deutsche Anführungszeichen verwenden: „..." (öffnend unten, schließend oben) – niemals "..." oder "..."`
 }
 
 // ─── System-Prompt für Elternteil-Rolle ──────────────────────────────────────
