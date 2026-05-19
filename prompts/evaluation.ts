@@ -106,7 +106,9 @@ Ein konkreter Tipp für das nächste Gespräch mit diesem Elterntyp.
 - Das Kind steht immer im Mittelpunkt der Bewertung
 - Keine NLP- oder GFK-Fachbegriffe
 - Deutsch
-- Ca. 250-350 Wörter`
+- Ca. 250-350 Wörter
+- Keine Dokumentüberschrift (z. B. "# Gesprächsreflexion") – beginne direkt mit dem ersten Abschnitt **Was gut gelungen ist**
+- Abschnittstitel als **fett** in einer eigenen Zeile, kein #`
 }
 
 // ─── System-Prompt für Elternteil-Rolle ──────────────────────────────────────

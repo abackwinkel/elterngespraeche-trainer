@@ -47,6 +47,13 @@ export async function POST(req: NextRequest) {
       role: m.role as 'user' | 'assistant',
       content: m.content,
     }))
+    // Anthropic requires the first message to be from 'user'
+    if (messagesForAPI.length > 0 && messagesForAPI[0].role === 'assistant') {
+      messagesForAPI = [
+        { role: 'user', content: '(Gesprächsbeginn – du hast soeben deine Eröffnung gesagt.)' },
+        ...messagesForAPI,
+      ]
+    }
   }
 
   try {

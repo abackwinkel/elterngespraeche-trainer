@@ -1,5 +1,7 @@
 'use client'
 
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx'
+
 interface Props {
   totalSessions: number
   totalQuiz: number
@@ -9,40 +11,55 @@ interface Props {
 }
 
 export default function FortschrittDownload({ totalSessions, totalQuiz, quizRate, quizByModule, sessionTypen }: Props) {
-  function handleDownload() {
+  async function handleDownload() {
+    const isoDate = new Date().toISOString().slice(0, 10)
     const datum = new Date().toLocaleDateString('de-DE')
-    let text = `Lernfortschritt – Elterngespräche-Trainer\n`
-    text += `Stand: ${datum}\n`
-    text += `${'─'.repeat(50)}\n\n`
 
-    text += `Übersicht\n`
-    text += `  Trainierte Gespräche: ${totalSessions}\n`
-    text += `  Quiz-Fragen beantwortet: ${totalQuiz}\n`
-    if (quizRate !== null) text += `  Quiz-Trefferquote gesamt: ${quizRate} %\n`
+    const row = (label: string, value: string) =>
+      new Paragraph({
+        children: [
+          new TextRun({ text: `${label}: `, bold: true, size: 23 }),
+          new TextRun({ text: value, size: 23 }),
+        ],
+        spacing: { after: 60 },
+      })
+
+    const children: Paragraph[] = [
+      new Paragraph({ text: 'Lernfortschritt', heading: HeadingLevel.HEADING_1 }),
+      new Paragraph({
+        children: [new TextRun({ text: `Stand: ${datum}`, size: 22, color: '555555' })],
+        spacing: { after: 300 },
+      }),
+      new Paragraph({ text: 'Übersicht', heading: HeadingLevel.HEADING_2 }),
+      row('Trainierte Gespräche', String(totalSessions)),
+      row('Quiz-Fragen beantwortet', String(totalQuiz)),
+      ...(quizRate !== null ? [row('Quiz-Trefferquote gesamt', `${quizRate} %`)] : []),
+    ]
 
     if (quizByModule.some(m => m.total > 0)) {
-      text += `\nQuiz-Ergebnisse nach Modul\n`
+      children.push(new Paragraph({ text: 'Quiz-Ergebnisse nach Modul', heading: HeadingLevel.HEADING_2, spacing: { before: 300 } }))
       for (const m of quizByModule) {
-        if (m.total > 0) {
-          text += `  ${m.label}: ${m.correct}/${m.total} richtig (${m.rate} %)\n`
-        } else {
-          text += `  ${m.label}: noch nicht geübt\n`
-        }
+        const val = m.total > 0 ? `${m.correct}/${m.total} richtig (${m.rate} %)` : 'noch nicht geübt'
+        children.push(row(m.label, val))
       }
     }
 
     if (sessionTypen.length > 0) {
-      text += `\nGeübte Elterntypen\n`
+      children.push(new Paragraph({ text: 'Geübte Elterntypen', heading: HeadingLevel.HEADING_2, spacing: { before: 300 } }))
       for (const t of sessionTypen) {
-        text += `  ${t.label}: ${t.count}×\n`
+        children.push(new Paragraph({
+          children: [new TextRun({ text: `${t.label}: ${t.count}×`, size: 23 })],
+          spacing: { after: 60 },
+        }))
       }
     }
 
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const doc = new Document({ sections: [{ children }] })
+    const blob = await Packer.toBlob(doc)
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `fortschritt-${datum.replace(/\./g, '-')}.txt`
+    a.download = `Fortschritt-${isoDate}.docx`
     a.click()
     URL.revokeObjectURL(url)
   }

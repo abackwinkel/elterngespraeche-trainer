@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx'
 import type { GespraechsKonfiguration, Turn, FeedbackResponse } from '@/types'
 import { buildSzenarioKontext, findSzenario, SITUATIONSBESCHREIBUNGEN_POOL, SZENARIEN, SCHWIERIGKEIT_LABEL, ELTERNTYP_LABEL } from '@/lib/szenarien-data'
 import AuswertungsPanel from './AuswertungsPanel'
@@ -217,58 +218,77 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
     }
   }
 
-  function downloadGespraech() {
+  async function downloadGespraech() {
     const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
     const schwLabel = SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit
+    const isoDate = new Date().toISOString().slice(0, 10)
     const datum = new Date().toLocaleDateString('de-DE')
 
-    let text = `Gesprächsprotokoll – Elterngespräche-Trainer\n`
-    text += `Datum: ${datum}\n`
-    text += `Elterntyp: ${elternLabel} · Schwierigkeit: ${schwLabel}\n`
-    text += `${'─'.repeat(50)}\n\n`
+    const children: Paragraph[] = [
+      new Paragraph({ text: 'Gesprächsprotokoll', heading: HeadingLevel.HEADING_1 }),
+      new Paragraph({
+        children: [new TextRun({ text: `Datum: ${datum}  ·  Elterntyp: ${elternLabel}  ·  Schwierigkeit: ${schwLabel}`, size: 22, color: '555555' })],
+        spacing: { after: 300 },
+      }),
+    ]
 
     for (const turn of turns) {
       if (turn.role === 'situation') {
-        text += `[${turn.content}]\n\n`
+        children.push(new Paragraph({
+          children: [new TextRun({ text: `[${turn.content}]`, italics: true, color: '888888', size: 20 })],
+          spacing: { before: 120, after: 120 },
+        }))
       } else {
         const rolle = turn.role === 'elternteil' ? 'Elternteil' : 'Lehrkraft'
-        text += `${rolle}:\n${turn.content}\n\n`
+        children.push(new Paragraph({
+          children: [new TextRun({ text: `${rolle}:`, bold: true, size: 23 })],
+          spacing: { before: 240, after: 60 },
+        }))
+        for (const line of turn.content.split('\n')) {
+          children.push(new Paragraph({
+            children: [new TextRun({ text: line, size: 23 })],
+            spacing: { after: 40 },
+          }))
+        }
       }
     }
 
     if (notizen.trim()) {
-      text += `${'─'.repeat(50)}\nMeine Notizen:\n${notizen}\n`
+      children.push(new Paragraph({ text: 'Meine Notizen', heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }))
+      for (const line of notizen.split('\n')) {
+        children.push(new Paragraph({ children: [new TextRun({ text: line, size: 23 })] }))
+      }
     }
 
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `gespraech-${datum.replace(/\./g, '-')}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
+    const doc = new Document({ sections: [{ children }] })
+    const blob = await Packer.toBlob(doc)
+    triggerDownload(blob, `Gespräch-${isoDate}.docx`)
   }
 
-  function downloadReflexion(reflexionText: string) {
-    const datum = new Date().toLocaleDateString('de-DE')
+  async function downloadReflexion(reflexionText: string) {
     const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
+    const isoDate = new Date().toISOString().slice(0, 10)
+    const datum = new Date().toLocaleDateString('de-DE')
 
-    let text = `Gesamtreflexion – Elterngespräche-Trainer\n`
-    text += `Datum: ${datum} · Elterntyp: ${elternLabel}\n`
-    text += `${'─'.repeat(50)}\n\n`
-    text += reflexionText
+    const children: Paragraph[] = [
+      new Paragraph({ text: 'Reflexion', heading: HeadingLevel.HEADING_1 }),
+      new Paragraph({
+        children: [new TextRun({ text: `Datum: ${datum}  ·  Elterntyp: ${elternLabel}`, size: 22, color: '555555' })],
+        spacing: { after: 300 },
+      }),
+      ...markdownToDocxParagraphs(reflexionText),
+    ]
 
     if (notizen.trim()) {
-      text += `\n\n${'─'.repeat(50)}\nMeine Notizen:\n${notizen}`
+      children.push(new Paragraph({ text: 'Meine Notizen', heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }))
+      for (const line of notizen.split('\n')) {
+        children.push(new Paragraph({ children: [new TextRun({ text: line, size: 23 })] }))
+      }
     }
 
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `reflexion-${datum.replace(/\./g, '-')}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
+    const doc = new Document({ sections: [{ children }] })
+    const blob = await Packer.toBlob(doc)
+    triggerDownload(blob, `Reflexion-${isoDate}.docx`)
   }
 
   return (
@@ -405,8 +425,8 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
                 </div>
               )}
               {reflexion && (
-                <div className="text-base text-[var(--c-dark)] leading-relaxed whitespace-pre-wrap">
-                  {reflexion}
+                <div className="text-base text-[var(--c-dark)] leading-relaxed">
+                  {renderMarkdown(reflexion)}
                   {isStreamingreflexion && <span className="animate-pulse">▍</span>}
                 </div>
               )}
@@ -449,6 +469,81 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         </div>
       )}
     </div>
+  )
+}
+
+function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+function markdownToDocxParagraphs(text: string): Paragraph[] {
+  const result: Paragraph[] = []
+  for (const line of text.split('\n')) {
+    const stripped = line.trim()
+    if (!stripped) {
+      result.push(new Paragraph({ spacing: { after: 60 } }))
+      continue
+    }
+    // "# Heading" oder "## Heading"
+    const h1 = stripped.match(/^#{1,2}\s+(.+)/)
+    if (h1) {
+      result.push(new Paragraph({ text: h1[1], heading: HeadingLevel.HEADING_2 }))
+      continue
+    }
+    // "**Abschnittstitel**" allein auf einer Zeile
+    const bold = stripped.match(/^\*\*(.+)\*\*$/)
+    if (bold) {
+      result.push(new Paragraph({
+        children: [new TextRun({ text: bold[1], bold: true, size: 24 })],
+        spacing: { before: 280, after: 80 },
+      }))
+      continue
+    }
+    // Normaler Text mit inline **bold**
+    result.push(new Paragraph({
+      children: parseInlineBold(stripped),
+      spacing: { after: 100 },
+    }))
+  }
+  return result
+}
+
+function parseInlineBold(text: string): TextRun[] {
+  const parts = text.split(/\*\*([^*]+)\*\*/)
+  return parts.map((part, i) => new TextRun({ text: part, bold: i % 2 === 1, size: 23 }))
+}
+
+function renderMarkdown(text: string) {
+  return text.split('\n').map((line, i) => {
+    const stripped = line.trim()
+    if (!stripped) return <div key={i} style={{ height: '0.6rem' }} />
+    const h = stripped.match(/^#{1,2}\s+(.+)/)
+    if (h) return null // Titel-Zeile ausblenden (UI hat eigenen Header)
+    const bold = stripped.match(/^\*\*(.+)\*\*$/)
+    if (bold) {
+      return (
+        <p key={i} style={{ fontWeight: 700, color: 'var(--c-dark)', marginTop: '1.1rem', marginBottom: '0.2rem', fontSize: '0.95rem' }}>
+          {bold[1]}
+        </p>
+      )
+    }
+    return (
+      <p key={i} style={{ margin: '0 0 0.45rem', lineHeight: 1.7 }}>
+        {renderInlineBold(stripped)}
+      </p>
+    )
+  })
+}
+
+function renderInlineBold(text: string) {
+  const parts = text.split(/\*\*([^*]+)\*\*/)
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <strong key={i}>{part}</strong> : part
   )
 }
 
