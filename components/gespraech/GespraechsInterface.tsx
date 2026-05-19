@@ -185,7 +185,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
     }
 
     try {
-      await fetch('/api/gespraech/session', {
+      const res = await fetch('/api/gespraech/session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -199,7 +199,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
           reflexion: reflexionText,
         }),
       })
-      setSessionSaved(true)
+      if (res.ok) setSessionSaved(true)
     } catch {
       // Session-Speicherung schweigend ignorieren
     }
