@@ -12,8 +12,8 @@ interface Props {
 
 export default function FortschrittDownload({ totalSessions, totalQuiz, quizRate, quizByModule, sessionTypen }: Props) {
   async function handleDownload() {
-    const isoDate = new Date().toISOString().slice(0, 10)
-    const datum = new Date().toLocaleDateString('de-DE')
+    const d = new Date()
+    const datum = `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`
 
     const row = (label: string, value: string) =>
       new Paragraph({
@@ -59,7 +59,7 @@ export default function FortschrittDownload({ totalSessions, totalQuiz, quizRate
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `Fortschritt-${isoDate}.docx`
+    a.download = `Fortschritt-${datum}.docx`
     a.click()
     URL.revokeObjectURL(url)
   }

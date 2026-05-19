@@ -56,14 +56,10 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         content: t.content,
       }))
 
-    // Anthropic requires the first message to be from 'user'.
-    // The opener turn maps to 'assistant' – prepend a neutral user message so the
-    // opener stays in the history but the alternation is valid.
+    // Anthropic requires the first message to be 'user'. The opener maps to
+    // 'assistant' – drop it; the system prompt provides the context.
     if (!sessionStart && messages.length > 0 && messages[0].role === 'assistant') {
-      messages = [
-        { role: 'user' as const, content: '(Gesprächsbeginn – du hast soeben deine Eröffnung gesagt.)' },
-        ...messages,
-      ]
+      messages = messages.slice(1)
     }
 
     const body = {
@@ -128,13 +124,12 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
     setInput('')
     turnCountRef.current += 1
 
+    // Build nextTurns directly from `turns` (which is in the dependency array) to
+    // avoid a React 18 batching race where the setState updater runs after
+    // fetchElternteilResponse is already called, leaving nextTurns as [].
     const lehrkraftTurn: Turn = { role: 'lehrkraft', content: trimmed, timestamp: new Date().toISOString() }
-    let nextTurns: Turn[] = []
-
-    setTurns(prev => {
-      nextTurns = [...prev, lehrkraftTurn]
-      return nextTurns
-    })
+    let nextTurns = [...turns, lehrkraftTurn]
+    setTurns(nextTurns)
 
     if (turnCountRef.current % SITUATION_INTERVAL === 0) {
       const pool = szenario?.situationsbeschreibungen ?? SITUATIONSBESCHREIBUNGEN_POOL
@@ -170,7 +165,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, isStreaming, sessionEnded, feedbackEnabled, szenarioKontext])
+  }, [input, isStreaming, sessionEnded, feedbackEnabled, szenarioKontext, turns])
 
   async function handleGespraechBeenden() {
     if (isStreaming || sessionEnded) return
@@ -231,79 +226,59 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   async function downloadGespraech() {
     const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
     const schwLabel = SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit
-    const isoDate = new Date().toISOString().slice(0, 10)
-    const datum = new Date().toLocaleDateString('de-DE')
+    const datum = germanDate()
 
     const children: Paragraph[] = [
-      new Paragraph({ text: 'Gesprächsprotokoll', heading: HeadingLevel.HEADING_1 }),
-      new Paragraph({
-        children: [new TextRun({ text: `Datum: ${datum}  ·  Elterntyp: ${elternLabel}  ·  Schwierigkeit: ${schwLabel}`, size: 22, color: '555555' })],
-        spacing: { after: 300 },
-      }),
+      docHeading('Gesprächsprotokoll'),
+      docMeta(`Datum: ${datum}  ·  Elterntyp: ${elternLabel}  ·  Schwierigkeit: ${schwLabel}`),
     ]
 
     for (const turn of turns) {
       if (turn.role === 'situation') {
-        children.push(new Paragraph({
-          children: [new TextRun({ text: `[${turn.content}]`, italics: true, color: '888888', size: 20 })],
-          spacing: { before: 120, after: 120 },
-        }))
+        children.push(docSituationParagraph(turn.content))
       } else if (turn.role === 'elternteil') {
-        children.push(new Paragraph({
-          children: [new TextRun({ text: 'Elternteil:', bold: true, size: 23 })],
-          spacing: { before: 240, after: 60 },
-        }))
+        children.push(docLabel('Elternteil:'))
         children.push(...elternteilContentToDocxParagraphs(turn.content))
       } else {
-        children.push(new Paragraph({
-          children: [new TextRun({ text: 'Lehrkraft:', bold: true, size: 23 })],
-          spacing: { before: 240, after: 60 },
-        }))
+        children.push(docLabel('Lehrkraft:'))
         for (const line of turn.content.split('\n')) {
-          children.push(new Paragraph({
-            children: [new TextRun({ text: line, size: 23 })],
-            spacing: { after: 40 },
-          }))
+          children.push(docBody(line))
         }
       }
     }
 
     if (notizen.trim()) {
-      children.push(new Paragraph({ text: 'Meine Notizen', heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }))
+      children.push(docSubheading('Meine Notizen'))
       for (const line of notizen.split('\n')) {
-        children.push(new Paragraph({ children: [new TextRun({ text: line, size: 23 })] }))
+        children.push(docBody(line))
       }
     }
 
-    const doc = new Document({ sections: [{ children }] })
+    const doc = buildDoc(children)
     const blob = await Packer.toBlob(doc)
-    triggerDownload(blob, `Gespräch-${isoDate}.docx`)
+    triggerDownload(blob, `Gespräch-${datum}.docx`)
   }
 
   async function downloadReflexion(reflexionText: string) {
     const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
-    const isoDate = new Date().toISOString().slice(0, 10)
-    const datum = new Date().toLocaleDateString('de-DE')
+    const datum = germanDate()
 
     const children: Paragraph[] = [
-      new Paragraph({ text: 'Reflexion', heading: HeadingLevel.HEADING_1 }),
-      new Paragraph({
-        children: [new TextRun({ text: `Datum: ${datum}  ·  Elterntyp: ${elternLabel}`, size: 22, color: '555555' })],
-        spacing: { after: 300 },
-      }),
+      docHeading('Reflexion'),
+      docMeta(`Datum: ${datum}  ·  Elterntyp: ${elternLabel}`),
       ...markdownToDocxParagraphs(reflexionText),
     ]
 
     if (notizen.trim()) {
-      children.push(new Paragraph({ text: 'Meine Notizen', heading: HeadingLevel.HEADING_2, spacing: { before: 400 } }))
+      children.push(docSubheading('Meine Notizen'))
       for (const line of notizen.split('\n')) {
-        children.push(new Paragraph({ children: [new TextRun({ text: line, size: 23 })] }))
+        children.push(docBody(line))
       }
     }
 
-    const doc = new Document({ sections: [{ children }] })
+    const doc = buildDoc(children)
     const blob = await Packer.toBlob(doc)
-    triggerDownload(blob, `Reflexion-${isoDate}.docx`)
+    triggerDownload(blob, `Reflexion-${datum}.docx`)
   }
 
   return (
@@ -487,6 +462,62 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   )
 }
 
+// ─── DOCX-Hilfsfunktionen ──────────────────────────────────────────────────
+
+const S = 24        // 12pt (half-points)
+const LS = { line: 276, lineRule: 'auto' as const }  // 1.15 Zeilenabstand
+const TEAL = '0F7B6C'
+
+function germanDate(d = new Date()): string {
+  return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}`
+}
+
+function buildDoc(children: Paragraph[]) {
+  return new Document({ sections: [{ children }] })
+}
+
+function docHeading(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text, bold: true, size: 32, color: TEAL })],
+    spacing: { after: 80, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
+function docSubheading(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text, bold: true, size: 26, color: TEAL })],
+    spacing: { before: 400, after: 80, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
+function docMeta(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text, size: S - 2, color: '666666' })],
+    spacing: { after: 320, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
+function docLabel(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text, bold: true, size: S })],
+    spacing: { before: 280, after: 60, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
+function docBody(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text, size: S })],
+    spacing: { after: 60, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
+function docSituationParagraph(text: string): Paragraph {
+  return new Paragraph({
+    children: [new TextRun({ text: `[${text}]`, italics: true, color: '888888', size: S - 2 })],
+    spacing: { before: 160, after: 160, line: LS.line, lineRule: LS.lineRule },
+  })
+}
+
 function elternteilContentToDocxParagraphs(content: string): Paragraph[] {
   const parts = content.split(/\*([^*]+)\*/)
   const paragraphs: Paragraph[] = []
@@ -495,15 +526,15 @@ function elternteilContentToDocxParagraphs(content: string): Paragraph[] {
     if (i % 2 === 1) {
       const capped = part.trim().charAt(0).toUpperCase() + part.trim().slice(1)
       paragraphs.push(new Paragraph({
-        children: [new TextRun({ text: capped, italics: true, color: '666666', size: 21 })],
-        spacing: { before: 60, after: 60 },
+        children: [new TextRun({ text: capped, italics: true, color: '666666', size: S })],
+        spacing: { before: 100, after: 100, line: LS.line, lineRule: LS.lineRule },
       }))
     } else {
       for (const line of part.trim().split('\n')) {
         if (line.trim()) {
           paragraphs.push(new Paragraph({
-            children: [new TextRun({ text: line, size: 23 })],
-            spacing: { after: 40 },
+            children: [new TextRun({ text: line, size: S })],
+            spacing: { before: 100, after: 60, line: LS.line, lineRule: LS.lineRule },
           }))
         }
       }
@@ -526,28 +557,25 @@ function markdownToDocxParagraphs(text: string): Paragraph[] {
   for (const line of text.split('\n')) {
     const stripped = line.trim()
     if (!stripped) {
-      result.push(new Paragraph({ spacing: { after: 60 } }))
+      result.push(new Paragraph({ spacing: { after: 80, line: LS.line, lineRule: LS.lineRule } }))
       continue
     }
-    // "# Heading" oder "## Heading"
-    const h1 = stripped.match(/^#{1,2}\s+(.+)/)
-    if (h1) {
-      result.push(new Paragraph({ text: h1[1], heading: HeadingLevel.HEADING_2 }))
+    const h = stripped.match(/^#{1,2}\s+(.+)/)
+    if (h) {
+      result.push(docSubheading(h[1]))
       continue
     }
-    // "**Abschnittstitel**" allein auf einer Zeile
     const bold = stripped.match(/^\*\*(.+)\*\*$/)
     if (bold) {
       result.push(new Paragraph({
-        children: [new TextRun({ text: bold[1], bold: true, size: 24 })],
-        spacing: { before: 280, after: 80 },
+        children: [new TextRun({ text: bold[1], bold: true, size: S, color: '333333' })],
+        spacing: { before: 280, after: 80, line: LS.line, lineRule: LS.lineRule },
       }))
       continue
     }
-    // Normaler Text mit inline **bold**
     result.push(new Paragraph({
       children: parseInlineBold(stripped),
-      spacing: { after: 100 },
+      spacing: { after: 80, line: LS.line, lineRule: LS.lineRule },
     }))
   }
   return result
@@ -555,7 +583,7 @@ function markdownToDocxParagraphs(text: string): Paragraph[] {
 
 function parseInlineBold(text: string): TextRun[] {
   const parts = text.split(/\*\*([^*]+)\*\*/)
-  return parts.map((part, i) => new TextRun({ text: part, bold: i % 2 === 1, size: 23 }))
+  return parts.map((part, i) => new TextRun({ text: part, bold: i % 2 === 1, size: S }))
 }
 
 function renderMarkdown(text: string) {

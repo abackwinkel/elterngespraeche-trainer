@@ -1,13 +1,16 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Sidebar from '@/components/layout/Sidebar'
 import FortschrittDownload from './FortschrittDownload'
+import SessionDownloads, { type SessionData } from './SessionDownloads'
 
 interface SessionRow {
   id: string
   elterntyp: string
   schwierigkeit: string
-  gespraechsanlass: string
+  gespraechsanlass: string | null
   created_at: string
+  turns: Array<{ role: string; content: string }>
+  reflexion: string | null
 }
 
 interface QuizRow {
@@ -27,7 +30,7 @@ export default async function FortschrittPage() {
       const [{ data: s }, { data: q }] = await Promise.all([
         supabase
           .from('elterngespraech_sessions')
-          .select('id, elterntyp, schwierigkeit, gespraechsanlass, created_at')
+          .select('id, elterntyp, schwierigkeit, gespraechsanlass, created_at, turns, reflexion')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(50),
@@ -230,6 +233,9 @@ export default async function FortschrittPage() {
                   </div>
                 </section>
               )}
+
+              {/* Gesprächsverläufe zum Download */}
+              <SessionDownloads sessions={sessions as SessionData[]} />
             </>
           )}
         </main>
