@@ -1,11 +1,7 @@
-import Sidebar from '@/components/layout/Sidebar'
-
 export default function NachbereitungPage() {
   return (
-    <div className="flex h-screen overflow-hidden page-with-sidebar" style={{ background: 'var(--c-offwhite)' }}>
-      <Sidebar />
-      <div className="flex-1 min-w-0 overflow-y-auto">
-        <header style={{
+    <>
+      <header style={{
           background: 'var(--c-dark)', padding: '2rem 2rem 2.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}>
@@ -35,7 +31,7 @@ export default function NachbereitungPage() {
           }}>
             <h2 style={{
               fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-              fontSize: '1.5rem', fontWeight: 600,
+              fontSize: '1.67rem', fontWeight: 600,
               color: 'var(--c-dark)', margin: '0 0 1rem',
             }}>
               Gesprächsnachbereitung – was dokumentieren?
@@ -82,7 +78,7 @@ export default function NachbereitungPage() {
           }}>
             <h2 style={{
               fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-              fontSize: '1.5rem', fontWeight: 600,
+              fontSize: '1.67rem', fontWeight: 600,
               color: 'var(--c-dark)', margin: '0 0 0.5rem',
             }}>
               Selfcare – warum das zählt
@@ -124,7 +120,6 @@ export default function NachbereitungPage() {
           </section>
 
         </main>
-      </div>
-    </div>
+    </>
   )
 }

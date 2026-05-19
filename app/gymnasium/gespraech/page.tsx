@@ -11,6 +11,9 @@ export default function GespraechPage() {
   if (!config) {
     return (
       <div className="p-6 md:p-10">
+        <a href="/gymnasium" className="inline-block text-sm text-[var(--c-gray)] hover:text-[var(--c-dark)] transition-colors mb-6">
+          ← Zurück zum Gymnasium
+        </a>
         <KonfigurationsForm onStart={setConfig} />
       </div>
     )

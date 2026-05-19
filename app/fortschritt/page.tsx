@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import Sidebar from '@/components/layout/Sidebar'
+import FortschrittDownload from './FortschrittDownload'
 
 interface SessionRow {
   id: string
@@ -103,7 +104,7 @@ export default async function FortschrittPage() {
           </p>
           <h1 style={{
             fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-            fontSize: 'clamp(1.8rem, 4vw, 2.4rem)',
+            fontSize: 'clamp(2rem, 4vw, 2.57rem)',
             fontWeight: 400, color: '#fff', lineHeight: 1.15, margin: 0,
           }}>
             Dein Trainingsstand
@@ -111,6 +112,21 @@ export default async function FortschrittPage() {
         </header>
 
         <main style={{ padding: '2rem', maxWidth: 900, margin: '0 auto' }}>
+
+          {(totalSessions > 0 || totalQuiz > 0) && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+              <FortschrittDownload
+                totalSessions={totalSessions}
+                totalQuiz={totalQuiz}
+                quizRate={quizRate}
+                quizByModule={quizByModule}
+                sessionTypen={Object.entries(typCounts).map(([typ, count]) => ({
+                  label: ELTERNTYP_LABEL[typ] || typ,
+                  count,
+                }))}
+              />
+            </div>
+          )}
 
           {totalSessions === 0 && totalQuiz === 0 ? (
             <div style={{
@@ -121,7 +137,7 @@ export default async function FortschrittPage() {
               <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📊</div>
               <h2 style={{
                 fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-                fontSize: '1.5rem', fontWeight: 600, color: 'var(--c-dark)', margin: '0 0 0.75rem',
+                fontSize: '1.67rem', fontWeight: 600, color: 'var(--c-dark)', margin: '0 0 0.75rem',
               }}>
                 Noch keine Daten
               </h2>
@@ -149,7 +165,7 @@ export default async function FortschrittPage() {
                 }}>
                   <h2 style={{
                     fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-                    fontSize: '1.35rem', fontWeight: 600,
+                    fontSize: '1.52rem', fontWeight: 600,
                     color: 'var(--c-dark)', margin: '0 0 1rem',
                   }}>
                     Quiz-Ergebnisse nach Modul
@@ -193,7 +209,7 @@ export default async function FortschrittPage() {
                 }}>
                   <h2 style={{
                     fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-                    fontSize: '1.35rem', fontWeight: 600,
+                    fontSize: '1.52rem', fontWeight: 600,
                     color: 'var(--c-dark)', margin: '0 0 1rem',
                   }}>
                     Geübte Elterntypen

@@ -84,6 +84,9 @@ export default function QuizPage() {
     const moduls = Array.from(new Set(QUIZ_FRAGEN.map(f => f.modul))) as QuizModul[]
     return (
       <div className="p-6 md:p-10 max-w-3xl">
+        <a href="/gymnasium" className="inline-block text-sm text-[var(--c-gray)] hover:text-[var(--c-dark)] transition-colors mb-6">
+          ← Zurück zum Gymnasium
+        </a>
         <h1 className="text-3xl font-semibold text-[var(--c-dark)] mb-2" style={{ fontFamily: 'var(--font-cormorant)' }}>
           Wissensquiz
         </h1>

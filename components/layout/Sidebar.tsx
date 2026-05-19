@@ -104,10 +104,10 @@ export default function Sidebar() {
         />
         {gymnasiumOpen && (
           <>
+            <GespraechsschmiedeLink href="/gymnasium/gespraech" isActive={isPrefix('/gymnasium/gespraech')} />
             <SubNavLink label="Grundlagen & Info"   href="/gymnasium/info"           isActive={isPrefix('/gymnasium/info')} />
             <SubNavLink label="Quiz"                href="/gymnasium/quiz"           isActive={isPrefix('/gymnasium/quiz')} />
             <SubNavLink label="Körpersignale"       href="/gymnasium/koerpersignale" isActive={isPrefix('/gymnasium/koerpersignale')} />
-            <SubNavLink label="Gesprächsschmiede"   href="/gymnasium/gespraech"      isActive={isPrefix('/gymnasium/gespraech')} highlight />
             <SubNavLink label="Nachbereitung"       href="/gymnasium/nachbereitung"  isActive={isPrefix('/gymnasium/nachbereitung')} />
           </>
         )}
@@ -294,6 +294,31 @@ function FooterButton({ label, onClick }: { label: string; onClick: () => void }
     >
       {label}
     </button>
+  )
+}
+
+function GespraechsschmiedeLink({ href, isActive }: { href: string; isActive: boolean }) {
+  return (
+    <Link
+      href={href}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        padding: '0.5rem 1.25rem 0.5rem 2rem',
+        fontSize: '0.88rem',
+        fontWeight: 600,
+        color: isActive ? '#fff' : 'var(--c-teal-light)',
+        background: isActive ? 'rgba(15,123,108,0.28)' : 'rgba(15,123,108,0.08)',
+        borderLeft: `3px solid ${isActive ? 'var(--c-teal-light)' : 'var(--c-teal)'}`,
+        textDecoration: 'none',
+        marginBottom: '0.35rem',
+        transition: 'color 0.15s, background 0.15s',
+      }}
+    >
+      <span style={{ fontSize: '0.85em', opacity: 0.9 }}>🎭</span>
+      Gesprächsschmiede
+    </Link>
   )
 }
 

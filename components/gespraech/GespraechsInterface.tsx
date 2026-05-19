@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import type { GespraechsKonfiguration, Turn, FeedbackResponse } from '@/types'
-import { buildSzenarioKontext, findSzenario, SITUATIONSBESCHREIBUNGEN_POOL, SZENARIEN } from '@/lib/szenarien-data'
+import { buildSzenarioKontext, findSzenario, SITUATIONSBESCHREIBUNGEN_POOL, SZENARIEN, SCHWIERIGKEIT_LABEL, ELTERNTYP_LABEL } from '@/lib/szenarien-data'
 import AuswertungsPanel from './AuswertungsPanel'
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
   onNeustart: () => void
 }
 
-const SITUATION_INTERVAL = 3 // Situationsbeschreibung alle ~3 Züge einblenden
+const SITUATION_INTERVAL = 3
 
 export default function GespraechsInterface({ config, onNeustart }: Props) {
   const [turns, setTurns] = useState<Turn[]>([])
@@ -25,6 +26,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   const [sessionSaved, setSessionSaved] = useState(false)
   const [sessionEnded, setSessionEnded] = useState(false)
   const [initialized, setInitialized] = useState(false)
+  const [notizen, setNotizen] = useState('')
 
   const szenario = findSzenario(config.elterntyp, config.anlass, config.klassenstufe, config.familie)
   const szenarioKontext = buildSzenarioKontext(szenario ?? SZENARIEN[0], config)
@@ -33,7 +35,6 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   const chatEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Opener vom Elternteil einholen (sessionStart)
   useEffect(() => {
     if (initialized) return
     setInitialized(true)
@@ -112,7 +113,6 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       return nextTurns
     })
 
-    // Gelegentlich Situationsbeschreibung einblenden
     if (turnCountRef.current % SITUATION_INTERVAL === 0) {
       const pool = szenario?.situationsbeschreibungen ?? SITUATIONSBESCHREIBUNGEN_POOL
       const idx = situationIndexRef.current % pool.length
@@ -122,17 +122,21 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       setTurns(nextTurns)
     }
 
-    // Elternteil-Antwort streamen
     const elternText = await fetchElternteilResponse(nextTurns)
 
-    // Per-Turn-Feedback (wenn aktiviert)
     if (feedbackEnabled && elternText) {
       setIsLoadingFeedback(true)
       try {
         const res = await fetch('/api/gespraech/feedback', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userTurn: trimmed, elternTurn: elternText, szenarioKontext }),
+          body: JSON.stringify({
+            userTurn: trimmed,
+            elternTurn: elternText,
+            szenarioKontext,
+            elterntyp: config.elterntyp,
+            schwierigkeit: config.schwierigkeit,
+          }),
         })
         const data = await res.json()
         setFeedback(data)
@@ -180,7 +184,6 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       setIsStreamingReflexion(false)
     }
 
-    // Session in Supabase speichern
     try {
       await fetch('/api/gespraech/session', {
         method: 'POST',
@@ -202,6 +205,60 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
     }
   }
 
+  function downloadGespraech() {
+    const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
+    const schwLabel = SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit
+    const datum = new Date().toLocaleDateString('de-DE')
+
+    let text = `Gesprächsprotokoll – Elterngespräche-Trainer\n`
+    text += `Datum: ${datum}\n`
+    text += `Elterntyp: ${elternLabel} · Schwierigkeit: ${schwLabel}\n`
+    text += `${'─'.repeat(50)}\n\n`
+
+    for (const turn of turns) {
+      if (turn.role === 'situation') {
+        text += `[${turn.content}]\n\n`
+      } else {
+        const rolle = turn.role === 'elternteil' ? 'Elternteil' : 'Lehrkraft'
+        text += `${rolle}:\n${turn.content}\n\n`
+      }
+    }
+
+    if (notizen.trim()) {
+      text += `${'─'.repeat(50)}\nMeine Notizen:\n${notizen}\n`
+    }
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `gespraech-${datum.replace(/\./g, '-')}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  function downloadReflexion(reflexionText: string) {
+    const datum = new Date().toLocaleDateString('de-DE')
+    const elternLabel = ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp
+
+    let text = `Gesamtreflexion – Elterngespräche-Trainer\n`
+    text += `Datum: ${datum} · Elterntyp: ${elternLabel}\n`
+    text += `${'─'.repeat(50)}\n\n`
+    text += reflexionText
+
+    if (notizen.trim()) {
+      text += `\n\n${'─'.repeat(50)}\nMeine Notizen:\n${notizen}`
+    }
+
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `reflexion-${datum.replace(/\./g, '-')}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -211,19 +268,30 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
             Gesprächsschmiede
           </h2>
           <p className="text-sm text-[var(--c-gray)] mt-0.5">
-            {szenario?.elternName ?? 'Elternteil'} · {config.elterntyp} · {config.schwierigkeit}
+            {szenario?.elternName ?? 'Elternteil'} · {ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp} · {SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-[var(--c-gray)] cursor-pointer select-none">
             <div
               onClick={() => setFeedbackEnabled(v => !v)}
-              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${feedbackEnabled ? 'bg-[var(--c-teal)]' : 'bg-[var(--c-gray-light)]'}`}
+              className="relative inline-flex h-5 w-9 items-center rounded-full transition-colors cursor-pointer"
+              style={{ background: feedbackEnabled ? 'var(--c-teal)' : '#9ca3af' }}
             >
-              <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${feedbackEnabled ? 'translate-x-4' : 'translate-x-0.5'}`} />
+              <span
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${feedbackEnabled ? 'translate-x-4' : 'translate-x-0.5'}`}
+              />
             </div>
             Sofort-Auswertung
           </label>
+          {sessionEnded && (
+            <button
+              onClick={downloadGespraech}
+              className="px-3 py-1.5 text-xs border border-[var(--c-gray-light)] rounded-lg text-[var(--c-gray)] hover:bg-[var(--c-offwhite)] transition-colors"
+            >
+              ↓ Gespräch
+            </button>
+          )}
         </div>
       </div>
 
@@ -258,7 +326,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
                     handleSend()
                   }
                 }}
-                placeholder="Deine Antwort als Lehrkraft... (Enter zum Senden, Shift+Enter für Zeilenumbruch)"
+                placeholder="Deine Antwort als Lehrkraft … (Enter zum Senden, Shift+Enter für Zeilenumbruch)"
                 rows={3}
                 disabled={isStreaming}
                 className="w-full border border-[var(--c-gray-light)] rounded-xl px-4 py-3 text-base text-[var(--c-dark)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--c-teal)] focus:border-transparent disabled:opacity-50"
@@ -285,9 +353,22 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
 
         {/* Auswertungs-Spalte (nur wenn Toggle ein) */}
         {feedbackEnabled && (
-          <div className="flex-[35] bg-[var(--c-offwhite)] rounded-xl p-4 border border-[var(--c-gray-light)] overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
-            <h3 className="text-sm font-semibold text-[var(--c-dark)] mb-3">Sofort-Auswertung</h3>
-            <AuswertungsPanel feedback={feedback} isLoading={isLoadingFeedback} />
+          <div className="flex-[35] flex flex-col gap-3 min-h-0">
+            <div className="bg-[var(--c-offwhite)] rounded-xl p-4 border border-[var(--c-gray-light)] overflow-y-auto" style={{ maxHeight: 'calc(100vh - 400px)' }}>
+              <h3 className="text-sm font-semibold text-[var(--c-dark)] mb-3">Sofort-Auswertung</h3>
+              <AuswertungsPanel feedback={feedback} isLoading={isLoadingFeedback} />
+            </div>
+            {/* Notizen */}
+            <div className="bg-white rounded-xl border border-[var(--c-gray-light)] p-4 flex flex-col flex-1 min-h-0">
+              <h3 className="text-sm font-semibold text-[var(--c-dark)] mb-2">Meine Notizen</h3>
+              <textarea
+                value={notizen}
+                onChange={e => setNotizen(e.target.value)}
+                placeholder="Gedanken, Beobachtungen, Ideen …"
+                className="flex-1 resize-none text-sm text-[var(--c-dark)] bg-transparent focus:outline-none leading-relaxed"
+                style={{ minHeight: '80px' }}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -308,7 +389,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
                   <span className="animate-pulse">●</span>
                   <span className="animate-pulse" style={{ animationDelay: '0.2s' }}>●</span>
                   <span className="animate-pulse" style={{ animationDelay: '0.4s' }}>●</span>
-                  <span className="ml-2">Auswertung wird erstellt…</span>
+                  <span className="ml-2">Auswertung wird erstellt …</span>
                 </div>
               )}
               {reflexion && (
@@ -317,14 +398,32 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
                   {isStreamingreflexion && <span className="animate-pulse">▍</span>}
                 </div>
               )}
+              {notizen.trim() && !isStreamingreflexion && (
+                <div className="mt-6 pt-4 border-t border-[var(--c-gray-light)]">
+                  <div className="text-xs font-semibold text-[var(--c-gray)] uppercase tracking-wide mb-2">Meine Notizen</div>
+                  <p className="text-sm text-[var(--c-dark)] whitespace-pre-wrap leading-relaxed">{notizen}</p>
+                </div>
+              )}
             </div>
             {!isStreamingreflexion && (
-              <div className="p-6 border-t border-[var(--c-gray-light)] flex gap-3">
+              <div className="p-6 border-t border-[var(--c-gray-light)] flex gap-3 flex-wrap">
                 <button
                   onClick={onNeustart}
                   className="flex-1 py-3 border border-[var(--c-gray-light)] rounded-xl text-sm font-semibold text-[var(--c-gray)] hover:bg-[var(--c-offwhite)] transition-colors"
                 >
                   Neues Gespräch
+                </button>
+                <button
+                  onClick={() => downloadReflexion(reflexion)}
+                  className="flex-1 py-3 border border-[var(--c-teal)] text-[var(--c-teal)] rounded-xl text-sm font-semibold hover:bg-[var(--c-mint)] transition-colors"
+                >
+                  ↓ Reflexion herunterladen
+                </button>
+                <button
+                  onClick={downloadGespraech}
+                  className="flex-1 py-3 border border-[var(--c-gray-light)] rounded-xl text-sm font-semibold text-[var(--c-gray)] hover:bg-[var(--c-offwhite)] transition-colors"
+                >
+                  ↓ Gesprächsprotokoll
                 </button>
                 <a
                   href="/fortschritt"
@@ -345,7 +444,7 @@ function TurnBubble({ turn }: { turn: Turn }) {
   if (turn.role === 'situation') {
     return (
       <p className="text-sm text-[var(--c-gray)] italic text-center px-4">
-        *{turn.content}*
+        {turn.content}
       </p>
     )
   }

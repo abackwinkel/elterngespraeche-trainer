@@ -43,6 +43,9 @@ export default function KoerpersignalePage() {
     const percent = Math.round((korrektCount / KOERPERSIGNALE.length) * 100)
     return (
       <div className="p-6 md:p-10 max-w-2xl">
+        <a href="/gymnasium" className="inline-block text-sm text-[var(--c-gray)] hover:text-[var(--c-dark)] transition-colors mb-6">
+          ← Zurück zum Gymnasium
+        </a>
         <h1 className="text-3xl font-semibold text-[var(--c-dark)] mb-6" style={{ fontFamily: 'var(--font-cormorant)' }}>
           Körpersignale lesen
         </h1>
@@ -69,6 +72,9 @@ export default function KoerpersignalePage() {
 
   return (
     <div className="p-6 md:p-10 max-w-2xl">
+      <a href="/gymnasium" className="inline-block text-sm text-[var(--c-gray)] hover:text-[var(--c-dark)] transition-colors mb-6">
+        ← Zurück zum Gymnasium
+      </a>
       <div className="mb-6">
         <h1 className="text-3xl font-semibold text-[var(--c-dark)] mb-1" style={{ fontFamily: 'var(--font-cormorant)' }}>
           Körpersignale lesen
@@ -97,7 +103,7 @@ export default function KoerpersignalePage() {
       <div className="bg-white rounded-2xl border border-[var(--c-gray-light)] p-6 mb-4">
         <div className="bg-[var(--c-mint)] rounded-xl p-4 mb-5">
           <p className="text-base text-[var(--c-dark)] italic leading-relaxed">
-            *{item.situation}*
+            {item.situation}
           </p>
         </div>
 

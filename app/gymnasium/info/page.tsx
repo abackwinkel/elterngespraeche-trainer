@@ -1,5 +1,3 @@
-import Sidebar from '@/components/layout/Sidebar'
-
 const TABS = [
   { id: 'grundlagen', label: 'Gesprächsführung' },
   { id: 'vorbereitung', label: 'Vorbereitung' },
@@ -10,10 +8,8 @@ const TABS = [
 
 export default function InfoPage() {
   return (
-    <div className="flex h-screen overflow-hidden page-with-sidebar" style={{ background: 'var(--c-offwhite)' }}>
-      <Sidebar />
-      <div className="flex-1 min-w-0 overflow-y-auto">
-        <header style={{
+    <>
+      <header style={{
           background: 'var(--c-dark)', padding: '2rem 2rem 2.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}>
@@ -66,7 +62,7 @@ export default function InfoPage() {
           }}>
             <h2 style={{
               fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
-              fontSize: '1.6rem', fontWeight: 600,
+              fontSize: '1.77rem', fontWeight: 600,
               color: 'var(--c-dark)', margin: '0 0 1rem',
             }}>
               Gesprächsführung – Grundlagen
@@ -114,7 +110,6 @@ export default function InfoPage() {
             Weitere Inhalte (Vorbereitung, Körpersprache, Rechtliches, Schwierige Situationen) folgen in Sprint 2.
           </p>
         </main>
-      </div>
-    </div>
+    </>
   )
 }
