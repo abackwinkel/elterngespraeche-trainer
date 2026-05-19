@@ -37,16 +37,7 @@ export async function proxy(request: NextRequest) {
   const serviceClient = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll() },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
+    { cookies: { getAll: () => [], setAll: () => {} } }
   )
 
   const { data: profile } = await serviceClient
