@@ -49,26 +49,40 @@ export async function POST(req: NextRequest) {
     }))
   }
 
-  const anthropic = getAnthropicClient()
-  const stream = await anthropic.messages.stream({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: isOpening ? 300 : 512,
-    system: systemPrompt,
-    messages: messagesForAPI,
-  })
+  let stream: Awaited<ReturnType<typeof anthropic.messages.stream>>
+  try {
+    const anthropic = getAnthropicClient()
+    stream = await anthropic.messages.stream({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: isOpening ? 300 : 512,
+      system: systemPrompt,
+      messages: messagesForAPI,
+    })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[elternteil] Anthropic-Fehler:', msg)
+    return NextResponse.json({ error: msg }, { status: 502 })
+  }
 
   const encoder = new TextEncoder()
   const readable = new ReadableStream({
     async start(controller) {
-      for await (const chunk of stream) {
-        if (
-          chunk.type === 'content_block_delta' &&
-          chunk.delta.type === 'text_delta'
-        ) {
-          controller.enqueue(encoder.encode(chunk.delta.text))
+      try {
+        for await (const chunk of stream) {
+          if (
+            chunk.type === 'content_block_delta' &&
+            chunk.delta.type === 'text_delta'
+          ) {
+            controller.enqueue(encoder.encode(chunk.delta.text))
+          }
         }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err)
+        console.error('[elternteil] Stream-Fehler:', msg)
+        controller.enqueue(encoder.encode(`\n\n[Fehler beim Streaming: ${msg}]`))
+      } finally {
+        controller.close()
       }
-      controller.close()
     },
   })
 

@@ -77,7 +77,9 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       })
 
       if (!res.ok) {
-        const errMsg = `Serverfehler (${res.status}) – bitte Seite neu laden oder Support kontaktieren.`
+        let detail = ''
+        try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
+        const errMsg = `Serverfehler (${res.status})${detail ? ': ' + detail : ''} – bitte Seite neu laden.`
         setTurns(prev => {
           const updated = [...prev]
           updated[updated.length - 1] = { role: 'elternteil', content: errMsg, timestamp: new Date().toISOString() }
