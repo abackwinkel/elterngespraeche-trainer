@@ -22,7 +22,8 @@ const SCHWIERIGKEIT_BESCHREIBUNG: Record<Schwierigkeit, string> = {
 }
 
 export default function KonfigurationsForm({ schultyp, onStart }: Props) {
-  const [klassenstufe, setKlassenstufe] = useState<Klassenstufe>('7-8')
+  const defaultKlassenstufe: Klassenstufe = schultyp === 'grundschule' ? '3-4' : '7-8'
+  const [klassenstufe, setKlassenstufe] = useState<Klassenstufe>(defaultKlassenstufe)
   const [anlass, setAnlass] = useState<Gespraechsanlass>('leistungsabfall')
   const [familie, setFamilie] = useState<Familiensituation>('keine')
   const [elterntyp, setElterntyp] = useState<Elterntyp>('defensiv')
@@ -33,9 +34,11 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
     onStart({ schultyp, klassenstufe, anlass, familie, elterntyp, schwierigkeit })
   }
 
-  const klassenstufeOptionen = Object.entries(KLASSENSTUFE_LABEL).filter(
-    ([val]) => schultyp === 'realschule' ? val !== 'oberstufe' : true
-  )
+  const klassenstufeOptionen = Object.entries(KLASSENSTUFE_LABEL).filter(([val]) => {
+    if (schultyp === 'grundschule') return val === '1-2' || val === '3-4'
+    if (schultyp === 'mittelschule' || schultyp === 'realschule') return ['5-6', '7-8', '9-10'].includes(val)
+    return val !== '1-2' && val !== '3-4'
+  })
 
   return (
     <div className="max-w-2xl mx-auto">

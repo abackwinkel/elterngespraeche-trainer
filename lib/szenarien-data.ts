@@ -11,6 +11,8 @@ export const SCHULTYP_LABEL: Record<Schultyp, string> = {
   gymnasium:    'Gymnasium',
   realschule:   'Realschule',
   gesamtschule: 'Gesamtschule',
+  grundschule:  'Grundschule',
+  mittelschule: 'Mittelschule',
 }
 
 export const ELTERNTYP_LABEL: Record<Elterntyp, string> = {
@@ -39,6 +41,8 @@ export const ANLASS_LABEL: Record<Gespraechsanlass, string> = {
 }
 
 export const KLASSENSTUFE_LABEL: Record<Klassenstufe, string> = {
+  '1-2':       '1./2. Klasse',
+  '3-4':       '3./4. Klasse',
   '5-6':       '5./6. Klasse',
   '7-8':       '7./8. Klasse',
   '9-10':      '9./10. Klasse',
@@ -365,6 +369,118 @@ export const SZENARIEN: Szenario[] = [
     situationsbeschreibungen: [
       'Frau Peters greift nach ihrem Taschentuch.',
       'Frau Peters schaut kurz weg und atmet tief durch.',
+    ],
+  },
+
+  // ─── Grundschule ──────────────────────────────────────────────────────────────
+
+  // GRU-1: Allgemeines Entwicklungsgespräch / Kooperativ / 1./2. Klasse / keine Besonderheit
+  {
+    id: 'gru-allgemein-kooperativ-hoffmann',
+    schultyp: 'grundschule',
+    klassenstufe: '1-2',
+    anlass: 'allgemein',
+    familie: 'keine',
+    elterntyp: 'kooperativ',
+    elternName: 'Frau Hoffmann',
+    kindName: 'Mathis',
+    opener: 'Guten Tag. Ich wollte mal hören, wie Mathis sich so macht. Zuhause erzählt er manchmal, dass er nicht so gerne in die Schule will – das hat mich ein bisschen überrascht.',
+    hintergrund: 'Elternprofil: Frau Hoffmann, Mutter, Sohn Mathis (männlich), 2. Klasse. Allgemeines Entwicklungsgespräch. Mathis lernt solide, fällt aber durch zunehmenden Widerwillen gegen den Schulweg auf. Frau Hoffmann ist kooperativ und aufgeschlossen, möchte verstehen, was in der Schule passiert, und gemeinsam Lösungen finden.',
+    situationsbeschreibungen: [
+      'Frau Hoffmann nickt ruhig und schaut Sie offen an.',
+      'Frau Hoffmann notiert sich kurz etwas.',
+    ],
+  },
+
+  // GRU-2: Verhaltensauffälligkeiten / Aggressiv / 3./4. Klasse / Scheidung
+  {
+    id: 'gru-verhalten-aggressiv-baum',
+    schultyp: 'grundschule',
+    klassenstufe: '3-4',
+    anlass: 'verhalten',
+    familie: 'scheidung',
+    elterntyp: 'aggressiv',
+    elternName: 'Herr Baum',
+    kindName: 'Noah',
+    opener: 'Mir hat Noah erzählt, dass er letzte Woche vom Unterricht ausgeschlossen wurde. Ich halte das für völlig übertrieben und möchte wissen, wie das begründet ist.',
+    hintergrund: 'Elternprofil: Herr Baum, Vater, Sohn Noah (männlich), 4. Klasse. Noah verhält sich seit der Trennung der Eltern zunehmend auffällig – Auseinandersetzungen mit Mitschülern, Verweigerung von Aufgaben. Herr Baum lebt getrennt von der Mutter, kommt zu diesem Gespräch allein und reagiert defensiv-aggressiv. Er fühlt sich als Elternteil übergangen.',
+    situationsbeschreibungen: [
+      'Herr Baum legt die Arme auf dem Tisch verschränkt vor sich.',
+      'Herr Baum lehnt sich vor und fixiert Sie direkt.',
+    ],
+  },
+
+  // GRU-3: Gefährdungseinschätzung / Defensiv / 1./2. Klasse / Multiproblemfamilie
+  {
+    id: 'gru-gefaehrdung-defensiv-schreiber',
+    schultyp: 'grundschule',
+    klassenstufe: '1-2',
+    anlass: 'gefaehrdung',
+    familie: 'multiproblem',
+    elterntyp: 'defensiv',
+    elternName: 'Frau Schreiber',
+    kindName: 'Amelie',
+    opener: 'Ich weiß eigentlich nicht, warum ich hier sein muss. Amelie geht es gut. Sie ist halt manchmal müde.',
+    hintergrund: 'Elternprofil: Frau Schreiber, Mutter, Tochter Amelie (weiblich), 2. Klasse. Amelie kommt wiederholt erschöpft und ungepflegt in die Schule, wirkt ängstlich und klammert sich an die Lehrperson. Erste Hinweise auf häusliche Vernachlässigung. Frau Schreiber ist überfordert, lebt in einer instabilen Situation und weicht Konflikten aus. Sie bagatellisiert alle Beobachtungen.',
+    situationsbeschreibungen: [
+      'Frau Schreiber zieht die Schultern hoch und weicht Ihrem Blick aus.',
+      'Frau Schreiber atmet kurz aus und schüttelt kaum merklich den Kopf.',
+    ],
+  },
+
+  // ─── Mittelschule ─────────────────────────────────────────────────────────────
+
+  // MIT-1: Versetzungsgefährdung / Aggressiv / 9./10. Klasse / Leistungsdruck
+  {
+    id: 'mit-versetzung-aggressiv-maier',
+    schultyp: 'mittelschule',
+    klassenstufe: '9-10',
+    anlass: 'versetzung',
+    familie: 'leistungsdruck',
+    elterntyp: 'aggressiv',
+    elternName: 'Herr und Frau Maier',
+    kindName: 'Lukas',
+    opener: 'Wir können das nicht nachvollziehen. Lukas gibt sich Mühe. Das muss an der Bewertung liegen – er war früher immer im Mittelfeld, und jetzt plötzlich das.',
+    hintergrund: 'Elternprofil: Herr und Frau Maier, beide anwesend, Sohn Lukas (männlich), 9. Klasse. Lukas ist in zwei Fächern versetzungsgefährdet. Die Eltern haben hohe Erwartungen und verknüpfen den Schulabschluss mit konkreten Berufswünschen. Sie sind frustriert und sehen die Schule in der Mitverantwortung. Herr Maier führt das Gespräch, Frau Maier bestärkt ihn.',
+    situationsbeschreibungen: [
+      'Herr Maier lehnt sich vor und tippt mit dem Zeigefinger auf den Tisch.',
+      'Frau Maier nickt und schaut Sie scharf an.',
+    ],
+  },
+
+  // MIT-2: Verhaltensauffälligkeiten / Übergriffig / 5./6. Klasse / Scheidung
+  {
+    id: 'mit-verhalten-uebergriffig-bergmann',
+    schultyp: 'mittelschule',
+    klassenstufe: '5-6',
+    anlass: 'verhalten',
+    familie: 'scheidung',
+    elterntyp: 'uebergriffig',
+    elternName: 'Frau Bergmann',
+    kindName: 'Alina',
+    opener: 'Ich habe von Alina gehört, dass sie immer als Schuldige dasteht, obwohl andere anfangen. Das macht mich wütend. Ich will wissen, was Sie konkret dagegen tun.',
+    hintergrund: 'Elternprofil: Frau Bergmann, Mutter, Tochter Alina (weiblich), 5. Klasse. Alina ist nach dem Umzug infolge der Scheidung neu in der Klasse und hat Schwierigkeiten, sich einzufügen. Es kommt zu Konflikten, bei denen Alina eskaliert. Frau Bergmann kämpft in vielen Lebensbereichen gleichzeitig und kommt mit hohem Anspruch auf sofortige Konsequenzen.',
+    situationsbeschreibungen: [
+      'Frau Bergmann öffnet ihr Handy und zeigt Ihnen eine Nachricht.',
+      'Frau Bergmann lehnt sich vor, ihre Stimme wird lauter.',
+    ],
+  },
+
+  // MIT-3: Berufsorientierung / Passiv / 9./10. Klasse / Migrationshintergrund
+  {
+    id: 'mit-beruf-passiv-demir',
+    schultyp: 'mittelschule',
+    klassenstufe: '9-10',
+    anlass: 'beruf',
+    familie: 'migration',
+    elterntyp: 'passiv',
+    elternName: 'Herr Demir',
+    kindName: 'Burak',
+    opener: 'Ja.',
+    hintergrund: 'Elternprofil: Herr Demir, Vater, Sohn Burak (männlich), 10. Klasse. Berufsorientierungsgespräch. Burak hat unklare Zukunftsvorstellungen, die Noten sind ausreichend. Herr Demir spricht wenig Deutsch, ist sichtlich unsicher und antwortet kaum. Er ist anwesend, weil die Schule ihn eingeladen hat, nicht aus eigenem Interesse. Möglicherweise liegt eine Sprachbarriere vor, möglicherweise kulturell andere Erwartungen an Schulgespräche.',
+    situationsbeschreibungen: [
+      'Herr Demir schaut auf die Tischfläche und nickt kaum wahrnehmbar.',
+      'Herr Demir verschränkt die Hände vor sich und schweigt.',
     ],
   },
 ]

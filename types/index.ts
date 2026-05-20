@@ -1,6 +1,6 @@
 // ─── Schultyp ─────────────────────────────────────────────────────────────────
 
-export type Schultyp = 'gymnasium' | 'realschule' | 'gesamtschule'
+export type Schultyp = 'gymnasium' | 'realschule' | 'gesamtschule' | 'grundschule' | 'mittelschule'
 
 // ─── Elterntypen & Schwierigkeit ──────────────────────────────────────────────
 
@@ -23,7 +23,7 @@ export type Gespraechsanlass =
   | 'beruf'
   | 'allgemein'
 
-export type Klassenstufe = '5-6' | '7-8' | '9-10' | 'oberstufe'
+export type Klassenstufe = '1-2' | '3-4' | '5-6' | '7-8' | '9-10' | 'oberstufe'
 
 export type Familiensituation =
   | 'keine'

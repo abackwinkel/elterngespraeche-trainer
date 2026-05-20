@@ -123,8 +123,16 @@ export default function Sidebar() {
           isActive={isPrefix('/gesamtschule')}
         />
 
-        <DemnachstLink label="Grundschule" />
-        <DemnachstLink label="Mittelschule" />
+        <GespraechsschmiedeLink
+          label="Grundschule"
+          href="/grundschule/gespraech"
+          isActive={isPrefix('/grundschule')}
+        />
+        <GespraechsschmiedeLink
+          label="Mittelschule"
+          href="/mittelschule/gespraech"
+          isActive={isPrefix('/mittelschule')}
+        />
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', margin: '0.5rem 0 0.25rem' }} />
 
