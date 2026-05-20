@@ -25,31 +25,32 @@ ${userTurn}
 ## Deine Aufgabe
 
 Gib eine kurze, konkrete Auswertung dieser einen Lehrkraft-Aussage.
-Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
+Antworte ausschliesslich als JSON in diesem Format – kein weiterer Text:
 
 {
-  "gut": "Was die Lehrkraft gut gemacht hat (1-2 Sätze, konkret und spezifisch)",
-  "besser": "Was besser hätte sein können – oder null, wenn nichts zu verbessern ist",
+  "gut": "Was die Lehrkraft gut gemacht hat (1-2 Saetze, konkret und spezifisch)",
+  "besser": "Was besser haette sein koennen – oder null, wenn nichts zu verbessern ist",
   "alternativ": "Eine alternative Formulierung als Vorschlag – oder null, wenn die Aussage gut war"
 }
 
 ## Bewertungskriterien
 
-1. Behält die Lehrkraft die Gesprächsführung? Gibt sie das Steuer nicht ab?
+1. Behaelt die Lehrkraft die Gespraechsfuehrung? Gibt sie das Steuer nicht ab?
 2. Steht das Kind und sein Wohlergehen im Mittelpunkt der Aussage?
-3. Wird Wertschätzung oder Verständnis für die Elternperspektive gezeigt?
+3. Wird Wertschaetzung oder Verstaendnis fuer die Elternperspektive gezeigt?
 4. Werden konkrete, umsetzbare Schritte angestrebt?
 5. Wird beschreibend statt bewertend formuliert (Beobachtung statt Urteil)?
 
 ## Wichtig
 
 - "gut" darf nie leer sein – finde immer etwas Positives, auch wenn es nur die Haltung oder der Versuch ist
-- "besser" und "alternativ" dürfen null sein, wenn die Aussage gut war
+- "besser" und "alternativ" duerfen null sein, wenn die Aussage gut war
 - Keine NLP- oder GFK-Fachbegriffe verwenden
-- Spreche die Lehrkraft direkt an: "Sie haben...", "Ihre Frage..."
-- Kurze, klare Sprache – keine langen Erklärungen
-- Ausschließlich Deutsch – keine englischen Wörter (z. B. "defensiv" statt "defensive")
-- Die Antwort muss exakt das JSON-Format erfüllen – kein weiterer Text davor oder danach`
+- Spreche die Lehrkraft direkt an: Sie haben..., Ihre Frage...
+- Kurze, klare Sprache – keine langen Erklaerungen
+- Ausschliesslich Deutsch – keine englischen Woerter (z. B. defensiv statt defensive)
+- Die Antwort muss exakt das JSON-Format erfuellen – kein weiterer Text davor oder danach
+- Saetze muessen grammatikalisch vollstaendig und korrekt sein`
 }
 
 // ─── Gesamtreflexion (Sonnet, am Ende des Gesprächs) ─────────────────────────
@@ -70,36 +71,36 @@ export function buildReflexionPrompt(
     .map(t => `[Situation: ${t.content}]`)
     .join('\n')
 
-  return `Du reflektierst ein abgeschlossenes Elterngespräch aus einer Trainingsplattform für Lehrkräfte.
+  return `Du reflektierst ein abgeschlossenes Elterngespraech aus einer Trainingsplattform fuer Lehrkraefte.
 
 ## Kontext
 ${szenarioKontext}
 Elterntyp: ${elterntyp}
 Schwierigkeitsstufe: ${schwierigkeit}
 
-## Eingeblendete Situationen (Körpersignale)
-${situationen || 'Keine Situationsbeschreibungen im Gespräch.'}
+## Eingeblendete Situationen (Koerpersignale)
+${situationen || 'Keine Situationsbeschreibungen im Gespraech.'}
 
-## Gesprächsverlauf
+## Gespraechsverlauf
 ${gespraechstext}
 
 ## Deine Aufgabe
 
-Verfasse eine strukturierte Gesamtreflexion des Gesprächs. Sprich die Lehrkraft direkt an ("Sie haben...").
+Verfasse eine strukturierte Gesamtreflexion des Gespraechs. Sprich die Lehrkraft direkt an.
 
 Schreibe in gut lesbaren Abschnitten, keine starre Liste. Nutze folgende Struktur:
 
 **Was gut gelungen ist**
-Nenne 2-3 konkrete Stärken aus dem Gespräch mit Bezug auf konkrete Aussagen.
+Nenne 2-3 konkrete Staerken aus dem Gespraech mit Bezug auf konkrete Aussagen.
 
 **Entwicklungspotenzial**
-Nenne 1-2 Bereiche, in denen das Gespräch besser hätte laufen können. Konkret, ohne zu urteilen.
+Nenne 1-2 Bereiche, in denen das Gespraech besser haette laufen koennen. Konkret, ohne zu urteilen.
 
 **Der entscheidende Moment**
-Identifiziere den Moment im Gespräch, der die größte Wirkung hatte – positiv oder als verpasste Gelegenheit.
+Identifiziere den Moment im Gespraech, der die groesste Wirkung hatte – positiv oder als verpasste Gelegenheit.
 
-**Empfehlung für die Praxis**
-Ein konkreter Tipp für das nächste Gespräch mit diesem Elterntyp.
+**Empfehlung fuer die Praxis**
+Ein konkreter Tipp fuer das naechste Gespraech mit diesem Elterntyp.
 
 ## Wichtig
 
@@ -107,10 +108,12 @@ Ein konkreter Tipp für das nächste Gespräch mit diesem Elterntyp.
 - Das Kind steht immer im Mittelpunkt der Bewertung
 - Keine NLP- oder GFK-Fachbegriffe
 - Deutsch
-- Ca. 250-350 Wörter
-- Keine Dokumentüberschrift (z. B. "# Gesprächsreflexion") – beginne direkt mit dem ersten Abschnitt **Was gut gelungen ist**
+- Ca. 250-350 Woerter
+- Keine Dokumentueberschrift – beginne direkt mit dem ersten Abschnitt **Was gut gelungen ist**
 - Abschnittstitel als **fett** in einer eigenen Zeile, kein #
-- Deutsche Anführungszeichen verwenden: „..." (öffnend unten, schließend oben) – niemals "..." oder "..."`
+- Deutsche Anfuehrungszeichen: „...“ (oeffnend unten, schliessend oben)
+- Einfache Anfuehrungszeichen ebenfalls: ‚...‘ (oeffnend unten, schliessend oben)
+- Alle Saetze grammatikalisch vollstaendig`
 }
 
 // ─── System-Prompt für Elternteil-Rolle ──────────────────────────────────────
@@ -125,17 +128,24 @@ export function buildElternteilSystemPrompt(
     : ''
 
   const isCouple = /\bund\b/.test(szenarioKontext.split('\n')[0] ?? '')
-  const coupleRule = isCouple
-    ? `\n- Beide Elternteile sind anwesend. Beginne jede Antwort mit dem Namen der sprechenden Person gefolgt von einem Doppelpunkt, z. B. "Herr Berger:" oder "Frau Berger:". Wechsle realistisch zwischen beiden.`
-    : ''
+  const coupleRules = isCouple
+    ? `
+- Beide Elternteile sind anwesend. Beginne jede Antwort mit "Herr [Name]:" oder "Frau [Name]:" (wer spricht) und wechsle realistisch.
+- Stage Directions (*...*) fuer gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
+- Im allerersten Turn: Zeige zuerst als Koerpersignal wie beide eintreten und sich setzen (Plural), dann spricht eine Person.`
+    : `
+- Im allerersten Turn: Zeige zuerst als Koerpersignal wie die Person eintritt und sich setzt, dann spricht sie.`
 
   return `${elternteilPrompt}${modifier}
 
-### Gesprächsregeln (immer einhalten)
+### Gespraechsregeln (immer einhalten)
 
-- Sprich die Lehrkraft ausschließlich mit "Sie" an – niemals mit "du"${coupleRule}
+- Sprich die Lehrkraft ausschliesslich mit "Sie" an – niemals mit "du"
+- Beachte das Geschlecht des Kindes genau (Sohn = er/sein/Schueler, Tochter = sie/ihr/Schuelerin) und verwende es durchgehend korrekt
+- Einfache Anfuehrungszeichen nach deutschem Standard: ‚...‘ (oeffnend unten, schliessend oben)
+- Alle Saetze vollstaendig und grammatikalisch korrekt${coupleRules}
 
-### Deine konkrete Situation in diesem Gespräch
+### Deine konkrete Situation in diesem Gespraech
 
 ${szenarioKontext}`
 }

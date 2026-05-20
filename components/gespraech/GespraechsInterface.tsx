@@ -377,12 +377,12 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         {feedbackEnabled && (
           <div className="flex-[35] flex flex-col gap-3 min-h-0">
             <div className="bg-[var(--c-offwhite)] rounded-xl p-4 border border-[var(--c-gray-light)] overflow-y-auto" style={{ maxHeight: 'calc(100vh - 400px)' }}>
-              <h3 className="font-semibold text-[var(--c-dark)] mb-3" style={{ fontSize: '1.05rem' }}>Sofort-Auswertung</h3>
+              <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--c-dark)', marginBottom: '0.75rem' }}>Sofort-Auswertung</h3>
               <AuswertungsPanel feedback={feedback} isLoading={isLoadingFeedback} />
             </div>
             {/* Notizen */}
             <div className="bg-white rounded-xl border border-[var(--c-gray-light)] p-4 flex flex-col flex-1 min-h-0">
-              <h3 className="font-semibold text-[var(--c-dark)] mb-2" style={{ fontSize: '1.05rem' }}>Meine Notizen</h3>
+              <h3 style={{ fontFamily: 'var(--font-cormorant)', fontSize: '1.35rem', fontWeight: 600, color: 'var(--c-dark)', marginBottom: '0.5rem' }}>Meine Notizen</h3>
               <textarea
                 value={notizen}
                 onChange={e => setNotizen(e.target.value)}
