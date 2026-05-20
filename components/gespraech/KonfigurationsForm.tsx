@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import type { GespraechsKonfiguration, Klassenstufe, Gespraechsanlass, Familiensituation, Elterntyp, Schwierigkeit } from '@/types'
+import type { GespraechsKonfiguration, Schultyp, Klassenstufe, Gespraechsanlass, Familiensituation, Elterntyp, Schwierigkeit } from '@/types'
 import {
   KLASSENSTUFE_LABEL,
   ANLASS_LABEL,
@@ -11,6 +11,7 @@ import {
 } from '@/lib/szenarien-data'
 
 interface Props {
+  schultyp: Schultyp
   onStart: (config: GespraechsKonfiguration) => void
 }
 
@@ -20,7 +21,7 @@ const SCHWIERIGKEIT_BESCHREIBUNG: Record<Schwierigkeit, string> = {
   'gewitterfront': 'Hochkonflikthaftes Gespräch, maximale Herausforderung',
 }
 
-export default function KonfigurationsForm({ onStart }: Props) {
+export default function KonfigurationsForm({ schultyp, onStart }: Props) {
   const [klassenstufe, setKlassenstufe] = useState<Klassenstufe>('7-8')
   const [anlass, setAnlass] = useState<Gespraechsanlass>('leistungsabfall')
   const [familie, setFamilie] = useState<Familiensituation>('keine')
@@ -29,7 +30,7 @@ export default function KonfigurationsForm({ onStart }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onStart({ schultyp: 'gymnasium', klassenstufe, anlass, familie, elterntyp, schwierigkeit })
+    onStart({ schultyp, klassenstufe, anlass, familie, elterntyp, schwierigkeit })
   }
 
   return (

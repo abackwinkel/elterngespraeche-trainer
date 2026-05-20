@@ -1,11 +1,17 @@
 import type {
-  Szenario, Elterntyp, Schwierigkeit, Gespraechsanlass,
+  Szenario, Schultyp, Elterntyp, Schwierigkeit, Gespraechsanlass,
   Klassenstufe, Familiensituation,
 } from '@/types'
 
-export type { Elterntyp, Schwierigkeit, Gespraechsanlass, Klassenstufe, Familiensituation }
+export type { Schultyp, Elterntyp, Schwierigkeit, Gespraechsanlass, Klassenstufe, Familiensituation }
 
 // ─── Labels für die UI ────────────────────────────────────────────────────────
+
+export const SCHULTYP_LABEL: Record<Schultyp, string> = {
+  gymnasium:    'Gymnasium',
+  realschule:   'Realschule',
+  gesamtschule: 'Gesamtschule',
+}
 
 export const ELTERNTYP_LABEL: Record<Elterntyp, string> = {
   kooperativ:  'Kooperativ-offen',
@@ -249,31 +255,146 @@ export const SZENARIEN: Szenario[] = [
       'Herr Hofmann lehnt sich vor und schaut Sie direkt an.',
     ],
   },
+
+  // ─── Realschule ───────────────────────────────────────────────────────────────
+
+  // RS-1: Leistungsabfall / Aggressiv / Scheidung / 7./8. Klasse
+  {
+    id: 'real-leistung-aggressiv-hartmann',
+    schultyp: 'realschule',
+    klassenstufe: '7-8',
+    anlass: 'leistungsabfall',
+    familie: 'scheidung',
+    elterntyp: 'aggressiv',
+    elternName: 'Frau Hartmann',
+    kindName: 'Kevin',
+    opener: 'Ich verstehe das nicht. Kevin ist doch kein schlechter Schüler. Ich frage mich, ob er bei Ihnen überhaupt fair benotet wird.',
+    hintergrund: 'Elternprofil: Frau Hartmann, Mutter, Sohn Kevin (männlich), 7. Klasse. Kevin hat seit der Trennung der Eltern stark nachgelassen – Noten in Deutsch und Mathe gefährdet. Frau Hartmann lebt allein mit ihm, arbeitet Vollzeit und ist selbst emotional belastet. Sie reagiert mit Angriff, weil sie sich schuldig fühlt.',
+    situationsbeschreibungen: [
+      'Frau Hartmann verschränkt die Arme und schaut Sie scharf an.',
+      'Frau Hartmann tippt auf den Tisch und ihre Stimme wird lauter.',
+    ],
+  },
+
+  // RS-2: Verhaltensauffälligkeiten / Kooperativ / Migrationshintergrund / 5./6. Klasse
+  {
+    id: 'real-verhalten-kooperativ-celik',
+    schultyp: 'realschule',
+    klassenstufe: '5-6',
+    anlass: 'verhalten',
+    familie: 'migration',
+    elterntyp: 'kooperativ',
+    elternName: 'Herr und Frau Çelik',
+    kindName: 'Selin',
+    opener: 'Guten Tag. Wir kommen, weil wir Selin helfen wollen. Bitte sagen Sie uns ehrlich, was los ist.',
+    hintergrund: 'Elternprofil: Herr und Frau Çelik, beide anwesend, Tochter Selin (weiblich), 6. Klasse. Selin fällt durch zunehmende Stimmungsschwankungen und Rückzug auf. Eltern sprechen Deutsch mit Akzent, aber beide engagiert. Sie sind kooperativ und möchten verstehen, wie sie zuhause unterstützen können. Vorsicht: Kulturell ist es ungewohnt, Probleme offen vor Fremden zu besprechen.',
+    situationsbeschreibungen: [
+      'Frau Çelik flüstert kurz etwas auf Türkisch zu ihrem Mann.',
+      'Herr Çelik nickt und schaut Sie direkt an.',
+    ],
+  },
+
+  // RS-3: Versetzungsgefährdung / Defensiv / Leistungsdruck / 9./10. Klasse
+  {
+    id: 'real-versetzung-defensiv-gruber',
+    schultyp: 'realschule',
+    klassenstufe: '9-10',
+    anlass: 'versetzung',
+    familie: 'leistungsdruck',
+    elterntyp: 'defensiv',
+    elternName: 'Herr Gruber',
+    kindName: 'Tobias',
+    opener: 'Ja, ich weiß, dass es Probleme gibt. Aber Tobias gibt sich wirklich Mühe. Wir lernen jeden Abend zusammen. Ich bin mir nicht sicher, ob das wirklich an ihm liegt.',
+    hintergrund: 'Elternprofil: Herr Gruber, Vater, Sohn Tobias (männlich), 10. Klasse. Tobias ist in zwei Fächern versetzungsgefährdet. Vater hat hohe Erwartungen, will aber Tobias schützen und sieht die Schule als mitverantwortlich. Er ist nicht böswillig, aber wenig selbstkritisch.',
+    situationsbeschreibungen: [
+      'Herr Gruber lehnt sich leicht zurück und schaut zur Seite.',
+      'Herr Gruber nickt zögernd, seine Arme bleiben verschränkt.',
+    ],
+  },
+
+  // ─── Gesamtschule ─────────────────────────────────────────────────────────────
+
+  // GS-1: Soziale Konflikte & Mobbing / Übergriffig / Scheidung / 7./8. Klasse
+  {
+    id: 'ges-mobbing-uebergriffig-bauer',
+    schultyp: 'gesamtschule',
+    klassenstufe: '7-8',
+    anlass: 'mobbing',
+    familie: 'scheidung',
+    elterntyp: 'uebergriffig',
+    elternName: 'Frau Bauer',
+    kindName: 'Niklas',
+    opener: 'Ich habe Screenshots. Ich habe alles. Niklas wird seit Monaten fertiggemacht und ich will wissen, was Sie dagegen unternommen haben. Wenn das hier nicht aufhört, gehe ich zur Schulbehörde.',
+    hintergrund: 'Elternprofil: Frau Bauer, Mutter, Sohn Niklas (männlich), 8. Klasse. Niklas ist in eine Mobbing-Situation verwickelt – teils Opfer, teils Mitläufer. Mutter ist nach der Scheidung sehr angespannt, hat das Gefühl, immer kämpfen zu müssen. Kommt mit einer Dokumentenmappe und hohem Anspruch auf sofortige Lösungen.',
+    situationsbeschreibungen: [
+      'Frau Bauer legt eine Mappe auf den Tisch und öffnet sie demonstrativ.',
+      'Frau Bauer lehnt sich vor, ihr Tonfall wird schärfer.',
+    ],
+  },
+
+  // GS-2: Berufsorientierung / Passiv / keine Besonderheit / 9./10. Klasse
+  {
+    id: 'ges-beruf-passiv-wolf',
+    schultyp: 'gesamtschule',
+    klassenstufe: '9-10',
+    anlass: 'beruf',
+    familie: 'keine',
+    elterntyp: 'passiv',
+    elternName: 'Frau Wolf',
+    kindName: 'Jana',
+    opener: 'Mmh. Okay.',
+    hintergrund: 'Elternprofil: Frau Wolf, Mutter, Tochter Jana (weiblich), 10. Klasse. Berufsorientierungsgespräch. Jana hat keine klare Richtung, ihre Noten sind mittelmäßig. Frau Wolf wirkt erschöpft und desinteressiert – möglicherweise überfordert oder hat das Gefühl, dass Schule nicht ihr Thema ist. Antwortet einsilbig, initiiert nichts.',
+    situationsbeschreibungen: [
+      'Frau Wolf schaut auf ihr Handy und legt es dann zögernd weg.',
+      'Frau Wolf nickt kurz, ohne den Blick zu heben.',
+    ],
+  },
+
+  // GS-3: Allgemeines Entwicklungsgespräch / Weinend / Alleinerziehend / 5./6. Klasse
+  {
+    id: 'ges-allgemein-weinend-peters',
+    schultyp: 'gesamtschule',
+    klassenstufe: '5-6',
+    anlass: 'allgemein',
+    familie: 'alleinerziehend',
+    elterntyp: 'weinend',
+    elternName: 'Frau Peters',
+    kindName: 'Leon',
+    opener: 'Ich mache mir so viele Sorgen um Leon. Er schläft schlecht, er isst kaum... ich weiß nicht mehr, wie ich ihm noch helfen soll.',
+    hintergrund: 'Elternprofil: Frau Peters, alleinerziehende Mutter, Sohn Leon (männlich), 6. Klasse. Leon hat soziale Schwierigkeiten und wirkt in der Schule häufig traurig und zurückgezogen. Frau Peters ist emotional am Limit, kümmert sich allein und ohne Unterstützung. Sie sucht Verständnis und praktische Hilfe, bricht aber schnell in Tränen aus.',
+    situationsbeschreibungen: [
+      'Frau Peters greift nach ihrem Taschentuch.',
+      'Frau Peters schaut kurz weg und atmet tief durch.',
+    ],
+  },
 ]
 
 // ─── Hilfsfunktion: Szenario für eine Konfiguration finden ───────────────────
 
 export function findSzenario(
+  schultyp: Schultyp,
   elterntyp: Elterntyp,
   anlass: Gespraechsanlass,
   klassenstufe: Klassenstufe,
   familie: Familiensituation,
 ): Szenario | null {
+  const pool = SZENARIEN.filter(s => s.schultyp === schultyp)
+
   // Exakter Treffer
-  const exact = SZENARIEN.find(
+  const exact = pool.find(
     s => s.elterntyp === elterntyp && s.anlass === anlass &&
          s.klassenstufe === klassenstufe && s.familie === familie
   )
   if (exact) return exact
 
   // Typ + Anlass
-  const byTypeAnlass = SZENARIEN.find(
+  const byTypeAnlass = pool.find(
     s => s.elterntyp === elterntyp && s.anlass === anlass
   )
   if (byTypeAnlass) return byTypeAnlass
 
   // Nur Typ
-  return SZENARIEN.find(s => s.elterntyp === elterntyp) ?? SZENARIEN[0]
+  return pool.find(s => s.elterntyp === elterntyp) ?? pool[0] ?? SZENARIEN[0]
 }
 
 // ─── Szenario-Kontext-String für Prompts ─────────────────────────────────────
@@ -284,7 +405,7 @@ export function buildSzenarioKontext(
 ): string {
   return `Elternteil(e): ${szenario.elternName}
 Kind: ${szenario.kindName}
-Schultyp: Gymnasium, ${KLASSENSTUFE_LABEL[config.klassenstufe]}
+Schultyp: ${SCHULTYP_LABEL[szenario.schultyp]}, ${KLASSENSTUFE_LABEL[config.klassenstufe]}
 Gesprächsanlass: ${ANLASS_LABEL[config.anlass]}
 Familiensituation: ${FAMILIE_LABEL[config.familie]}
 Hintergrund: ${szenario.hintergrund}`

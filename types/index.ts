@@ -1,3 +1,7 @@
+// ─── Schultyp ─────────────────────────────────────────────────────────────────
+
+export type Schultyp = 'gymnasium' | 'realschule' | 'gesamtschule'
+
 // ─── Elterntypen & Schwierigkeit ──────────────────────────────────────────────
 
 export type Elterntyp =
@@ -33,7 +37,7 @@ export type Familiensituation =
 
 export interface Szenario {
   id: string
-  schultyp: 'gymnasium'
+  schultyp: Schultyp
   klassenstufe: Klassenstufe
   anlass: Gespraechsanlass
   familie: Familiensituation
@@ -56,7 +60,7 @@ export interface Turn {
 }
 
 export interface GespraechsKonfiguration {
-  schultyp: 'gymnasium'
+  schultyp: Schultyp
   klassenstufe: Klassenstufe
   anlass: Gespraechsanlass
   familie: Familiensituation

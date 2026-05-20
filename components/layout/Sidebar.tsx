@@ -12,6 +12,12 @@ export default function Sidebar() {
   const [gymnasiumOpen, setGymnasiumOpen] = useState(
     pathname.startsWith('/gymnasium')
   )
+  const [realschuleOpen, setRealschuleOpen] = useState(
+    pathname.startsWith('/realschule')
+  )
+  const [gesamtschuleOpen, setGesamtschuleOpen] = useState(
+    pathname.startsWith('/gesamtschule')
+  )
 
   useEffect(() => {
     setMobileOpen(false)
@@ -110,6 +116,28 @@ export default function Sidebar() {
             <SubNavLink label="Körpersignale"       href="/gymnasium/koerpersignale" isActive={isPrefix('/gymnasium/koerpersignale')} />
             <SubNavLink label="Nachbereitung"       href="/gymnasium/nachbereitung"  isActive={isPrefix('/gymnasium/nachbereitung')} />
           </>
+        )}
+
+        {/* Realschule — expandierbar */}
+        <SectionToggle
+          label="Realschule"
+          isOpen={realschuleOpen}
+          onToggle={() => setRealschuleOpen(v => !v)}
+          isActive={isPrefix('/realschule')}
+        />
+        {realschuleOpen && (
+          <GespraechsschmiedeLink href="/realschule/gespraech" isActive={isPrefix('/realschule/gespraech')} />
+        )}
+
+        {/* Gesamtschule — expandierbar */}
+        <SectionToggle
+          label="Gesamtschule"
+          isOpen={gesamtschuleOpen}
+          onToggle={() => setGesamtschuleOpen(v => !v)}
+          isActive={isPrefix('/gesamtschule')}
+        />
+        {gesamtschuleOpen && (
+          <GespraechsschmiedeLink href="/gesamtschule/gespraech" isActive={isPrefix('/gesamtschule/gespraech')} />
         )}
 
         {/* Grundschule — Platzhalter */}

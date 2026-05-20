@@ -29,7 +29,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   const [initialized, setInitialized] = useState(false)
   const [notizen, setNotizen] = useState('')
 
-  const szenario = findSzenario(config.elterntyp, config.anlass, config.klassenstufe, config.familie)
+  const szenario = findSzenario(config.schultyp, config.elterntyp, config.anlass, config.klassenstufe, config.familie)
   const szenarioKontext = buildSzenarioKontext(szenario ?? SZENARIEN[0], config)
   const turnCountRef = useRef(0)
   const situationIndexRef = useRef(0)
