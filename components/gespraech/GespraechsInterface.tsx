@@ -323,7 +323,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         <div className={`flex flex-col min-h-0 ${feedbackEnabled ? 'flex-[65]' : 'flex-1'}`}>
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4" style={{ maxHeight: 'calc(100vh - 340px)' }}>
             {turns.map((turn, i) => (
-              <TurnBubble key={i} turn={turn} />
+              <TurnBubble key={i} turn={turn} elternName={szenario?.elternName} />
             ))}
             {isStreaming && turns.length > 0 && turns[turns.length - 1].role === 'elternteil' && turns[turns.length - 1].content === '' && (
               <div className="flex gap-2 items-center text-[var(--c-gray)] text-sm">
@@ -377,18 +377,18 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         {feedbackEnabled && (
           <div className="flex-[35] flex flex-col gap-3 min-h-0">
             <div className="bg-[var(--c-offwhite)] rounded-xl p-4 border border-[var(--c-gray-light)] overflow-y-auto" style={{ maxHeight: 'calc(100vh - 400px)' }}>
-              <h3 className="font-semibold text-[var(--c-dark)] mb-3" style={{ fontSize: '0.95rem' }}>Sofort-Auswertung</h3>
+              <h3 className="font-semibold text-[var(--c-dark)] mb-3" style={{ fontSize: '1.05rem' }}>Sofort-Auswertung</h3>
               <AuswertungsPanel feedback={feedback} isLoading={isLoadingFeedback} />
             </div>
             {/* Notizen */}
             <div className="bg-white rounded-xl border border-[var(--c-gray-light)] p-4 flex flex-col flex-1 min-h-0">
-              <h3 className="font-semibold text-[var(--c-dark)] mb-2" style={{ fontSize: '0.95rem' }}>Meine Notizen</h3>
+              <h3 className="font-semibold text-[var(--c-dark)] mb-2" style={{ fontSize: '1.05rem' }}>Meine Notizen</h3>
               <textarea
                 value={notizen}
                 onChange={e => setNotizen(e.target.value)}
                 placeholder="Gedanken, Beobachtungen, Ideen …"
                 className="flex-1 resize-none text-[var(--c-dark)] bg-transparent focus:outline-none leading-relaxed"
-                style={{ minHeight: '80px', fontSize: '0.9rem' }}
+                style={{ minHeight: '80px', fontSize: '0.95rem' }}
               />
             </div>
           </div>
@@ -647,7 +647,7 @@ function renderElternteilContent(content: string) {
   })
 }
 
-function TurnBubble({ turn }: { turn: Turn }) {
+function TurnBubble({ turn, elternName }: { turn: Turn; elternName?: string }) {
   if (turn.role === 'situation') {
     return (
       <p className="text-sm text-[var(--c-gray)] italic text-center px-4">
@@ -657,6 +657,18 @@ function TurnBubble({ turn }: { turn: Turn }) {
   }
 
   const isElternteil = turn.role === 'elternteil'
+
+  // Parse "Herr/Frau Name:" prefix the AI adds for couple scenarios
+  let speakerLabel = elternName ?? 'Elternteil'
+  let displayContent = turn.content
+  if (isElternteil) {
+    const prefixMatch = turn.content.match(/^((?:Herr|Frau)\s+\S+)\s*:\s*/i)
+    if (prefixMatch) {
+      speakerLabel = prefixMatch[1]
+      displayContent = turn.content.slice(prefixMatch[0].length)
+    }
+  }
+
   return (
     <div className={`flex ${isElternteil ? 'justify-start' : 'justify-end'}`}>
       <div
@@ -667,10 +679,10 @@ function TurnBubble({ turn }: { turn: Turn }) {
         }`}
       >
         {isElternteil && (
-          <div className="text-xs font-semibold text-[var(--c-gray)] mb-2">Elternteil</div>
+          <div className="text-xs font-semibold text-[var(--c-gray)] mb-2">{speakerLabel}</div>
         )}
         {isElternteil
-          ? renderElternteilContent(turn.content)
+          ? renderElternteilContent(displayContent)
           : <p className="whitespace-pre-wrap">{turn.content}</p>
         }
       </div>

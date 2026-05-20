@@ -124,7 +124,16 @@ export function buildElternteilSystemPrompt(
     ? `\n\n### Schwierigkeitsgrad-Anpassung\n${schwierigkeitsModifier}`
     : ''
 
+  const isCouple = /\bund\b/.test(szenarioKontext.split('\n')[0] ?? '')
+  const coupleRule = isCouple
+    ? `\n- Beide Elternteile sind anwesend. Beginne jede Antwort mit dem Namen der sprechenden Person gefolgt von einem Doppelpunkt, z. B. "Herr Berger:" oder "Frau Berger:". Wechsle realistisch zwischen beiden.`
+    : ''
+
   return `${elternteilPrompt}${modifier}
+
+### Gesprächsregeln (immer einhalten)
+
+- Sprich die Lehrkraft ausschließlich mit "Sie" an – niemals mit "du"${coupleRule}
 
 ### Deine konkrete Situation in diesem Gespräch
 

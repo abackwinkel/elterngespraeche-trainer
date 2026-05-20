@@ -77,10 +77,10 @@ function FeedbackItem({
 }) {
   return (
     <div className={`rounded-lg border ${bgColor} ${borderColor} p-3`}>
-      <div className={`font-semibold ${iconColor} mb-1.5`} style={{ fontSize: '0.875rem' }}>
+      <div className={`font-semibold ${iconColor} mb-1.5`} style={{ fontSize: '0.9rem' }}>
         {icon} {label}
       </div>
-      <p className="text-[var(--c-dark)] leading-relaxed" style={{ fontSize: '0.875rem' }}>{text}</p>
+      <p className="text-[var(--c-dark)] leading-relaxed" style={{ fontSize: '0.9rem' }}>{text}</p>
     </div>
   )
 }
