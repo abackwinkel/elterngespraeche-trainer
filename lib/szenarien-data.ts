@@ -160,6 +160,78 @@ export const SZENARIEN: Szenario[] = [
     ],
   },
 
+  // Szenario 7: Gefährdungseinschätzung / Defensiv / Multiproblemfamilie / 5./6. Klasse
+  {
+    id: 'gymn-gefaehrdung-defensiv-wagner',
+    schultyp: 'gymnasium',
+    klassenstufe: '5-6',
+    anlass: 'gefaehrdung',
+    familie: 'multiproblem',
+    elterntyp: 'defensiv',
+    elternName: 'Frau Wagner',
+    kindName: 'Tim',
+    opener: 'Ich weiß gar nicht, warum ich hier bin. Tim sagt, ihm geht es gut. Ich glaube, das wird alles aufgebauscht.',
+    hintergrund: 'Elternprofil: Frau Wagner, Mutter, Sohn Tim (männlich), 5. Klasse. Tim kommt wiederholt ungewaschen und ohne Frühstück in die Schule, wirkt erschöpft und ängstlich. Erste Hinweise auf Vernachlässigung. Frau Wagner wirkt überfordert, leugnet Probleme und verteidigt sich sofort. Schul-interne Gefährdungseinschätzung wurde eingeleitet.',
+    situationsbeschreibungen: [
+      'Frau Wagner verschränkt die Arme und weicht Ihrem Blick aus.',
+      'Frau Wagner atmet kurz scharf aus und schüttelt leicht den Kopf.',
+    ],
+  },
+
+  // Szenario 8: Verhaltensauffälligkeiten / Aggressiv / Scheidung / 7./8. Klasse
+  {
+    id: 'gymn-verhalten-aggressiv-richter',
+    schultyp: 'gymnasium',
+    klassenstufe: '7-8',
+    anlass: 'verhalten',
+    familie: 'scheidung',
+    elterntyp: 'aggressiv',
+    elternName: 'Herr Richter',
+    kindName: 'Felix',
+    opener: 'Ich habe Felix gefragt, was los ist. Er sagt, er wird in Ihrer Klasse von Mitschülern provoziert. Wenn Sie das nicht in den Griff kriegen, dann überlege ich, ob das noch die richtige Schule für ihn ist.',
+    hintergrund: 'Elternprofil: Herr Richter, Vater, Sohn Felix (männlich), 7. Klasse. Scheidung vor einem Jahr, Felix wechselt wöchentlich zwischen Elternteilen. Zunehmende Aggressionen im Unterricht und auf dem Schulhof. Herr Richter macht die Schule verantwortlich und ist selbst in einer belastenden Situation.',
+    situationsbeschreibungen: [
+      'Herr Richter legt die Hände flach auf den Tisch.',
+      'Herr Richter lehnt sich vor und fixiert Sie mit seinem Blick.',
+    ],
+  },
+
+  // Szenario 9: Leistungsabfall / Passiv / Leistungsdruck / 9./10. Klasse
+  {
+    id: 'gymn-leistung-passiv-schneider',
+    schultyp: 'gymnasium',
+    klassenstufe: '9-10',
+    anlass: 'leistungsabfall',
+    familie: 'leistungsdruck',
+    elterntyp: 'passiv',
+    elternName: 'Herr und Frau Schneider',
+    kindName: 'Lara',
+    opener: 'Ja. Wir hören Ihnen zu.',
+    hintergrund: 'Elternprofil: Herr und Frau Schneider, beide anwesend, Tochter Lara, 10. Klasse. Lara hatte bis zur 8. Klasse sehr gute Noten, jetzt deutlicher Leistungsabfall. Beide Eltern haben hohe Erwartungen und haben bisher nie an einem Gespräch teilgenommen – sie sind da, aber verschlossen. Möglicherweise überfordert mit der Situation oder bewusst zurückhaltend, weil sie das Problem nicht wahrhaben wollen.',
+    situationsbeschreibungen: [
+      'Herr Schneider nickt, schaut aber an Ihnen vorbei.',
+      'Frau Schneider faltet die Hände auf dem Schoß und hält sie still.',
+    ],
+  },
+
+  // Szenario 10: Soziale Konflikte & Mobbing / Kooperativ / keine Besonderheit / 5./6. Klasse
+  {
+    id: 'gymn-mobbing-kooperativ-braun',
+    schultyp: 'gymnasium',
+    klassenstufe: '5-6',
+    anlass: 'mobbing',
+    familie: 'keine',
+    elterntyp: 'kooperativ',
+    elternName: 'Frau Braun',
+    kindName: 'Mia',
+    opener: 'Guten Tag. Ich bin froh, dass Sie sich die Zeit nehmen. Mia hat mir erzählt, dass sie in der Klasse manchmal ausgeschlossen wird – ich wollte das gerne mit Ihnen besprechen.',
+    hintergrund: 'Elternprofil: Frau Braun, Mutter, Tochter Mia, 6. Klasse. Mia wird von einer kleinen Clique wiederholt ausgegrenzt – nichts Dramatisches, aber anhaltend. Frau Braun ist sachlich, offen und kooperationsbereit. Sie sucht gemeinsam nach Lösungen, hat aber klare Erwartungen an die Schule.',
+    situationsbeschreibungen: [
+      'Frau Braun hält Blickkontakt und nickt ruhig.',
+      'Frau Braun macht sich kurz eine Notiz.',
+    ],
+  },
+
   // Szenario 6: Allgemeines Entwicklungsgespräch / Kooperativ / 7./8. Klasse
   {
     id: 'gymn-allgemein-kooperativ-hofmann',

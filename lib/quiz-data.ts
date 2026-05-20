@@ -248,6 +248,64 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     erklaerung: 'Ein Bedürfnis im GFK-Sinn wird in der Ich-Form ausgedrückt und beschreibt, was man sich wünscht – konstruktiv und ohne Vorwurf. "Ich brauche..." macht das eigene Bedürfnis transparent.',
   },
 
+  // ── Körpersignale ─────────────────────────────────────────────────────────────
+  {
+    id: 'ks-q01',
+    modul: 'koerpersignale',
+    schwierigkeit: 'ruhige-see',
+    frage: 'Was bedeutet es, wenn ein Elternteil Ihnen gegenüber konstant Blickkontakt hält, nickt und sich leicht vorbeugt?',
+    antworten: [
+      'Er oder sie stimmt allem zu, was Sie sagen.',
+      'Er oder sie zeigt aktives Zuhören und Gesprächsbereitschaft.',
+      'Er oder sie versucht, Sie unter Druck zu setzen.',
+      'Er oder sie ist sehr nervös.',
+    ],
+    korrektIndex: 1,
+    erklaerung: 'Blickkontakt, Nicken und Vorbeugen signalisieren aktives Zuhören und Offenheit – aber noch keine inhaltliche Zustimmung. Wichtig: Trotz kooperativer Körperhaltung weiterhin nachfragen, ob das Gesagte wirklich verstanden wurde.',
+  },
+  {
+    id: 'ks-q02',
+    modul: 'koerpersignale',
+    schwierigkeit: 'ruhige-see',
+    frage: 'Eltern lehnen sich beide zurück und die Antworten werden einsilbiger. Was signalisiert das?',
+    antworten: [
+      'Sie sind mit dem Gespräch zufrieden und entspannen sich.',
+      'Zunehmende Abwehrhaltung – das Gespräch hat möglicherweise einen als bedrohlich empfundenen Punkt erreicht.',
+      'Sie wollen das Gespräch bald beenden, weil sie einen anderen Termin haben.',
+      'Das ist bedeutungslos – Körperhaltung und Gesprächsinhalt hängen nicht zusammen.',
+    ],
+    korrektIndex: 1,
+    erklaerung: 'Rückwärtslehnen und Einsilbigkeit zusammen signalisieren Rückzug. Jetzt ist es sinnvoll, den Druck aus dem Gespräch zu nehmen: "Mir ist wichtig, dass wir heute gemeinsam zu einem guten Ergebnis kommen." Dann eine offene Frage stellen.',
+  },
+  {
+    id: 'ks-q03',
+    modul: 'koerpersignale',
+    schwierigkeit: 'gegenwind',
+    frage: 'Ein Vater beugt sich vor, spricht lauter und gestikuliert. Was ist die geeignete Reaktion als Lehrkraft?',
+    antworten: [
+      'Ebenfalls lauter werden, um Präsenz zu zeigen.',
+      'Das Gespräch unterbrechen und die Schulleitung hinzuholen.',
+      'Ruhig und langsam sprechen – der eigene Tonfall wirkt oft regulierend.',
+      'Die Aussagen ignorieren und zum nächsten Thema übergehen.',
+    ],
+    korrektIndex: 2,
+    erklaerung: 'Vorneigen und lauter werden zeigt hohes Erregungsniveau. Nicht spiegeln – das eskaliert. Stattdessen: Eigenes Sprechtempo und Lautstärke bewusst senken. "Ich höre, dass Ihnen das wichtig ist – darf ich kurz antworten?" gibt dem Gespräch Raum.',
+  },
+  {
+    id: 'ks-q04',
+    modul: 'koerpersignale',
+    schwierigkeit: 'gewitterfront',
+    frage: 'Eine Mutter lächelt häufig und nickt, macht aber kaum eigene Aussagen und weicht konkreten Fragen aus. Was tun?',
+    antworten: [
+      'Das Lächeln als Zustimmung werten und die Vereinbarungen festhalten.',
+      'Das Gespräch abkürzen – sie ist offensichtlich einverstanden.',
+      'Einfache, offene Fragen stellen und echte Pausen aushalten.',
+      'Die Situation der Schulleitung melden, da das Verhalten verdächtig ist.',
+    ],
+    korrektIndex: 2,
+    erklaerung: 'Lächeln ohne Inhalt kann soziale Höflichkeit, Unsicherheit oder eine Sprachbarriere signalisieren – keine echte Zustimmung. Konkrete, einfache offene Fragen stellen ("Was ist Ihnen heute besonders wichtig?") und Pausen wirklich aushalten, ohne sofort weiterzusprechen.',
+  },
+
   // ── Vorbereitung ──────────────────────────────────────────────────────────────
   {
     id: 'vb-01',
