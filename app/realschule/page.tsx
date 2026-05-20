@@ -7,6 +7,21 @@ const HERO = {
   desc: 'KI-simulierte Elterngespräche mit Sofortfeedback – abgestimmt auf typische Realschul-Szenarien. Wähle Elterntyp, Schwierigkeit und Gesprächsanlass frei.',
 }
 
+const MODULE = [
+  {
+    href: '/realschule/info',
+    icon: '📖',
+    label: 'Grundlagen & Info',
+    desc: 'Gesprächsführung, Vorbereitung, Körpersprache, Recht, schwierige Situationen',
+  },
+  {
+    href: '/realschule/quiz',
+    icon: '❓',
+    label: 'Quiz',
+    desc: 'Gesprächsphasen, GFK, Rechtswissen, Reaktionen testen',
+  },
+]
+
 export default function RealschulePage() {
   return (
     <>
@@ -89,6 +104,39 @@ export default function RealschulePage() {
             </div>
           </div>
         </Link>
+
+        <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)', marginBottom: '0.875rem' }}>
+          Weitere Module
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: '1rem' }}>
+          {MODULE.map((mod) => (
+            <Link
+              key={mod.href}
+              href={mod.href}
+              className="module-card card-lift"
+              style={{
+                display: 'block', textDecoration: 'none',
+                background: '#fff', borderRadius: '10px',
+                border: '1px solid var(--c-lightgray)',
+                padding: '1.25rem',
+              }}
+            >
+              <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '0.5rem', lineHeight: 1 }}>
+                {mod.icon}
+              </span>
+              <h2 style={{
+                fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
+                fontSize: '1.17rem', fontWeight: 600,
+                color: 'var(--c-dark)', margin: '0 0 0.3rem',
+              }}>
+                {mod.label}
+              </h2>
+              <p style={{ fontSize: '0.825rem', color: 'rgba(0,0,0,0.5)', margin: 0, lineHeight: 1.5 }}>
+                {mod.desc}
+              </p>
+            </Link>
+          ))}
+        </div>
       </main>
     </>
   )

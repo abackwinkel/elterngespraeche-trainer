@@ -126,7 +126,11 @@ export default function Sidebar() {
           isActive={isPrefix('/realschule')}
         />
         {realschuleOpen && (
-          <GespraechsschmiedeLink href="/realschule/gespraech" isActive={isPrefix('/realschule/gespraech')} />
+          <>
+            <GespraechsschmiedeLink href="/realschule/gespraech" isActive={isPrefix('/realschule/gespraech')} />
+            <SubNavLink label="Grundlagen & Info" href="/realschule/info" isActive={isPrefix('/realschule/info')} />
+            <SubNavLink label="Quiz"              href="/realschule/quiz" isActive={isPrefix('/realschule/quiz')} />
+          </>
         )}
 
         {/* Gesamtschule — expandierbar */}
@@ -137,7 +141,11 @@ export default function Sidebar() {
           isActive={isPrefix('/gesamtschule')}
         />
         {gesamtschuleOpen && (
-          <GespraechsschmiedeLink href="/gesamtschule/gespraech" isActive={isPrefix('/gesamtschule/gespraech')} />
+          <>
+            <GespraechsschmiedeLink href="/gesamtschule/gespraech" isActive={isPrefix('/gesamtschule/gespraech')} />
+            <SubNavLink label="Grundlagen & Info" href="/gesamtschule/info" isActive={isPrefix('/gesamtschule/info')} />
+            <SubNavLink label="Quiz"              href="/gesamtschule/quiz" isActive={isPrefix('/gesamtschule/quiz')} />
+          </>
         )}
 
         {/* Grundschule — Platzhalter */}
