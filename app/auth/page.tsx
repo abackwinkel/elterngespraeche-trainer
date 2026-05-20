@@ -21,9 +21,13 @@ export default function AuthPage() {
     setError('')
 
     const supabase = createClient()
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.elterngespraeche-trainieren.de'
     const { data, error: signUpError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
+      options: {
+        emailRedirectTo: `${siteUrl}/auth/confirm`,
+      },
     })
 
     setLoading(false)
