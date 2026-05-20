@@ -33,6 +33,10 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
     onStart({ schultyp, klassenstufe, anlass, familie, elterntyp, schwierigkeit })
   }
 
+  const klassenstufeOptionen = Object.entries(KLASSENSTUFE_LABEL).filter(
+    ([val]) => schultyp === 'realschule' ? val !== 'oberstufe' : true
+  )
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
@@ -50,7 +54,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             label="Klassenstufe"
             value={klassenstufe}
             onChange={v => setKlassenstufe(v as Klassenstufe)}
-            options={Object.entries(KLASSENSTUFE_LABEL)}
+            options={klassenstufeOptionen}
           />
           <SelectField
             label="Gesprächsanlass"

@@ -9,15 +9,6 @@ export default function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [gymnasiumOpen, setGymnasiumOpen] = useState(
-    pathname.startsWith('/gymnasium')
-  )
-  const [realschuleOpen, setRealschuleOpen] = useState(
-    pathname.startsWith('/realschule')
-  )
-  const [gesamtschuleOpen, setGesamtschuleOpen] = useState(
-    pathname.startsWith('/gesamtschule')
-  )
 
   useEffect(() => {
     setMobileOpen(false)
@@ -93,74 +84,51 @@ export default function Sidebar() {
       {/* Nav */}
       <nav style={{ flex: 1, padding: '0.75rem 0', overflowY: 'auto' }}>
 
-        <NavLink
-          label="Startseite"
-          href="/"
-          isActive={isActive('/')}
-        />
+        <NavLink label="Startseite" href="/" isActive={isActive('/')} />
 
         <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', margin: '0.4rem 0' }} />
 
-        {/* Gymnasium — expandierbar */}
-        <SectionToggle
+        {/* Gemeinsame Module */}
+        <NavLink label="Grundlagen & Info"  href="/info"           isActive={isPrefix('/info')} />
+        <NavLink label="Wissensquiz"         href="/quiz"           isActive={isPrefix('/quiz')} />
+        <NavLink label="Nachbereitung"       href="/nachbereitung"  isActive={isPrefix('/nachbereitung')} />
+
+        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', margin: '0.4rem 0' }} />
+
+        {/* Gesprächsschmiede – je Schultyp */}
+        <div style={{
+          padding: '0.5rem 1.25rem 0.25rem',
+          fontSize: '0.62rem',
+          fontWeight: 700,
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.28)',
+        }}>
+          Gesprächsschmiede
+        </div>
+
+        <GespraechsschmiedeLink
           label="Gymnasium"
-          isOpen={gymnasiumOpen}
-          onToggle={() => setGymnasiumOpen(v => !v)}
+          href="/gymnasium/gespraech"
           isActive={isPrefix('/gymnasium')}
         />
-        {gymnasiumOpen && (
-          <>
-            <GespraechsschmiedeLink href="/gymnasium/gespraech" isActive={isPrefix('/gymnasium/gespraech')} />
-            <SubNavLink label="Grundlagen & Info"   href="/gymnasium/info"           isActive={isPrefix('/gymnasium/info')} />
-            <SubNavLink label="Quiz"                href="/gymnasium/quiz"           isActive={isPrefix('/gymnasium/quiz')} />
-            <SubNavLink label="Körpersignale"       href="/gymnasium/koerpersignale" isActive={isPrefix('/gymnasium/koerpersignale')} />
-            <SubNavLink label="Nachbereitung"       href="/gymnasium/nachbereitung"  isActive={isPrefix('/gymnasium/nachbereitung')} />
-          </>
-        )}
-
-        {/* Realschule — expandierbar */}
-        <SectionToggle
+        <GespraechsschmiedeLink
           label="Realschule"
-          isOpen={realschuleOpen}
-          onToggle={() => setRealschuleOpen(v => !v)}
+          href="/realschule/gespraech"
           isActive={isPrefix('/realschule')}
         />
-        {realschuleOpen && (
-          <>
-            <GespraechsschmiedeLink href="/realschule/gespraech" isActive={isPrefix('/realschule/gespraech')} />
-            <SubNavLink label="Grundlagen & Info" href="/realschule/info" isActive={isPrefix('/realschule/info')} />
-            <SubNavLink label="Quiz"              href="/realschule/quiz" isActive={isPrefix('/realschule/quiz')} />
-          </>
-        )}
-
-        {/* Gesamtschule — expandierbar */}
-        <SectionToggle
+        <GespraechsschmiedeLink
           label="Gesamtschule"
-          isOpen={gesamtschuleOpen}
-          onToggle={() => setGesamtschuleOpen(v => !v)}
+          href="/gesamtschule/gespraech"
           isActive={isPrefix('/gesamtschule')}
         />
-        {gesamtschuleOpen && (
-          <>
-            <GespraechsschmiedeLink href="/gesamtschule/gespraech" isActive={isPrefix('/gesamtschule/gespraech')} />
-            <SubNavLink label="Grundlagen & Info" href="/gesamtschule/info" isActive={isPrefix('/gesamtschule/info')} />
-            <SubNavLink label="Quiz"              href="/gesamtschule/quiz" isActive={isPrefix('/gesamtschule/quiz')} />
-          </>
-        )}
 
-        {/* Grundschule — Platzhalter */}
-        <DemnachstLink label="Grundschule" href="/grundschule" />
-
-        {/* Mittelschule — Platzhalter */}
-        <DemnachstLink label="Mittelschule" href="/mittelschule" />
+        <DemnachstLink label="Grundschule" />
+        <DemnachstLink label="Mittelschule" />
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', margin: '0.5rem 0 0.25rem' }} />
 
-        <NavLink
-          label="Mein Fortschritt"
-          href="/fortschritt"
-          isActive={isActive('/fortschritt')}
-        />
+        <NavLink label="Mein Fortschritt" href="/fortschritt" isActive={isActive('/fortschritt')} />
 
       </nav>
 
@@ -197,49 +165,6 @@ export default function Sidebar() {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function SectionToggle({
-  label, isOpen, onToggle, isActive,
-}: {
-  label: string
-  isOpen: boolean
-  onToggle: () => void
-  isActive?: boolean
-}) {
-  return (
-    <button
-      onClick={onToggle}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        padding: '0.55rem 1.25rem',
-        fontSize: '0.75rem',
-        fontWeight: 600,
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        color: isActive ? 'var(--c-teal-light, #15a08a)' : 'rgba(255,255,255,0.45)',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {label}
-      <span style={{
-        display: 'inline-block',
-        fontSize: '0.95rem',
-        fontWeight: 400,
-        transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
-        transition: 'transform 0.2s ease',
-        color: 'rgba(255,255,255,0.3)',
-        marginLeft: '0.4rem',
-        lineHeight: 1,
-      }}>›</span>
-    </button>
-  )
-}
-
 function NavLink({ label, href, isActive }: { label: string; href: string; isActive: boolean }) {
   return (
     <Link
@@ -261,44 +186,46 @@ function NavLink({ label, href, isActive }: { label: string; href: string; isAct
   )
 }
 
-function SubNavLink({ label, href, isActive, highlight }: {
-  label: string; href: string; isActive: boolean; highlight?: boolean
-}) {
+function GespraechsschmiedeLink({ label, href, isActive }: { label: string; href: string; isActive: boolean }) {
   return (
     <Link
       href={href}
       style={{
-        display: 'block',
-        padding: '0.45rem 1.25rem 0.45rem 2rem',
-        fontSize: '0.84rem',
-        fontWeight: isActive ? 500 : 400,
-        color: isActive ? '#fff' : highlight ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.55)',
-        background: isActive ? 'rgba(15,123,108,0.22)' : 'transparent',
-        borderLeft: `3px solid ${isActive ? 'var(--c-teal)' : 'transparent'}`,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        padding: '0.5rem 1.25rem',
+        fontSize: '0.875rem',
+        fontWeight: isActive ? 600 : 400,
+        color: isActive ? '#fff' : 'var(--c-teal-light)',
+        background: isActive ? 'rgba(15,123,108,0.28)' : 'rgba(15,123,108,0.07)',
+        borderLeft: `3px solid ${isActive ? 'var(--c-teal-light)' : 'transparent'}`,
         textDecoration: 'none',
+        marginBottom: '0.15rem',
         transition: 'color 0.15s, background 0.15s',
       }}
     >
+      <span style={{ fontSize: '0.85em', opacity: 0.9 }}>🎭</span>
       {label}
     </Link>
   )
 }
 
-function DemnachstLink({ label, href }: { label: string; href: string }) {
+function DemnachstLink({ label }: { label: string }) {
   return (
     <div style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '0.55rem 1.25rem',
-      fontSize: '0.75rem',
-      fontWeight: 600,
-      letterSpacing: '0.08em',
-      textTransform: 'uppercase',
+      padding: '0.5rem 1.25rem',
+      fontSize: '0.875rem',
       color: 'rgba(255,255,255,0.2)',
       cursor: 'default',
     }}>
-      {label}
+      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <span style={{ fontSize: '0.85em', opacity: 0.5 }}>🎭</span>
+        {label}
+      </span>
       <span style={{
         fontSize: '0.6rem',
         fontWeight: 600,
@@ -330,31 +257,6 @@ function FooterButton({ label, onClick }: { label: string; onClick: () => void }
     >
       {label}
     </button>
-  )
-}
-
-function GespraechsschmiedeLink({ href, isActive }: { href: string; isActive: boolean }) {
-  return (
-    <Link
-      href={href}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        padding: '0.5rem 1.25rem 0.5rem 2rem',
-        fontSize: '0.88rem',
-        fontWeight: 600,
-        color: isActive ? '#fff' : 'var(--c-teal-light)',
-        background: isActive ? 'rgba(15,123,108,0.28)' : 'rgba(15,123,108,0.08)',
-        borderLeft: `3px solid ${isActive ? 'var(--c-teal-light)' : 'var(--c-teal)'}`,
-        textDecoration: 'none',
-        marginBottom: '0.35rem',
-        transition: 'color 0.15s, background 0.15s',
-      }}
-    >
-      <span style={{ fontSize: '0.85em', opacity: 0.9 }}>🎭</span>
-      Gesprächsschmiede
-    </Link>
   )
 }
 
