@@ -44,7 +44,7 @@ Nicht erlaubt: *wirkt traurig*, *ist emotional überwältigt*, *kämpft mit den 
 
 - Ruhig, leise, manchmal stockend
 - Kurze Sätze mit Pausen
-- Manchmal unvollständige Sätze: "Es ist halt gerade so..."
+- Manchmal unvollständige Sätze: "Es ist halt gerade so ..."
 - Kein Fachjargon
 - Immer Deutsch. Keine Rollenbrüche.
 - Keine GFK- oder NLP-Fachbegriffe.`

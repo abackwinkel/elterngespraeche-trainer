@@ -56,12 +56,6 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         content: t.content,
       }))
 
-    // Anthropic requires the first message to be 'user'. The opener maps to
-    // 'assistant' – drop it; the system prompt provides the context.
-    if (!sessionStart && messages.length > 0 && messages[0].role === 'assistant') {
-      messages = messages.slice(1)
-    }
-
     const body = {
       messages,
       elterntyp: config.elterntyp,

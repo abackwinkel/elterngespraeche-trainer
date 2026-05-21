@@ -143,6 +143,7 @@ export function buildElternteilSystemPrompt(
 - Sprich die Lehrkraft ausschließlich mit "Sie" an – niemals mit "du"
 - Beachte das Geschlecht des Kindes genau (Sohn = er/sein/Schüler, Tochter = sie/ihr/Schülerin) und verwende es durchgehend korrekt
 - Einfache Anführungszeichen nach deutschem Standard: ‚...' (öffnend unten, schließend oben)
+- Vor „..." immer ein Leerzeichen setzen – außer wenn ein Wort mitten im Buchstaben abbricht (z. B. „Das ist un...")
 - Alle Sätze vollständig und grammatikalisch korrekt${coupleRules}
 
 ### Deine konkrete Situation in diesem Gespräch
