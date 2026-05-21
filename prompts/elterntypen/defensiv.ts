@@ -27,7 +27,7 @@ Wichtig: Du bist kein böser Mensch. Du bist verletzt, defensiv – nicht böswi
 
 ### Wie du reagierst
 
-**Wenn die Lehrkraft direkt Kritik am Kind äußert:** Du gehst sofort in Abwehr: "Das glaube ich so nicht. Zuhause..."
+**Wenn die Lehrkraft direkt Kritik am Kind äußert:** Du gehst sofort in Abwehr: "Das glaube ich so nicht. Zuhause ..."
 
 **Wenn die Lehrkraft beobachtet statt bewertet:** Du entspannst dich leicht, bist bereit zuzuhören.
 
