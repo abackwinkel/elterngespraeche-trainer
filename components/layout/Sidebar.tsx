@@ -40,7 +40,7 @@ export default function Sidebar() {
         href="/"
         style={{
           padding: '1.5rem 1.25rem 1.2rem',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgba(26,46,53,0.12)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -52,17 +52,18 @@ export default function Sidebar() {
             fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
             fontSize: '1.3rem',
             fontWeight: 500,
-            color: '#fff',
+            color: 'var(--c-sidebar-text)',
             lineHeight: 1.2,
           }}>
             Elterngespräche
           </div>
           <div style={{
             fontSize: '0.68rem',
-            fontWeight: 600,
+            fontWeight: 700,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: 'var(--c-teal-light, #15a08a)',
+            color: 'var(--c-sidebar-text)',
+            opacity: 0.6,
             marginTop: '0.2rem',
           }}>
             trainieren mit KI
@@ -74,7 +75,8 @@ export default function Sidebar() {
           aria-label="Menü schließen"
           style={{
             background: 'none', border: 'none',
-            color: 'rgba(255,255,255,0.5)',
+            color: 'var(--c-sidebar-text)',
+            opacity: 0.5,
             fontSize: '1.5rem', cursor: 'pointer',
             lineHeight: 1, padding: '0.25rem',
           }}
@@ -86,14 +88,14 @@ export default function Sidebar() {
 
         <NavLink label="Startseite" href="/" isActive={isActive('/')} />
 
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', margin: '0.4rem 0' }} />
+        <div style={{ borderBottom: '1px solid rgba(26,46,53,0.1)', margin: '0.4rem 0' }} />
 
         {/* Gemeinsame Module */}
         <NavLink label="Grundlagen & Info"  href="/info"           isActive={isPrefix('/info')} />
         <NavLink label="Wissensquiz"         href="/quiz"           isActive={isPrefix('/quiz')} />
         <NavLink label="Nachbereitung"       href="/nachbereitung"  isActive={isPrefix('/nachbereitung')} />
 
-        <div style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', margin: '0.4rem 0' }} />
+        <div style={{ borderBottom: '1px solid rgba(26,46,53,0.1)', margin: '0.4rem 0' }} />
 
         {/* Gesprächsschmiede – je Schultyp */}
         <div style={{
@@ -102,7 +104,8 @@ export default function Sidebar() {
           fontWeight: 700,
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color: 'rgba(255,255,255,0.28)',
+          color: 'var(--c-sidebar-text)',
+          opacity: 0.45,
         }}>
           Gesprächsschmiede
         </div>
@@ -134,14 +137,14 @@ export default function Sidebar() {
           isActive={isPrefix('/mittelschule')}
         />
 
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', margin: '0.5rem 0 0.25rem' }} />
+        <div style={{ borderTop: '1px solid rgba(26,46,53,0.1)', margin: '0.5rem 0 0.25rem' }} />
 
         <NavLink label="Mein Fortschritt" href="/fortschritt" isActive={isActive('/fortschritt')} />
 
       </nav>
 
       {/* Footer */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '0.75rem 0' }}>
+      <div style={{ borderTop: '1px solid rgba(26,46,53,0.1)', padding: '0.75rem 0' }}>
         <FooterLinkHref label="Datenschutz & Privatsphäre" href="/datenschutz" />
         <FooterButton label="Abmelden" onClick={handleLogout} />
       </div>
@@ -181,12 +184,13 @@ function NavLink({ label, href, isActive }: { label: string; href: string; isAct
         display: 'block',
         padding: '0.55rem 1.25rem',
         fontSize: '0.875rem',
-        fontWeight: isActive ? 500 : 400,
-        color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
-        background: isActive ? 'rgba(15,123,108,0.22)' : 'transparent',
-        borderLeft: `3px solid ${isActive ? 'var(--c-teal)' : 'transparent'}`,
+        fontWeight: isActive ? 600 : 400,
+        color: 'var(--c-sidebar-text)',
+        opacity: isActive ? 1 : 0.7,
+        background: isActive ? 'rgba(26,46,53,0.12)' : 'transparent',
+        borderLeft: `3px solid ${isActive ? 'var(--c-sidebar-text)' : 'transparent'}`,
         textDecoration: 'none',
-        transition: 'color 0.15s, background 0.15s',
+        transition: 'opacity 0.15s, background 0.15s',
       }}
     >
       {label}
@@ -204,49 +208,19 @@ function GespraechsschmiedeLink({ label, href, isActive }: { label: string; href
         gap: '0.5rem',
         padding: '0.5rem 1.25rem',
         fontSize: '0.875rem',
-        fontWeight: isActive ? 600 : 400,
-        color: isActive ? '#fff' : 'var(--c-teal-light)',
-        background: isActive ? 'rgba(15,123,108,0.28)' : 'rgba(15,123,108,0.07)',
-        borderLeft: `3px solid ${isActive ? 'var(--c-teal-light)' : 'transparent'}`,
+        fontWeight: isActive ? 700 : 500,
+        color: 'var(--c-sidebar-text)',
+        opacity: isActive ? 1 : 0.75,
+        background: isActive ? 'rgba(26,46,53,0.15)' : 'rgba(26,46,53,0.06)',
+        borderLeft: `3px solid ${isActive ? 'var(--c-sidebar-text)' : 'transparent'}`,
         textDecoration: 'none',
         marginBottom: '0.15rem',
-        transition: 'color 0.15s, background 0.15s',
+        transition: 'opacity 0.15s, background 0.15s',
       }}
     >
-      <span style={{ fontSize: '0.85em', opacity: 0.9 }}>🎭</span>
+      <span style={{ fontSize: '0.85em' }}>🎭</span>
       {label}
     </Link>
-  )
-}
-
-function DemnachstLink({ label }: { label: string }) {
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0.5rem 1.25rem',
-      fontSize: '0.875rem',
-      color: 'rgba(255,255,255,0.2)',
-      cursor: 'default',
-    }}>
-      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <span style={{ fontSize: '0.85em', opacity: 0.5 }}>🎭</span>
-        {label}
-      </span>
-      <span style={{
-        fontSize: '0.6rem',
-        fontWeight: 600,
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.2)',
-        background: 'rgba(255,255,255,0.08)',
-        borderRadius: '3px',
-        padding: '0.1rem 0.4rem',
-      }}>
-        bald
-      </span>
-    </div>
   )
 }
 
@@ -257,11 +231,13 @@ function FooterButton({ label, onClick }: { label: string; onClick: () => void }
       style={{
         display: 'block', width: '100%', textAlign: 'left',
         padding: '0.4rem 1.25rem', fontSize: '0.75rem',
-        color: 'rgba(255,255,255,0.28)', background: 'none',
-        border: 'none', cursor: 'pointer', transition: 'color 0.15s',
+        color: 'var(--c-sidebar-text)',
+        opacity: 0.45,
+        background: 'none',
+        border: 'none', cursor: 'pointer', transition: 'opacity 0.15s',
       }}
-      onMouseOver={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}
-      onMouseOut={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.28)' }}
+      onMouseOver={e => { e.currentTarget.style.opacity = '0.8' }}
+      onMouseOut={e => { e.currentTarget.style.opacity = '0.45' }}
     >
       {label}
     </button>
@@ -274,11 +250,13 @@ function FooterLinkHref({ label, href }: { label: string; href: string }) {
       href={href}
       style={{
         display: 'block', padding: '0.4rem 1.25rem',
-        fontSize: '0.75rem', color: 'rgba(255,255,255,0.28)',
-        textDecoration: 'none', transition: 'color 0.15s',
+        fontSize: '0.75rem',
+        color: 'var(--c-sidebar-text)',
+        opacity: 0.45,
+        textDecoration: 'none', transition: 'opacity 0.15s',
       }}
-      onMouseOver={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.55)' }}
-      onMouseOut={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.28)' }}
+      onMouseOver={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.8' }}
+      onMouseOut={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = '0.45' }}
     >
       {label}
     </Link>

@@ -81,7 +81,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gegenwind',
     frage: 'Eltern werden aggressiver und machen Sie persönlich verantwortlich. Was hilft in diesem Moment am meisten?',
     antworten: [
-      'Ruhig bleiben und Deeskalationsformeln einsetzen ("Ich höre, dass Sie das sehr belastet...")',
+      'Ruhig bleiben und Deeskalationsformeln einsetzen („Ich höre, dass Sie das sehr belastet …")',
       'Sofort sachliche Gegenargumente nennen',
       'Das Gespräch für beendet erklären',
       'Die Schulleitung zum Gespräch hinzubitten',
@@ -245,7 +245,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       '"Wir sind uns hier offensichtlich nicht einig."',
     ],
     korrektIndex: 1,
-    erklaerung: 'Ein Bedürfnis im GFK-Sinn wird in der Ich-Form ausgedrückt und beschreibt, was man sich wünscht – konstruktiv und ohne Vorwurf. "Ich brauche..." macht das eigene Bedürfnis transparent.',
+    erklaerung: 'Ein Bedürfnis im GFK-Sinn wird in der Ich-Form ausgedrückt und beschreibt, was man sich wünscht – konstruktiv und ohne Vorwurf. „Ich brauche …" macht das eigene Bedürfnis transparent.',
   },
 
   // ── Körpersignale ─────────────────────────────────────────────────────────────

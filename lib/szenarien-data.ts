@@ -1,6 +1,7 @@
 import type {
   Szenario, Schultyp, Elterntyp, Schwierigkeit, Gespraechsanlass,
-  Klassenstufe, Familiensituation,
+  Klassenstufe, Familiensituation, GespraechsKonfiguration,
+  KindGeschlecht, Gespraechsinitiative, Sprachbarriere,
 } from '@/types'
 
 export type { Schultyp, Elterntyp, Schwierigkeit, Gespraechsanlass, Klassenstufe, Familiensituation }
@@ -22,6 +23,7 @@ export const ELTERNTYP_LABEL: Record<Elterntyp, string> = {
   weinend:     'Überfordernd-weinend',
   passiv:      'Schweigend-passiv',
   uebergriffig:'Übergriffig-fordernd',
+  unbekannt:   'Nicht bekannt',
 }
 
 export const SCHWIERIGKEIT_LABEL: Record<Schwierigkeit, string> = {
@@ -56,6 +58,33 @@ export const FAMILIE_LABEL: Record<Familiensituation, string> = {
   migration:     'Migrationshintergrund',
   leistungsdruck:'Hoher Leistungsdruck durch Familie',
   multiproblem:  'Multiproblemfamilie',
+  unbekannt:     'Nicht bekannt',
+}
+
+export const GESCHLECHT_LABEL: Record<KindGeschlecht, string> = {
+  maedchen:     'Mädchen',
+  junge:        'Junge',
+  divers:       'Divers (amtlich)',
+  'nicht-binaer':'Nicht-binär',
+  'keine-angabe':'Keine Angabe',
+}
+
+export const INITIATIVE_LABEL: Record<Gespraechsinitiative, string> = {
+  elternsprechtag: 'Elternsprechtag',
+  schule:          'Schule hat um das Gespräch gebeten',
+  eltern:          'Eltern haben um das Gespräch gebeten',
+}
+
+const INITIATIVE_PROMPT: Record<Gespraechsinitiative, string> = {
+  elternsprechtag: 'Elternsprechtag – du kommst zum regulären Gespräch ohne vorab angekündigtes konkretes Anliegen.',
+  schule:          'Die Schule hat dieses Gespräch erbeten – du weißt, dass es ein Thema gibt, kennst es aber nicht im Detail und kommst möglicherweise angespannt.',
+  eltern:          'Du hast selbst um dieses Gespräch gebeten und kommst mit einem eigenen Anliegen. Die Lehrkraft kennt den Grund noch nicht.',
+}
+
+const SPRACHBARRIERE_ANWEISUNG: Record<Sprachbarriere, string | null> = {
+  deutsch: null,
+  gering:  'Sprachbarriere: Geringe Deutschkenntnisse – antworte in vereinfachtem, teils gebrochenem Deutsch. Kurze Sätze, gelegentliche Verständnislücken, gelegentlich einzelne Wörter einer anderen Sprache. Signalisiere Unsicherheit z. B. mit „Ich … nicht ganz verstehen."',
+  keine:   'Sprachbarriere: Keine Deutschkenntnisse – simuliere schwere Verständigungsprobleme. Gestik, Mimik, internationale Wörter, Übersetzungsversuche. Du kannst vollständige Sätze in einer anderen Sprache verwenden (je nach Situationstext, sonst Türkisch oder Arabisch).',
 }
 
 // ─── Situationsbeschreibungen (Körpersignale im Gespräch) ─────────────────────
@@ -126,7 +155,7 @@ export const SZENARIEN: Szenario[] = [
     elterntyp: 'weinend',
     elternName: 'Frau Lange',
     kindName: 'Sophie',
-    opener: 'Ich weiß ehrlich gesagt nicht mehr weiter... Sophie redet kaum noch mit mir. Ich mache mir so große Sorgen, aber ich weiß nicht, was ich tun soll.',
+    opener: 'Ich weiß ehrlich gesagt nicht mehr weiter … Sophie redet kaum noch mit mir. Ich mache mir so große Sorgen, aber ich weiß nicht, was ich tun soll.',
     hintergrund: 'Elternprofil: Frau Lange, Mutter, Tochter Sophie, 12. Klasse. Sophie hat massive Leistungseinbrüche, wirkt erschöpft und sozial zurückgezogen. Mutter ist selbst am Limit, Vater häufig beruflich unterwegs. Frau Lange ist emotional überfordert und sucht Halt.',
     situationsbeschreibungen: [
       'Frau Lange hält kurz inne und greift nach einem Taschentuch.',
@@ -162,7 +191,7 @@ export const SZENARIEN: Szenario[] = [
     elterntyp: 'passiv',
     elternName: 'Frau Yilmaz',
     kindName: 'Amir',
-    opener: 'Ja. ... Danke.',
+    opener: 'Ja. … Danke.',
     hintergrund: 'Elternprofil: Frau Yilmaz, Mutter, Sohn Amir, 10. Klasse. Berufsorientierungsgespräch. Frau Yilmaz spricht Deutsch mit starkem Akzent, ist sichtlich unsicher. Gibt kaum Reaktion, antwortet mit Ja/Nein. Möglicherweise Sprachbarriere, Überforderung oder kulturell andere Gesprächsnormen.',
     situationsbeschreibungen: [
       'Frau Yilmaz lächelt kurz und schaut dann auf ihre Hände.',
@@ -364,7 +393,7 @@ export const SZENARIEN: Szenario[] = [
     elterntyp: 'weinend',
     elternName: 'Frau Peters',
     kindName: 'Leon',
-    opener: 'Ich mache mir so viele Sorgen um Leon. Er schläft schlecht, er isst kaum... ich weiß nicht mehr, wie ich ihm noch helfen soll.',
+    opener: 'Ich mache mir so viele Sorgen um Leon. Er schläft schlecht, er isst kaum … ich weiß nicht mehr, wie ich ihm noch helfen soll.',
     hintergrund: 'Elternprofil: Frau Peters, alleinerziehende Mutter, Sohn Leon (männlich), 6. Klasse. Leon hat soziale Schwierigkeiten und wirkt in der Schule häufig traurig und zurückgezogen. Frau Peters ist emotional am Limit, kümmert sich allein und ohne Unterstützung. Sie sucht Verständnis und praktische Hilfe, bricht aber schnell in Tränen aus.',
     situationsbeschreibungen: [
       'Frau Peters greift nach ihrem Taschentuch.',
@@ -496,6 +525,11 @@ export function findSzenario(
 ): Szenario | null {
   const pool = SZENARIEN.filter(s => s.schultyp === schultyp)
 
+  // 'unbekannt' hat kein eigenes Szenario – Fallback auf erstes passendes
+  if (elterntyp === 'unbekannt') {
+    return pool[0] ?? SZENARIEN[0]
+  }
+
   // Exakter Treffer
   const exact = pool.find(
     s => s.elterntyp === elterntyp && s.anlass === anlass &&
@@ -517,12 +551,58 @@ export function findSzenario(
 
 export function buildSzenarioKontext(
   szenario: Szenario,
-  config: { klassenstufe: Klassenstufe; anlass: Gespraechsanlass; familie: Familiensituation }
+  config: GespraechsKonfiguration,
 ): string {
-  return `Elternteil(e): ${szenario.elternName}
-Kind: ${szenario.kindName}
-Schultyp: ${SCHULTYP_LABEL[szenario.schultyp]}, ${KLASSENSTUFE_LABEL[config.klassenstufe]}
-Gesprächsanlass: ${ANLASS_LABEL[config.anlass]}
-Familiensituation: ${FAMILIE_LABEL[config.familie]}
-Hintergrund: ${szenario.hintergrund}`
+  // S3: Personenzeile aus Formular-Auswahl oder Szenario-Name
+  let elternteilStr: string
+  if (config.person1) {
+    if (config.person2) {
+      // Marker [PRIMÄR]/[SEKUNDÄR] für buildElternteilSystemPrompt
+      elternteilStr = `${config.person1} [PRIMÄR] und ${config.person2} [SEKUNDÄR]`
+    } else {
+      elternteilStr = config.person1
+    }
+  } else {
+    elternteilStr = szenario.elternName
+  }
+
+  // S5b/S5c: Kindzeile
+  let kindStr = config.kindName ?? szenario.kindName
+  if (config.kindGeschlecht && config.kindGeschlecht !== 'keine-angabe') {
+    kindStr += ` (${GESCHLECHT_LABEL[config.kindGeschlecht]})`
+  }
+
+  const lines: string[] = [
+    `Elternteil(e): ${elternteilStr}`,
+    `Kind: ${kindStr}`,
+    `Schultyp: ${SCHULTYP_LABEL[szenario.schultyp]}, ${KLASSENSTUFE_LABEL[config.klassenstufe]}`,
+  ]
+
+  // S6: Gesprächsinitiative
+  if (config.gespraechsinitiative) {
+    lines.push(`Gesprächsinitiative: ${INITIATIVE_PROMPT[config.gespraechsinitiative]}`)
+  }
+
+  lines.push(`Gesprächsanlass: ${ANLASS_LABEL[config.anlass]}`)
+  lines.push(`Familiensituation: ${config.familie !== 'unbekannt' ? FAMILIE_LABEL[config.familie] : 'nicht bekannt'}`)
+  lines.push(`Hintergrund: ${szenario.hintergrund}`)
+
+  // S4/S9: Elterntyp unbekannt → KI leitet Verhalten aus Freitext ab
+  if (config.elterntyp === 'unbekannt') {
+    if (config.situationText?.trim()) {
+      lines.push(`Elternverhalten: Leite das Verhalten des Elternteils aus der folgenden Schilderung ab – ${config.situationText.trim()}`)
+    } else {
+      lines.push('Elternverhalten: Nicht vorgegeben – spiele einen unvorhersehbaren, neutralen Gesprächspartner.')
+    }
+  } else if (config.situationText?.trim()) {
+    lines.push(`Zusätzliche Situation/Vorgeschichte: ${config.situationText.trim()}`)
+  }
+
+  // S11: Sprachbarriere
+  const sprachHinweis = config.sprachbarriere
+    ? SPRACHBARRIERE_ANWEISUNG[config.sprachbarriere]
+    : null
+  if (sprachHinweis) lines.push(sprachHinweis)
+
+  return lines.join('\n')
 }

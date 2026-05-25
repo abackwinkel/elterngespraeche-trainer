@@ -11,6 +11,7 @@ export type Elterntyp =
   | 'weinend'
   | 'passiv'
   | 'uebergriffig'
+  | 'unbekannt'  // S4: KI leitet Verhalten aus Freitext ab
 
 export type Schwierigkeit = 'ruhige-see' | 'gegenwind' | 'gewitterfront'
 
@@ -32,6 +33,32 @@ export type Familiensituation =
   | 'migration'
   | 'leistungsdruck'
   | 'multiproblem'
+  | 'unbekannt'  // S4: KI leitet Verhalten aus Freitext ab
+
+// ─── S3: Elternpersonen ───────────────────────────────────────────────────────
+
+export type ElternPerson =
+  | 'Mutter'
+  | 'Vater'
+  | 'Stiefmutter'
+  | 'Stiefvater'
+  | 'Lebenspartnerin'
+  | 'Lebenspartner'
+  | 'Großmutter'
+  | 'Großvater'
+  | 'Sonstige Bezugsperson'
+
+// ─── S5c: Geschlecht / Geschlechtsidentität ───────────────────────────────────
+
+export type KindGeschlecht = 'maedchen' | 'junge' | 'divers' | 'nicht-binaer' | 'keine-angabe'
+
+// ─── S6: Gesprächsinitiative ──────────────────────────────────────────────────
+
+export type Gespraechsinitiative = 'elternsprechtag' | 'schule' | 'eltern'
+
+// ─── S11: Sprachbarriere ──────────────────────────────────────────────────────
+
+export type Sprachbarriere = 'deutsch' | 'gering' | 'keine'
 
 // ─── Szenario ────────────────────────────────────────────────────────────────
 
@@ -66,6 +93,19 @@ export interface GespraechsKonfiguration {
   familie: Familiensituation
   elterntyp: Elterntyp
   schwierigkeit: Schwierigkeit
+  // S3 – Wer nimmt teil
+  person1?: ElternPerson
+  person2?: ElternPerson
+  // S5b – Kind
+  kindName?: string
+  // S5c – Geschlecht
+  kindGeschlecht?: KindGeschlecht
+  // S6 – Gesprächsinitiative
+  gespraechsinitiative?: Gespraechsinitiative
+  // S9 – Situationsfreitext
+  situationText?: string
+  // S11 – Sprachbarriere
+  sprachbarriere?: Sprachbarriere
 }
 
 // ─── API: Elternteil-Route ────────────────────────────────────────────────────

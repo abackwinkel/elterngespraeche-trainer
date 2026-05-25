@@ -31,6 +31,8 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
 
   const szenario = findSzenario(config.schultyp, config.elterntyp, config.anlass, config.klassenstufe, config.familie)
   const szenarioKontext = buildSzenarioKontext(szenario ?? SZENARIEN[0], config)
+  // Bei freier Konfiguration oder 'unbekannt' keinen fixen Opener verwenden
+  const scenarioOpener = (config.person1 || config.elterntyp === 'unbekannt') ? undefined : szenario?.opener
   const turnCountRef = useRef(0)
   const situationIndexRef = useRef(0)
   const chatEndRef = useRef<HTMLDivElement>(null)
@@ -62,7 +64,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       schwierigkeit: config.schwierigkeit,
       szenarioKontext,
       sessionStart,
-      opener: szenario?.opener,
+      opener: scenarioOpener,
     }
 
     let elternText = ''
@@ -652,11 +654,14 @@ function TurnBubble({ turn, elternName }: { turn: Turn; elternName?: string }) {
 
   const isElternteil = turn.role === 'elternteil'
 
-  // Parse "Herr/Frau Name:" prefix the AI adds for couple scenarios
+  // Parse Sprecher-Präfix: „Herr/Frau Name:" (vorgefertigte Szenarien)
+  // oder Rollennamen wie „Mutter:", „Vater:" (Formular-Konfiguration)
   let speakerLabel = elternName ?? 'Elternteil'
   let displayContent = turn.content
   if (isElternteil) {
-    const prefixMatch = turn.content.match(/^((?:Herr|Frau)\s+\S+)\s*:\s*/i)
+    const prefixMatch = turn.content.match(
+      /^((?:Herr|Frau)\s+\S+|Mutter|Vater|Stiefmutter|Stiefvater|Lebenspartnerin|Lebenspartner|Großmutter|Großvater|Sonstige Bezugsperson)\s*:\s*/i
+    )
     if (prefixMatch) {
       speakerLabel = prefixMatch[1]
       displayContent = turn.content.slice(prefixMatch[0].length)

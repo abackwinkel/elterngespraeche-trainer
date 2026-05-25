@@ -42,7 +42,7 @@ function GespraechsfuehrungTab() {
         Aktives Zuhören
       </h3>
       <p style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.7, margin: 0 }}>
-        Aktives Zuhören bedeutet: Nicht nur hören, was gesagt wird – sondern auch, was dahintersteckt. Paraphrasiere das Gesagte: „Wenn ich Sie richtig verstehe, meinen Sie..." Das gibt Eltern das Gefühl, wirklich gehört zu werden, und schafft Vertrauen.
+        Aktives Zuhören bedeutet: Nicht nur hören, was gesagt wird – sondern auch, was dahintersteckt. Paraphrasiere das Gesagte: „Wenn ich Sie richtig verstehe, meinen Sie …" Das gibt Eltern das Gefühl, wirklich gehört zu werden, und schafft Vertrauen.
       </p>
       <InfoBox>
         <strong>Wichtig:</strong> Das Kind steht im Mittelpunkt – nicht die Eltern-Lehrkraft-Beziehung, nicht der Leistungsvergleich. Jede Aussage kann an der Frage gemessen werden: „Was hilft diesem Kind am meisten?"

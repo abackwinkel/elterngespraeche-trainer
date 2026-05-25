@@ -127,23 +127,41 @@ export function buildElternteilSystemPrompt(
     ? `\n\n### Schwierigkeitsgrad-Anpassung\n${schwierigkeitsModifier}`
     : ''
 
-  const isCouple = /\bund\b/.test(szenarioKontext.split('\n')[0] ?? '')
-  const coupleRules = isCouple
-    ? `
-- Beide Elternteile sind anwesend. Beginne jede Antwort mit "Herr [Name]:" oder "Frau [Name]:" (wer spricht) und wechsle realistisch.
-- Stage Directions (*...*) für gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
+  // Zwei-Personen-Erkennung: entweder [PRIMÄR]-Marker (Formular-Konfiguration)
+  // oder „und" in der ersten Zeile (vorgefertigte Szenarien wie „Herr und Frau Berger")
+  const firstLine = szenarioKontext.split('\n')[0] ?? ''
+  const twoPersonMatch = firstLine.match(/Elternteil\(e\):\s*(.+?)\s*\[PRIMÄR\]\s*und\s*(.+?)\s*\[SEKUNDÄR\]/)
+  const isCouple = twoPersonMatch !== null || /\bund\b/.test(firstLine)
+
+  let coupleRules: string
+  if (twoPersonMatch) {
+    // Formular-Konfiguration: konkrete Rollen bekannt
+    const primär = twoPersonMatch[1]
+    const sekundär = twoPersonMatch[2]
+    coupleRules = `
+- Beide Elternteile sind anwesend. ${primär} ist die Primärperson und spricht häufiger; ${sekundär} schaltet sich gelegentlich ein.
+- Zeige an, wer spricht: Beginne den jeweiligen Redebeitrag mit „${primär}:" oder „${sekundär}:" gefolgt von der Aussage.
+- Stage Directions (*…*) für gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
+- Im allerersten Turn: Zeige zuerst als Körpersignal wie beide eintreten und sich setzen (Plural), dann spricht ${primär}.`
+  } else if (isCouple) {
+    // Vorgefertigtes Szenario mit Namensangabe
+    coupleRules = `
+- Beide Elternteile sind anwesend. Beginne jede Antwort mit „Herr [Name]:" oder „Frau [Name]:" (wer spricht) und wechsle realistisch.
+- Stage Directions (*…*) für gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
 - Im allerersten Turn: Zeige zuerst als Körpersignal wie beide eintreten und sich setzen (Plural), dann spricht eine Person.`
-    : `
+  } else {
+    coupleRules = `
 - Im allerersten Turn: Zeige zuerst als Körpersignal wie die Person eintritt und sich setzt, dann spricht sie.`
+  }
 
   return `${elternteilPrompt}${modifier}
 
 ### Gesprächsregeln (immer einhalten)
 
-- Sprich die Lehrkraft ausschließlich mit "Sie" an – niemals mit "du"
+- Sprich die Lehrkraft ausschließlich mit „Sie" an – niemals mit „du"
 - Beachte das Geschlecht des Kindes genau (Sohn = er/sein/Schüler, Tochter = sie/ihr/Schülerin) und verwende es durchgehend korrekt
-- Einfache Anführungszeichen nach deutschem Standard: ‚...' (öffnend unten, schließend oben)
-- Vor „..." immer ein Leerzeichen setzen – außer wenn ein Wort mitten im Buchstaben abbricht (z. B. „Das ist un...")
+- Anführungszeichen nach deutschem Standard: „…" (öffnend unten, schließend oben)
+- Vor … immer ein Leerzeichen setzen – außer wenn ein Wort mitten im Buchstaben abbricht (z. B. „Das ist un…")
 - Alle Sätze vollständig und grammatikalisch korrekt${coupleRules}
 
 ### Deine konkrete Situation in diesem Gespräch
