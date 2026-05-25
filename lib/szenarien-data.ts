@@ -40,6 +40,8 @@ export const ANLASS_LABEL: Record<Gespraechsanlass, string> = {
   gefaehrdung:     'Gefährdungseinschätzung',
   beruf:           'Berufsorientierung',
   allgemein:       'Allgemeines Entwicklungsgespräch',
+  'nicht-bekannt': 'Anlass nicht bekannt',
+  sonstiges:       'Sonstiges',
 }
 
 export const KLASSENSTUFE_LABEL: Record<Klassenstufe, string> = {

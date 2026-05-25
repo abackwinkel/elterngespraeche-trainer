@@ -33,6 +33,10 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   const szenarioKontext = buildSzenarioKontext(szenario ?? SZENARIEN[0], config)
   // Bei freier Konfiguration oder 'unbekannt' keinen fixen Opener verwenden
   const scenarioOpener = (config.person1 || config.elterntyp === 'unbekannt') ? undefined : szenario?.opener
+  // Sprecherbezeichnung: aus Formular-Konfiguration (Person 1/2) oder Szenario-Name
+  const configPersonLabel = config.person1
+    ? config.person2 ? `${config.person1} & ${config.person2}` : config.person1
+    : undefined
   const turnCountRef = useRef(0)
   const situationIndexRef = useRef(0)
   const chatEndRef = useRef<HTMLDivElement>(null)
@@ -286,7 +290,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
             Gesprächsschmiede
           </h2>
           <p className="text-sm text-[var(--c-gray)] mt-0.5">
-            {szenario?.elternName ?? 'Elternteil'} · {ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp} · {SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit}
+            {configPersonLabel ?? szenario?.elternName ?? 'Elternteil'} · {ELTERNTYP_LABEL[config.elterntyp] ?? config.elterntyp} · {SCHWIERIGKEIT_LABEL[config.schwierigkeit] ?? config.schwierigkeit}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -319,7 +323,7 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
         <div className={`flex flex-col min-h-0 ${feedbackEnabled ? 'flex-[65]' : 'flex-1'}`}>
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 mb-4" style={{ maxHeight: 'calc(100vh - 340px)' }}>
             {turns.map((turn, i) => (
-              <TurnBubble key={i} turn={turn} elternName={szenario?.elternName} />
+              <TurnBubble key={i} turn={turn} elternName={configPersonLabel ?? szenario?.elternName} />
             ))}
             {isStreaming && turns.length > 0 && turns[turns.length - 1].role === 'elternteil' && turns[turns.length - 1].content === '' && (
               <div className="flex gap-2 items-center text-[var(--c-gray)] text-sm">

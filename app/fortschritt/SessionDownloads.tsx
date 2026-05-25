@@ -19,7 +19,9 @@ const ELTERNTYP_LABEL: Record<string, string> = {
   passiv: 'Passiv', uebergriffig: 'Übergriffig',
 }
 const SCHWIERIGKEIT_LABEL: Record<string, string> = {
-  einstieg: 'Einstieg', praxis: 'Praxis', meisterschaft: 'Meisterschaft',
+  'ruhige-see':    'Ruhige See',
+  'gegenwind':     'Gegenwind',
+  'gewitterfront': 'Gewitterfront',
 }
 
 const S = 24
