@@ -9,10 +9,12 @@ import type {
 import {
   KLASSENSTUFE_LABEL,
   ANLASS_LABEL,
+  ANLASS_OPTIONEN_BY_SCHULTYP,
   FAMILIE_LABEL,
   ELTERNTYP_LABEL,
   SCHWIERIGKEIT_LABEL,
 } from '@/lib/szenarien-data'
+import MeineFaelleDrawer, { type GespeicherterFall } from './MeineFaelleDrawer'
 
 // ─── Konstanten ───────────────────────────────────────────────────────────────
 
@@ -48,8 +50,14 @@ const SCHWIERIGKEIT_BESCHREIBUNG: Record<Schwierigkeit, string> = {
   'gewitterfront': 'Hochkonflikthaftes Gespräch, maximale Herausforderung',
 }
 
-const DATENSCHUTZ_TEXT =
-  'Diese Simulation findet ausschließlich in Ihrem Browser statt. Eingegebene Namen werden nicht auf unserem Server gespeichert. Wenn Sie echte Namen verwenden, geschieht das auf eigene Verantwortung.'
+const DATENSCHUTZ_ABSATZ_1 =
+  'Für die Simulation können Sie einen Vornamen des Kindes eingeben – das macht das Training realistischer. ' +
+  'Ihre Eingaben werden nicht auf unseren Servern gespeichert und nur für diese Sitzung verwendet. ' +
+  'Sie werden jedoch an die KI-Schnittstelle übermittelt, die das Gespräch generiert.'
+
+const DATENSCHUTZ_ABSATZ_2 =
+  'Wenn Sie keinen echten Namen eingeben möchten, kürzen wir ihn automatisch auf den Anfangsbuchstaben. ' +
+  'So bleibt das Gespräch trotzdem persönlich – ohne dass ein Klarname übertragen wird.'
 
 // ─── Hilfsfunktion ────────────────────────────────────────────────────────────
 
@@ -117,6 +125,23 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
   // S10 – Fall speichern
   const [fallSpeichern, setFallSpeichern] = useState(false)
 
+  // S12 – Meine Fälle Drawer
+  const [showMeineFaelle, setShowMeineFaelle] = useState(false)
+
+  function ladeKonfiguration(fall: GespeicherterFall) {
+    setPerson1(fall.person1 ?? '')
+    setPerson2(fall.person2 ?? '–')
+    setKlassenstufe(fall.klassenstufe)
+    setAnlass(fall.gespraechsanlass)
+    setFamilie(fall.familiensituation)
+    setElterntyp(fall.elterntyp)
+    if (fall.gespraechsinitiative) setGespraechsinitiative(fall.gespraechsinitiative)
+    setSituationText(fall.situation_text ?? '')
+    if (fall.kind_initial) setKindName(fall.kind_initial)
+    if (fall.kind_geschlecht) setKindGeschlecht(fall.kind_geschlecht)
+    if (fall.sprachbarriere) setSprachbarriere(fall.sprachbarriere as Sprachbarriere)
+  }
+
   // S7 – Klassenstufen-Filter je Schultyp
   const klassenstufeOptionen = Object.entries(KLASSENSTUFE_LABEL).filter(([val]) => {
     if (schultyp === 'grundschule')  return val === '1-2' || val === '3-4'
@@ -126,6 +151,11 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
     // gymnasium: 5-12
     return val !== '1-2' && val !== '3-4'
   })
+
+  // S15 – Gesprächsanlass-Filter je Schultyp
+  const anlassOptionen = ANLASS_OPTIONEN_BY_SCHULTYP[schultyp].map(
+    key => [key, ANLASS_LABEL[key]] as [string, string]
+  )
 
   function getEffectiveKindName(): string | undefined {
     if (!kindName.trim()) return undefined
@@ -169,6 +199,14 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
 
   return (
     <>
+      {/* S12 – Meine Fälle Drawer */}
+      <MeineFaelleDrawer
+        open={showMeineFaelle}
+        schultyp={schultyp}
+        onClose={() => setShowMeineFaelle(false)}
+        onLaden={ladeKonfiguration}
+      />
+
       {/* S5a – Datenschutz-Modal */}
       {showDatenschutz && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -179,8 +217,11 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             >
               Hinweis zum Datenschutz
             </h2>
+            <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-3">
+              {DATENSCHUTZ_ABSATZ_1}
+            </p>
             <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-6">
-              {DATENSCHUTZ_TEXT}
+              {DATENSCHUTZ_ABSATZ_2}
             </p>
             <label className="flex items-start gap-3 mb-6 cursor-pointer">
               <input
@@ -190,7 +231,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
                 className="mt-0.5 w-4 h-4 accent-[var(--c-teal)]"
               />
               <span className="text-sm text-[var(--c-dark)]">
-                Ich verstehe das und möchte echte Namen verwenden.
+                Ich bin mir bewusst, dass ich einen echten Vornamen eingebe, und stimme der Übermittlung für diese Sitzung zu.
               </span>
             </label>
             <button
@@ -204,16 +245,36 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
       )}
 
       <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <h1
-            className="text-3xl font-semibold text-[var(--c-dark)]"
-            style={{ fontFamily: 'var(--font-cormorant)' }}
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1
+              className="text-3xl font-semibold text-[var(--c-dark)]"
+              style={{ fontFamily: 'var(--font-cormorant)' }}
+            >
+              Gesprächsschmiede
+            </h1>
+            <p className="mt-2 text-base text-[var(--c-gray)]">
+              Konfiguriere dein Szenario – dann übernimmt die KI die Elternrolle.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowMeineFaelle(true)}
+            className="shrink-0 mt-1 px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors"
+            style={{
+              borderColor: 'var(--c-teal)',
+              color: 'var(--c-teal)',
+              background: 'transparent',
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.background = 'var(--c-mint)'
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.background = 'transparent'
+            }}
           >
-            Gesprächsschmiede
-          </h1>
-          <p className="mt-2 text-base text-[var(--c-gray)]">
-            Konfiguriere dein Szenario – dann übernimmt die KI die Elternrolle.
-          </p>
+            📂 Meine Fälle
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -304,7 +365,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
               label="Gesprächsanlass"
               value={anlass}
               onChange={v => setAnlass(v as Gespraechsanlass)}
-              options={Object.entries(ANLASS_LABEL)}
+              options={anlassOptionen}
             />
           </div>
 
@@ -358,8 +419,13 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
               placeholder="Beschreiben Sie, was Sie über die Situation und Vorgeschichte wissen – je konkreter Ihre Angaben, desto gezielter kann die Simulation auf Ihren Fall eingehen. Zum Beispiel: Wie ist das Kind bisher aufgefallen? Gab es bereits Kontakte mit den Eltern? Was wissen Sie über die Familiendynamik? Was ist Ihr Ziel für dieses Gespräch?"
               className="w-full border border-[var(--c-gray-light)] rounded-lg px-3 py-2 text-base text-[var(--c-dark)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--c-teal)] focus:border-transparent resize-none"
             />
-            <div className="text-xs text-[var(--c-gray)] mt-1 text-right">
-              {situationText.length}/1000
+            <div className="flex items-center justify-between mt-1">
+              <span className="text-xs text-[var(--c-gray)]">
+                Bitte geben Sie hier keine echten Namen ein – beschreiben Sie die Situation ohne Klarnamen.
+              </span>
+              <span className="text-xs text-[var(--c-gray)] ml-2 shrink-0">
+                {situationText.length}/1000
+              </span>
             </div>
           </div>
 

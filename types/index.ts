@@ -16,15 +16,34 @@ export type Elterntyp =
 export type Schwierigkeit = 'ruhige-see' | 'gegenwind' | 'gewitterfront'
 
 export type Gespraechsanlass =
+  // Basisoptionen (alle Schultypen)
+  | 'nicht-bekannt'
+  | 'allgemein'
+  | 'eltern-anliegen'
   | 'leistungsabfall'
   | 'versetzung'
   | 'verhalten'
   | 'mobbing'
   | 'gefaehrdung'
-  | 'beruf'
-  | 'allgemein'
-  | 'nicht-bekannt'
   | 'sonstiges'
+  // Grundschule
+  | 'uebergangsempfehlung'
+  | 'zurueckstellung'
+  // Mittelschule
+  | 'beruf'
+  | 'uebergang-berufsschule-ausbildung'
+  | 'abschluss-perspektive'
+  // Realschule
+  | 'kurswechsel-hauptreal'
+  | 'uebergang-beruf-gymnasium'
+  // Gymnasium
+  | 'kurswahl-oberstufe'
+  | 'fehlzeiten'
+  | 'abiturplanung'
+  | 'nichtversetzung'
+  // Gesamtschule
+  | 'eg-kurswechsel'
+  | 'uebergang-oberstufe'
 
 export type Klassenstufe = '1-2' | '3-4' | '5-6' | '7-8' | '9-10' | 'oberstufe'
 

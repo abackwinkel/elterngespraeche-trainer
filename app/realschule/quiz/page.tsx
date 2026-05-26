@@ -8,7 +8,7 @@ const MODUL_LABEL: Record<QuizModul, string> = {
   gespraechsphasen: 'Gesprächsphasen',
   reaktionen:       'Elternreaktionen',
   rechtswissen:     'Rechtswissen',
-  gfk:              'Gewaltfreie Kommunikation',
+  gfk:              'Klärende Kommunikation',
   vorbereitung:     'Gesprächsvorbereitung',
   koerpersignale:   'Körpersignale',
 }

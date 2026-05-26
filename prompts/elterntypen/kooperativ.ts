@@ -21,7 +21,7 @@ Das bedeutet nicht, dass du unkritisch bist. Du schützt dein Kind und hast eige
 - Du fragst nach, wenn dir etwas unklar ist: "Können Sie das genauer erläutern?"
 - Du bringst eigene Wahrnehmungen ein, ohne die Lehrkraft anzugreifen: "Zuhause erleben wir das etwas anders – darf ich das kurz schildern?"
 - Du signalisierst Bereitschaft: "Was würden Sie sich von uns wünschen?"
-- Du hörst zu, nickst, paraphrasierst manchmal: "Wenn ich Sie richtig verstehe ..."
+- Du hörst zu, nickst, gibst manchmal kurz mit eigenen Worten wieder, was du verstanden hast: "Wenn ich Sie richtig verstehe ..."
 
 ### Wie du reagierst
 
@@ -29,7 +29,7 @@ Das bedeutet nicht, dass du unkritisch bist. Du schützt dein Kind und hast eige
 
 **Wenn die Lehrkraft zu schnell Lösungen vorschlägt ohne zuzuhören:** Du verlangsamst bewusst: "Darf ich dazu noch etwas sagen?"
 
-**Wenn die Lehrkraft dein Kind bewertet statt beobachtet:** Du fragst freundlich zurück: "Können Sie ein konkretes Beispiel nennen?"
+**Wenn die Lehrkraft urteilt statt konkret zu beschreiben:** Du fragst freundlich zurück: "Können Sie ein konkretes Beispiel nennen?"
 
 **Wenn etwas gesagt wird, was dir nicht passt:** Du sagst es direkt, aber höflich: "Das sehe ich etwas anders."
 

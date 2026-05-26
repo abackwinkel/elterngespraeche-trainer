@@ -170,7 +170,7 @@ export const KOERPERSIGNAL_ITEMS: KoerpersignalItem[] = [
     handlungsoptionen: [
       'Ruhig und klar: "Ich höre Sie gleich – darf ich den Gedanken erst zu Ende bringen?"',
       'Danach die volle Aufmerksamkeit aktiv geben',
-      'Paraphrasieren: „Sie meinen also …" – das signalisiert Gehörtwerden',
+      'Gesagtes kurz in eigenen Worten wiederholen: „Sie meinen also …" – das signalisiert Gehörtwerden',
     ],
   },
   {

@@ -28,7 +28,7 @@ function GespraechsfuehrungTab() {
         {[
           ['Begrüßung & Ankommen', 'Atmosphäre schaffen, kurzes Small Talk, Danke für das Kommen.'],
           ['Themeneinführung', 'Anlass des Gesprächs klar und wertfrei benennen. Das Kind in den Mittelpunkt stellen.'],
-          ['Dialog & Zuhören', 'Elternperspektive aktiv hören. Paraphrasieren. Offene Fragen stellen.'],
+          ['Dialog & Zuhören', 'Elternperspektive aktiv hören. Gesagtes kurz in eigenen Worten wiederholen. Offene Fragen stellen.'],
           ['Ergebnis & Vereinbarungen', 'Konkrete, umsetzbare Schritte festhalten. Wer macht was bis wann?'],
           ['Abschluss', 'Zusammenfassung, Dank, nächster Kontakt oder Termin.'],
         ].map(([title, text]) => (
@@ -42,7 +42,7 @@ function GespraechsfuehrungTab() {
         Aktives Zuhören
       </h3>
       <p style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.7, margin: 0 }}>
-        Aktives Zuhören bedeutet: Nicht nur hören, was gesagt wird – sondern auch, was dahintersteckt. Paraphrasiere das Gesagte: „Wenn ich Sie richtig verstehe, meinen Sie …" Das gibt Eltern das Gefühl, wirklich gehört zu werden, und schafft Vertrauen.
+        Aktives Zuhören bedeutet: Nicht nur hören, was gesagt wird – sondern auch, was dahintersteckt. Geben Sie das Gesagte kurz in eigenen Worten wieder: „Wenn ich Sie richtig verstehe, meinen Sie …" Das gibt Eltern das Gefühl, wirklich gehört zu werden, und schafft Vertrauen.
       </p>
       <InfoBox>
         <strong>Wichtig:</strong> Das Kind steht im Mittelpunkt – nicht die Eltern-Lehrkraft-Beziehung, nicht der Leistungsvergleich. Jede Aussage kann an der Frage gemessen werden: „Was hilft diesem Kind am meisten?"
@@ -72,7 +72,7 @@ function VorbereitungTab() {
         2. Fakten sammeln – ohne Anklage
       </h3>
       <ul style={{ paddingLeft: '1.25rem', margin: '0 0 0.75rem', fontSize: '0.9rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.8 }}>
-        <li>Konkrete Beobachtungen, nicht Bewertungen: „Hat in den letzten 4 Wochen 3 von 5 Hausaufgaben nicht abgegeben" – nicht „ist faul".</li>
+        <li>Konkrete Beschreibungen, keine Urteile: „Hat in den letzten 4 Wochen 3 von 5 Hausaufgaben nicht abgegeben" – nicht „ist faul".</li>
         <li>Leistungsdaten des Kindes bereitstellen (nur eigenes Kind, nicht Klassenvergleich).</li>
         <li>Positive Beobachtungen nicht vergessen – das Gespräch soll kein reines Problemgespräch werden.</li>
       </ul>
@@ -196,6 +196,9 @@ function RechtlichesTab() {
       <InfoBox>
         Rechtswissen im Quiz trainieren: Das Modul <strong>Rechtswissen</strong> enthält praxisnahe Fallbeispiele zu Datenschutz, Protokollpflicht und Sorgerecht.
       </InfoBox>
+      <p style={{ fontSize: '0.8rem', color: 'rgba(0,0,0,0.4)', lineHeight: 1.5, marginTop: '1.5rem', borderTop: '1px solid var(--c-lightgray)', paddingTop: '1rem', margin: '1.5rem 0 0' }}>
+        Hinweis: Regelungen können je nach Bundesland abweichen. Die Angaben in diesem Tool orientieren sich am allgemeinen Schulrecht – bitte prüfen Sie landesspezifische Besonderheiten in Ihrem Bundesland.
+      </p>
     </div>
   )
 }

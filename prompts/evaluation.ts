@@ -39,7 +39,7 @@ Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
 2. Steht das Kind und sein Wohlergehen im Mittelpunkt der Aussage?
 3. Wird Wertschätzung oder Verständnis für die Elternperspektive gezeigt?
 4. Werden konkrete, umsetzbare Schritte angestrebt?
-5. Wird beschreibend statt bewertend formuliert (Beobachtung statt Urteil)?
+5. Spricht die Lehrkraft konkret aus, was sie gehört oder gesehen hat – ohne sofort zu urteilen?
 
 ## Wichtig
 

@@ -6,7 +6,7 @@ export const QUIZ_MODUL_LABEL: Record<QuizModul, string> = {
   gespraechsphasen: 'Gesprächsphasen',
   reaktionen:       'Reaktionen auf Elternverhalten',
   rechtswissen:     'Rechtswissen',
-  gfk:              'GFK-Grundlagen',
+  gfk:              'Klärende Kommunikation',
   vorbereitung:     'Vorbereitung',
   koerpersignale:   'Körpersignale',
 }
@@ -52,12 +52,12 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Das Gespräch ist emotional eskaliert. Welche Phase sollten Sie jetzt bewusst einleiten?',
     antworten: [
       'Sofort zur Ergebnis-Phase übergehen',
-      'Zum Dialog & Zuhören zurückkehren und aktiv paraphrasieren',
+      'Zum Dialog & Zuhören zurückkehren und das Gesagte kurz in eigenen Worten spiegeln',
       'Das Gespräch abbrechen und auf ein neues Treffen vertagen',
       'Die eigene Position klarer formulieren',
     ],
     korrektIndex: 1,
-    erklaerung: 'Bei Eskalation hilft aktives Zuhören und Paraphrasieren: Eltern fühlen sich gehört, Spannung nimmt ab. Erst dann können Ergebnisse nachhaltig erarbeitet werden.',
+    erklaerung: 'Bei Eskalation helfen aktives Zuhören und das Gesagte kurz in eigenen Worten wiederholen: Eltern fühlen sich gehört, Spannung nimmt ab. Erst dann können Ergebnisse nachhaltig erarbeitet werden.',
   },
 
   // ── Reaktionen auf Elternverhalten ──────────────────────────────────────────
@@ -190,12 +190,12 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     erklaerung: 'Datenschutz (DSGVO + Schulrecht) schützt personenbezogene Daten anderer Schüler. Eltern haben Einsicht in die Leistungsdaten ihres eigenen Kindes – nicht in die anderer.',
   },
 
-  // ── GFK-Grundlagen ────────────────────────────────────────────────────────────
+  // ── Klärende Kommunikation ────────────────────────────────────────────────────
   {
     id: 'gfk-01',
     modul: 'gfk',
     schwierigkeit: 'ruhige-see',
-    frage: 'Was ist eine Beobachtung im Sinne der Gewaltfreien Kommunikation?',
+    frage: 'Was beschreibt, was in einem Gespräch konkret wahrgenommen wurde – ohne Bewertung?',
     antworten: [
       '"Max ist faul."',
       '"Max hat in den letzten drei Wochen keine Hausaufgaben abgegeben."',
@@ -203,13 +203,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       '"Max will Ihre Autorität nicht anerkennen."',
     ],
     korrektIndex: 1,
-    erklaerung: 'Eine Beobachtung beschreibt konkret, was wahrgenommen wurde – ohne Bewertung oder Interpretation. "Keine Hausaufgaben abgegeben" ist beobachtbar. "Faul" oder "kümmert sich nicht" sind Bewertungen.',
+    erklaerung: 'Eine konkrete Beschreibung nennt, was tatsächlich passiert ist – ohne Bewertung oder Interpretation. "Keine Hausaufgaben abgegeben" ist beobachtbar und nachvollziehbar. "Faul" oder "kümmert sich nicht" sind Urteile.',
   },
   {
     id: 'gfk-02',
     modul: 'gfk',
     schwierigkeit: 'ruhige-see',
-    frage: 'Welche der folgenden Aussagen formuliert eine Bitte im GFK-Sinn?',
+    frage: 'Welche der folgenden Aussagen formuliert eine klare, einladende Bitte?',
     antworten: [
       '"Sie müssen Lena jeden Abend beim Lernen helfen."',
       '"Ich bitte Sie, Lena abends 20 Minuten beim Lernen zu begleiten."',
@@ -217,13 +217,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       '"Das liegt in Ihrer Verantwortung als Eltern."',
     ],
     korrektIndex: 1,
-    erklaerung: 'Eine GFK-Bitte ist konkret, positiv formuliert und offen für ein Nein. "Ich bitte Sie, X zu tun" schafft Klarheit ohne Druck – anders als "Sie müssen" oder vage Forderungen.',
+    erklaerung: 'Eine klare Bitte ist konkret, positiv formuliert und offen für ein Nein. "Ich bitte Sie, X zu tun" schafft Klarheit ohne Druck – anders als "Sie müssen" oder vage Erwartungen.',
   },
   {
     id: 'gfk-03',
     modul: 'gfk',
     schwierigkeit: 'gegenwind',
-    frage: 'Eltern sagen: "Ihr Unterricht ist langweilig – kein Wunder, dass Tobias nichts lernt." Welche GFK-Reaktion ist geeignet?',
+    frage: 'Eltern sagen: "Ihr Unterricht ist langweilig – kein Wunder, dass Tobias nichts lernt." Welche Reaktion wäre hier gesprächsfördernd?',
     antworten: [
       'Zurückweisen: "Das stimmt nicht, mein Unterricht ist gut vorbereitet."',
       'Anerkennen und hinter die Aussage schauen: "Ich höre, dass Sie sich Sorgen machen, wie Tobias den Unterricht erlebt."',
@@ -231,13 +231,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Die Eltern darauf hinweisen, dass sie Tobias selbst befragen sollen',
     ],
     korrektIndex: 1,
-    erklaerung: 'GFK bedeutet: Hinter eine Bewertung schauen und das zugrunde liegende Bedürfnis hören. Die Aussage signalisiert Sorge. Das anzusprechen öffnet das Gespräch mehr als Verteidigung.',
+    erklaerung: 'Hinter einer Aussage wie dieser steckt oft eine echte Sorge. Das anzusprechen – statt sich zu verteidigen – öffnet das Gespräch und schafft Vertrauen.',
   },
   {
     id: 'gfk-04',
     modul: 'gfk',
     schwierigkeit: 'gewitterfront',
-    frage: 'Welche Formulierung entspricht dem GFK-Prinzip "Bedürfnis benennen"?',
+    frage: 'Welche Formulierung benennt klar, was sich die Lehrkraft für das Gespräch wünscht?',
     antworten: [
       '"Sie machen das immer falsch."',
       '"Ich brauche in diesem Gespräch, dass wir gemeinsam nach Lösungen für Jonas suchen."',
@@ -245,7 +245,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       '"Wir sind uns hier offensichtlich nicht einig."',
     ],
     korrektIndex: 1,
-    erklaerung: 'Ein Bedürfnis im GFK-Sinn wird in der Ich-Form ausgedrückt und beschreibt, was man sich wünscht – konstruktiv und ohne Vorwurf. „Ich brauche …" macht das eigene Bedürfnis transparent.',
+    erklaerung: 'In der Ich-Form lässt sich klar und ohne Vorwurf sagen, was man sich für das Gespräch wünscht. „Ich brauche …" schafft Transparenz und bleibt lösungsorientiert.',
   },
 
   // ── Körpersignale ─────────────────────────────────────────────────────────────

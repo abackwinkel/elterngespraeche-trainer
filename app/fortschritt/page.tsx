@@ -58,7 +58,7 @@ export default async function FortschrittPage() {
     gespraechsphasen: 'Gesprächsphasen',
     reaktionen: 'Reaktionen',
     rechtswissen: 'Rechtswissen',
-    gfk: 'GFK-Grundlagen',
+    gfk: 'Klärende Kommunikation',
     vorbereitung: 'Vorbereitung',
     koerpersignale: 'Körpersignale',
   }

@@ -18,7 +18,7 @@ const MODULE = [
     href: '/quiz',
     icon: '❓',
     label: 'Quiz',
-    desc: 'Gesprächsphasen, GFK, Rechtswissen, Reaktionen testen',
+    desc: 'Gesprächsphasen, Klärende Kommunikation, Rechtswissen, Reaktionen testen',
   },
 ]
 

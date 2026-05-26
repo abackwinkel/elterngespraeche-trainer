@@ -33,15 +33,47 @@ export const SCHWIERIGKEIT_LABEL: Record<Schwierigkeit, string> = {
 }
 
 export const ANLASS_LABEL: Record<Gespraechsanlass, string> = {
-  leistungsabfall: 'Leistungsabfall',
-  versetzung:      'Versetzungsgefährdung',
-  verhalten:       'Verhaltensauffälligkeiten',
-  mobbing:         'Soziale Konflikte & Mobbing',
-  gefaehrdung:     'Gefährdungseinschätzung',
-  beruf:           'Berufsorientierung',
-  allgemein:       'Allgemeines Entwicklungsgespräch',
-  'nicht-bekannt': 'Anlass nicht bekannt',
-  sonstiges:       'Sonstiges',
+  // Basis (alle Schultypen)
+  'nicht-bekannt':  'Anlass nicht bekannt',
+  allgemein:        'Allgemeines Entwicklungsgespräch',
+  'eltern-anliegen':'Elternanliegen',
+  leistungsabfall:  'Leistungsabfall',
+  versetzung:       'Versetzungsgefährdung',
+  verhalten:        'Verhaltensauffälligkeiten',
+  mobbing:          'Soziale Konflikte & Mobbing',
+  gefaehrdung:      'Gefährdungseinschätzung',
+  sonstiges:        'Sonstiges',
+  // Grundschule
+  uebergangsempfehlung: 'Übergangsempfehlung',
+  zurueckstellung:      'Zurückstellung',
+  // Mittelschule
+  beruf:                          'Berufsorientierung',
+  'uebergang-berufsschule-ausbildung': 'Übergang Berufsschule / Ausbildung',
+  'abschluss-perspektive':        'Abschlussperspektive',
+  // Realschule
+  'kurswechsel-hauptreal':    'Kurswechsel Haupt-/Realschulzug',
+  'uebergang-beruf-gymnasium': 'Übergang Beruf oder Gymnasium',
+  // Gymnasium
+  'kurswahl-oberstufe': 'Kurswahl Oberstufe',
+  fehlzeiten:           'Fehlzeiten',
+  abiturplanung:        'Abiturplanung',
+  nichtversetzung:      'Nichtversetzung',
+  // Gesamtschule
+  'eg-kurswechsel':     'Kurswechsel (E-/G-Kurs)',
+  'uebergang-oberstufe':'Übergang in die Oberstufe',
+}
+
+const ANLASS_BASIS: Gespraechsanlass[] = [
+  'nicht-bekannt', 'allgemein', 'eltern-anliegen', 'leistungsabfall',
+  'versetzung', 'verhalten', 'mobbing', 'gefaehrdung', 'sonstiges',
+]
+
+export const ANLASS_OPTIONEN_BY_SCHULTYP: Record<Schultyp, Gespraechsanlass[]> = {
+  grundschule:  [...ANLASS_BASIS, 'uebergangsempfehlung', 'zurueckstellung'],
+  mittelschule: [...ANLASS_BASIS, 'beruf', 'uebergang-berufsschule-ausbildung', 'abschluss-perspektive'],
+  realschule:   [...ANLASS_BASIS, 'kurswechsel-hauptreal', 'abschluss-perspektive', 'uebergang-beruf-gymnasium'],
+  gymnasium:    [...ANLASS_BASIS, 'kurswahl-oberstufe', 'fehlzeiten', 'abiturplanung', 'nichtversetzung'],
+  gesamtschule: [...ANLASS_BASIS, 'eg-kurswechsel', 'abschluss-perspektive', 'uebergang-oberstufe'],
 }
 
 export const KLASSENSTUFE_LABEL: Record<Klassenstufe, string> = {
