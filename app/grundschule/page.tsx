@@ -9,10 +9,10 @@ const HERO = {
 
 const MODULE = [
   {
-    href: '/info',
+    href: '/grundschule/info',
     icon: '📖',
     label: 'Grundlagen & Info',
-    desc: 'Gesprächsführung, Vorbereitung, Körpersprache, Recht, schwierige Situationen',
+    desc: 'Gesprächsführung, Vorbereitung, Körpersprache, Recht, schwierige Situationen, Maßnahmen & Folgeschritte',
   },
   {
     href: '/quiz',
