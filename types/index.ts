@@ -172,6 +172,7 @@ export type QuizModul =
   | 'gfk'
   | 'vorbereitung'
   | 'koerpersignale'
+  | 'massnahmen'
 
 export interface QuizFrage {
   id: string

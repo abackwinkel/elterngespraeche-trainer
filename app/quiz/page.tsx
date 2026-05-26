@@ -11,6 +11,7 @@ const MODUL_LABEL: Record<QuizModul, string> = {
   gfk:              'Klärende Kommunikation',
   vorbereitung:     'Gesprächsvorbereitung',
   koerpersignale:   'Körpersignale',
+  massnahmen:       'Maßnahmen & Folgeschritte',
 }
 
 const MODUL_EMOJI: Record<QuizModul, string> = {
@@ -20,6 +21,7 @@ const MODUL_EMOJI: Record<QuizModul, string> = {
   gfk:              '🌱',
   vorbereitung:     '📋',
   koerpersignale:   '👁️',
+  massnahmen:       '🗂️',
 }
 
 const MODUL_FARBE: Record<string, string> = {
@@ -29,6 +31,7 @@ const MODUL_FARBE: Record<string, string> = {
   gfk:              'bg-purple-50 border-purple-200 text-purple-700',
   vorbereitung:     'bg-amber-50 border-amber-200 text-amber-700',
   koerpersignale:   'bg-green-50 border-green-200 text-green-700',
+  massnahmen:       'bg-orange-50 border-orange-200 text-orange-700',
 }
 
 export default function QuizPage() {

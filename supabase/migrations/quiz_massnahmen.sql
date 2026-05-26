@@ -1,0 +1,23 @@
+-- Sprint 3 S18: Neue Quiz-Kategorie "massnahmen"
+-- Die Fragen selbst liegen in lib/quiz-data.ts (mas-01 bis mas-10).
+-- Die Tabelle elterngespraech_quiz speichert nur Ergebnisse (modul ist text,
+-- kein enum) -- daher ist keine Schema-Änderung nötig.
+-- Diese Datei dokumentiert die neue Kategorie und die Fragen-IDs.
+
+-- Neue modul-Werte in elterngespraech_quiz ab Sprint 3:
+--   'massnahmen'  → Maßnahmen & Folgeschritte (mas-01 bis mas-10)
+--
+-- Fragen-IDs:
+--   mas-01  ruhige-see   Verspätungen: Klare Regel kommunizieren
+--   mas-02  ruhige-see   Hausaufgaben vergessen: Hausaufgaben-Heft
+--   mas-03  ruhige-see   Positive Nachricht an Eltern
+--   mas-04  gegenwind    Hausaufgaben-Unterstützung: kooperative Absprache
+--   mas-05  gegenwind    Klassenkonferenz einberufen
+--   mas-06  gegenwind    Schriftliche Vereinbarung
+--   mas-07  gegenwind    Schüler ins Gespräch einbeziehen
+--   mas-08  gewitterfront  § 8a SGB VIII Ablauf
+--   mas-09  gewitterfront  Nachteilsausgleich bei LRS
+--   mas-10  gewitterfront  Emotional überforderte Mutter im Gespräch
+
+-- Sicherstellen dass elterngespraech_quiz via Data API erreichbar ist
+-- (wurde in Sprint 3 Bugfix-Session im Supabase Dashboard aktiviert).
