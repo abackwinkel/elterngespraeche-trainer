@@ -6,6 +6,7 @@ import type {
   Familiensituation, Elterntyp, Schwierigkeit,
   ElternPerson, KindGeschlecht, Gespraechsinitiative, Sprachbarriere,
 } from '@/types'
+import { createClient } from '@/lib/supabase'
 import {
   KLASSENSTUFE_LABEL,
   ANLASS_LABEL,
@@ -81,18 +82,31 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
   // S5a – Datenschutz-Modal
   const [showDatenschutz, setShowDatenschutz] = useState(false)
   const [datenschutzAkzeptiert, setDatenschutzAkzeptiert] = useState(false)
+  const [nichtMehrZeigen, setNichtMehrZeigen] = useState(false)
 
   useEffect(() => {
+    // localStorage: dauerhaft unterdrückt (z. B. nach „Nicht mehr anzeigen")
+    const permanent = localStorage.getItem('datenschutz-permanent')
+    if (permanent) {
+      setDatenschutzAkzeptiert(permanent === 'consent')
+      setShowDatenschutz(false)
+      return
+    }
+    // sessionStorage: für diese Browser-Session bereits bestätigt
     if (sessionStorage.getItem('datenschutz-bestaetigt')) {
       setDatenschutzAkzeptiert(true)
-    } else {
-      setShowDatenschutz(true)
+      setShowDatenschutz(false)
+      return
     }
+    setShowDatenschutz(true)
   }, [])
 
   function handleDatenschutzWeiter() {
     if (datenschutzAkzeptiert) {
       sessionStorage.setItem('datenschutz-bestaetigt', '1')
+    }
+    if (nichtMehrZeigen) {
+      localStorage.setItem('datenschutz-permanent', datenschutzAkzeptiert ? 'consent' : 'no-consent')
     }
     setShowDatenschutz(false)
   }
@@ -182,24 +196,49 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
       sprachbarriere:      sprachbarriere !== 'deutsch' ? sprachbarriere : undefined,
     }
 
-    // S10 – Fall speichern (awaited, damit Fehler im Vercel-Log sichtbar sind)
+    // S10 – Fall speichern (direkt via Supabase Browser-Client)
     if (fallSpeichern) {
       try {
-        const saveRes = await fetch('/api/gespraech/konfiguration', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...config,
-            kind_initial: kindName.trim() ? truncateToInitial(kindName) : null,
-          }),
-        })
-        if (!saveRes.ok) {
-          const detail = await saveRes.json().catch(() => ({}))
-          console.error('[Konfiguration speichern] HTTP', saveRes.status, detail)
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          console.error('[Konfiguration speichern] Nicht authentifiziert')
+        } else {
+          const kindInitial = kindName.trim() ? truncateToInitial(kindName) : null
+          const anlassLabel = ANLASS_LABEL[config.anlass as Gespraechsanlass] ?? config.anlass
+          const klassLabel  = KLASSENSTUFE_LABEL[config.klassenstufe as Klassenstufe] ?? `Kl. ${config.klassenstufe}`
+          const label = [
+            kindInitial ? `${kindInitial},` : null,
+            klassLabel,
+            '–',
+            anlassLabel,
+          ].filter(Boolean).join(' ')
+
+          const { error } = await supabase
+            .from('elterngespraech_konfigurationen')
+            .insert({
+              user_id:              user.id,
+              label,
+              schultyp:             config.schultyp,
+              klassenstufe:         config.klassenstufe,
+              person1:              config.person1,
+              person2:              config.person2 ?? null,
+              elterntyp:            config.elterntyp,
+              familiensituation:    config.familie,
+              gespraechsinitiative: config.gespraechsinitiative ?? null,
+              gespraechsanlass:     config.anlass,
+              situation_text:       config.situationText ?? null,
+              kind_initial:         kindInitial,
+              kind_geschlecht:      config.kindGeschlecht ?? null,
+              sprachbarriere:       config.sprachbarriere ?? null,
+            })
+
+          if (error) {
+            console.error('[Konfiguration speichern] Supabase-Fehler:', error.message)
+          }
         }
       } catch (err) {
-        console.error('[Konfiguration speichern] Netzwerkfehler:', err)
+        console.error('[Konfiguration speichern] Unerwarteter Fehler:', err)
       }
     }
 
@@ -232,7 +271,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-6">
               {DATENSCHUTZ_ABSATZ_2}
             </p>
-            <label className="flex items-start gap-3 mb-6 cursor-pointer">
+            <label className="flex items-start gap-3 mb-4 cursor-pointer">
               <input
                 type="checkbox"
                 checked={datenschutzAkzeptiert}
@@ -241,6 +280,17 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
               />
               <span className="text-sm text-[var(--c-dark)]">
                 Ich bin mir bewusst, dass ich einen echten Vornamen eingebe, und stimme der Übermittlung für diese Sitzung zu.
+              </span>
+            </label>
+            <label className="flex items-center gap-3 mb-6 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={nichtMehrZeigen}
+                onChange={e => setNichtMehrZeigen(e.target.checked)}
+                className="w-4 h-4 accent-[var(--c-teal)]"
+              />
+              <span className="text-sm text-[var(--c-gray)]">
+                Diesen Hinweis nicht mehr anzeigen
               </span>
             </label>
             <button

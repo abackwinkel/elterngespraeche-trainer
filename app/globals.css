@@ -17,6 +17,9 @@
   --c-sidebar-text:   #1A2E35;
   --c-sidebar-muted:  rgba(26,46,53,0.55);
 
+  /* Header – dunkles Teal-Navy, harmoniert mit Sidebar-Palette */
+  --c-header:         #1A2E35;
+
   /* Responsive spacing tokens */
   --page-px:      5%;
   --page-py:      4rem;

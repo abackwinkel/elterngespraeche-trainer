@@ -290,7 +290,7 @@ export default function InfoPage() {
   return (
     <>
       <header style={{
-        background: 'var(--c-dark)', padding: '2rem 2rem 2.5rem',
+        background: 'var(--c-header)', padding: '2rem 2rem 2.5rem',
         borderBottom: '1px solid rgba(255,255,255,0.07)',
       }}>
         <p style={{

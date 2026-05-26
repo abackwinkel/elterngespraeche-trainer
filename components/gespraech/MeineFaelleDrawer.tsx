@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase'
 import type {
   Schultyp, Elterntyp, Familiensituation, Gespraechsanlass,
   ElternPerson, KindGeschlecht, Gespraechsinitiative, Klassenstufe,
@@ -48,18 +49,43 @@ export default function MeineFaelleDrawer({ open, schultyp, onClose, onLaden }: 
     if (!open) return
     setLoading(true)
     setLoeschenId(null)
-    fetch(`/api/gespraech/konfiguration?schultyp=${schultyp}`)
-      .then(r => r.json())
-      .then(d => setFaelle(d.konfigurationen ?? []))
-      .catch(() => setFaelle([]))
-      .finally(() => setLoading(false))
+
+    async function ladeFaelle() {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('elterngespraech_konfigurationen')
+        .select(
+          'id, label, schultyp, klassenstufe, person1, person2, elterntyp, familiensituation, ' +
+          'gespraechsinitiative, gespraechsanlass, situation_text, kind_initial, kind_geschlecht, ' +
+          'sprachbarriere, created_at'
+        )
+        .eq('schultyp', schultyp)
+        .order('created_at', { ascending: false })
+        .limit(50)
+
+      if (error) {
+        console.error('[MeineFaelle laden] Supabase-Fehler:', error.message)
+        setFaelle([])
+      } else {
+        setFaelle((data ?? []) as unknown as GespeicherterFall[])
+      }
+      setLoading(false)
+    }
+
+    ladeFaelle()
   }, [open, schultyp])
 
   async function handleLoeschen(id: string) {
     setLoeschenLaeuft(true)
     try {
-      const res = await fetch(`/api/gespraech/konfiguration?id=${id}`, { method: 'DELETE' })
-      if (res.ok) {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('elterngespraech_konfigurationen')
+        .delete()
+        .eq('id', id)
+      if (error) {
+        console.error('[MeineFaelle löschen] Supabase-Fehler:', error.message)
+      } else {
         setFaelle(prev => prev.filter(f => f.id !== id))
       }
     } finally {

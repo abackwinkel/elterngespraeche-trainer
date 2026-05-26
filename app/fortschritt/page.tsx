@@ -95,7 +95,7 @@ export default async function FortschrittPage() {
 
       <div className="flex-1 min-w-0 overflow-y-auto">
         <header style={{
-          background: 'var(--c-dark)', padding: '2rem 2rem 2.5rem',
+          background: 'var(--c-header)', padding: '2rem 2rem 2.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}>
           <p style={{

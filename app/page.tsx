@@ -32,7 +32,7 @@ export default async function StartPage() {
       <div className="flex-1 min-w-0 overflow-y-auto">
         {/* Header */}
         <header style={{
-          background: 'var(--c-dark)',
+          background: 'var(--c-header)',
           padding: '2rem 2rem 2.5rem',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}>

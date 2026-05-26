@@ -26,7 +26,7 @@ export default function GrundschulePage() {
   return (
     <>
       <header style={{
-        background: 'var(--c-dark)',
+        background: 'var(--c-header)',
         padding: '2rem 2rem 2.5rem',
         borderBottom: '1px solid rgba(255,255,255,0.07)',
       }}>
