@@ -91,50 +91,21 @@ export default function Sidebar() {
         <div style={{ borderBottom: '1px solid rgba(26,46,53,0.1)', margin: '0.4rem 0' }} />
 
         {/* Gemeinsame Module */}
-        <NavLink label="Grundlagen & Info"  href="/info"           isActive={isPrefix('/info')} />
-        <NavLink label="Wissensquiz"         href="/quiz"           isActive={isPrefix('/quiz')} />
-        <NavLink label="Nachbereitung"       href="/nachbereitung"  isActive={isPrefix('/nachbereitung')} />
+        <NavLink label="Grundlagen & Info"        href="/info"          isActive={isPrefix('/info')} />
+        <NavLink label="Maßnahmen & Folgeschritte" href="/massnahmen"    isActive={isPrefix('/massnahmen')} />
+        <NavLink label="Wissensquiz"               href="/quiz"          isActive={isPrefix('/quiz')} />
 
         <div style={{ borderBottom: '1px solid rgba(26,46,53,0.1)', margin: '0.4rem 0' }} />
 
-        {/* Gesprächsschmiede – je Schultyp */}
-        <div style={{
-          padding: '0.5rem 1.25rem 0.25rem',
-          fontSize: '0.62rem',
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'var(--c-sidebar-text)',
-          opacity: 0.45,
-        }}>
-          Gesprächsschmiede
-        </div>
-
         <GespraechsschmiedeLink
-          label="Gymnasium"
-          href="/gymnasium/gespraech"
-          isActive={isPrefix('/gymnasium')}
+          label="Gesprächsschmiede"
+          href="/gesprach"
+          isActive={isPrefix('/gesprach')}
         />
         <GespraechsschmiedeLink
-          label="Realschule"
-          href="/realschule/gespraech"
-          isActive={isPrefix('/realschule')}
-        />
-        <GespraechsschmiedeLink
-          label="Gesamtschule"
-          href="/gesamtschule/gespraech"
-          isActive={isPrefix('/gesamtschule')}
-        />
-
-        <GespraechsschmiedeLink
-          label="Grundschule"
-          href="/grundschule/gespraech"
-          isActive={isPrefix('/grundschule')}
-        />
-        <GespraechsschmiedeLink
-          label="Mittelschule"
-          href="/mittelschule/gespraech"
-          isActive={isPrefix('/mittelschule')}
+          label="Referendare"
+          href="/referendare"
+          isActive={isPrefix('/referendare')}
         />
 
         <div style={{ borderTop: '1px solid rgba(26,46,53,0.1)', margin: '0.5rem 0 0.25rem' }} />

@@ -65,21 +65,20 @@ export default async function StartPage() {
             fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
             fontWeight: 400, color: '#fff', lineHeight: 1.15, margin: 0,
           }}>
-            Dein Schultyp – dein Einstieg
+            Wo möchtest du heute starten?
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '1rem', marginTop: '0.75rem', maxWidth: '52ch', lineHeight: 1.6 }}>
-            Wähle die Schulform, die deiner Unterrichtspraxis entspricht. Die KI übernimmt die Elternrolle und gibt dir nach jeder Eingabe gezieltes Feedback.
+            Wähle einen Bereich und leg direkt los – ob Hintergrundwissen, Quiz oder live Gespräch üben.
           </p>
         </header>
 
         <main style={{ padding: '2rem 2rem 4rem', maxWidth: 960, margin: '0 auto' }}>
 
-          {/* Schultyp-Karten */}
+          {/* Feature-Kacheln */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
 
-            {/* Gymnasium — vollständig */}
             <Link
-              href="/gymnasium"
+              href="/info"
               style={{
                 display: 'block', textDecoration: 'none',
                 background: '#fff', borderRadius: '10px',
@@ -89,16 +88,16 @@ export default async function StartPage() {
               }}
               className="card-lift"
             >
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>🏫</div>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>📖</div>
               <h2 style={{
                 fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
                 fontSize: '1.5rem', fontWeight: 600,
                 color: 'var(--c-dark)', margin: '0 0 0.4rem',
               }}>
-                Gymnasium
+                Grundlagen & Info
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.5)', margin: '0 0 1rem', lineHeight: 1.5 }}>
-                Vollständig ausgebaut: Gesprächsschmiede, Quiz, Körpersignale, Infoseiten und Nachbereitung.
+                Gesprächsführung, Vorbereitung, Körpersprache, Rechtliches, schwierige Situationen und Nachbereitung.
               </p>
               <span style={{
                 display: 'inline-block', fontSize: '0.72rem', fontWeight: 600,
@@ -106,63 +105,73 @@ export default async function StartPage() {
                 color: 'var(--c-teal)', padding: '0.25rem 0.75rem',
                 background: 'rgba(15,123,108,0.08)', borderRadius: '4px',
               }}>
-                Jetzt starten →
+                Zum Wissen →
               </span>
             </Link>
 
-            {/* Grundschule — Platzhalter */}
-            <div style={{
-              background: '#fff', borderRadius: '10px',
-              border: '1px solid var(--c-lightgray)',
-              padding: '1.75rem', opacity: 0.55, cursor: 'default',
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>🏫</div>
+            <Link
+              href="/quiz"
+              style={{
+                display: 'block', textDecoration: 'none',
+                background: '#fff', borderRadius: '10px',
+                border: '2px solid var(--c-teal)',
+                padding: '1.75rem',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+              className="card-lift"
+            >
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>🧠</div>
               <h2 style={{
                 fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
                 fontSize: '1.5rem', fontWeight: 600,
                 color: 'var(--c-dark)', margin: '0 0 0.4rem',
               }}>
-                Grundschule
+                Wissensquiz
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.5)', margin: '0 0 1rem', lineHeight: 1.5 }}>
-                Inhalte speziell für den Grundschulbereich – Elternkommunikation und Gesprächsführung.
+                7 Wissensmodule trainieren – von Gesprächsphasen über Rechtswissen bis zu Elternreaktionen.
               </p>
               <span style={{
                 display: 'inline-block', fontSize: '0.72rem', fontWeight: 600,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: 'rgba(0,0,0,0.3)', padding: '0.25rem 0.75rem',
-                background: 'rgba(0,0,0,0.05)', borderRadius: '4px',
+                color: 'var(--c-teal)', padding: '0.25rem 0.75rem',
+                background: 'rgba(15,123,108,0.08)', borderRadius: '4px',
               }}>
-                Demnächst
+                Zum Quiz →
               </span>
-            </div>
+            </Link>
 
-            {/* Mittelschule — Platzhalter */}
-            <div style={{
-              background: '#fff', borderRadius: '10px',
-              border: '1px solid var(--c-lightgray)',
-              padding: '1.75rem', opacity: 0.55, cursor: 'default',
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>🏫</div>
+            <Link
+              href="/gesprach"
+              style={{
+                display: 'block', textDecoration: 'none',
+                background: '#fff', borderRadius: '10px',
+                border: '2px solid var(--c-teal)',
+                padding: '1.75rem',
+                transition: 'box-shadow 0.2s, transform 0.2s',
+              }}
+              className="card-lift"
+            >
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem', lineHeight: 1 }}>🎭</div>
               <h2 style={{
                 fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
                 fontSize: '1.5rem', fontWeight: 600,
                 color: 'var(--c-dark)', margin: '0 0 0.4rem',
               }}>
-                Mittelschule
+                Gesprächsschmiede
               </h2>
               <p style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.5)', margin: '0 0 1rem', lineHeight: 1.5 }}>
-                Elterngespräche im Mittelschulkontext – mit besonderen Herausforderungen dieser Schulstufe.
+                Live mit der KI üben – alle Schultypen, alle Elterntypen, mit gezieltem Feedback nach jeder Eingabe.
               </p>
               <span style={{
                 display: 'inline-block', fontSize: '0.72rem', fontWeight: 600,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
-                color: 'rgba(0,0,0,0.3)', padding: '0.25rem 0.75rem',
-                background: 'rgba(0,0,0,0.05)', borderRadius: '4px',
+                color: 'var(--c-teal)', padding: '0.25rem 0.75rem',
+                background: 'rgba(15,123,108,0.08)', borderRadius: '4px',
               }}>
-                Demnächst
+                Gespräch starten →
               </span>
-            </div>
+            </Link>
 
           </div>
 

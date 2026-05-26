@@ -8,7 +8,6 @@ const TABS = [
   { id: 'koerpersprache',label: 'Körpersprache' },
   { id: 'recht',         label: 'Rechtliches' },
   { id: 'schwierig',     label: 'Schwierige Situationen' },
-  { id: 'massnahmen',    label: 'Maßnahmen & Folgeschritte' },
 ]
 
 // ─── Hilfs-Komponenten ────────────────────────────────────────────────────────
@@ -500,7 +499,6 @@ export default function GrundschuleInfoPage() {
           {activeTab === 'koerpersprache'&& <KoerperspracheTab />}
           {activeTab === 'recht'         && <RechtlichesTab />}
           {activeTab === 'schwierig'     && <SchwierigeSituationenTab />}
-          {activeTab === 'massnahmen'    && <MassnahmenTab />}
         </div>
       </main>
     </>

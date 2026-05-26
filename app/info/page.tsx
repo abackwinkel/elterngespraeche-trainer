@@ -8,6 +8,7 @@ const TABS = [
   { id: 'koerpersprache', label: 'Körpersprache',           quizModul: 'koerpersignale',   quizLabel: 'Körpersignale' },
   { id: 'recht',          label: 'Rechtliches',             quizModul: 'rechtswissen',     quizLabel: 'Rechtswissen' },
   { id: 'schwierig',      label: 'Schwierige Situationen',  quizModul: 'reaktionen',       quizLabel: 'Elternreaktionen' },
+  { id: 'nachbereitung',  label: 'Nachbereitung',           quizModul: '',                 quizLabel: '' },
 ]
 
 // ─── Hilfs-Komponenten ────────────────────────────────────────────────────────
@@ -323,6 +324,70 @@ function SchwierigeSituationenTab() {
   )
 }
 
+function NachbereitungTab() {
+  return (
+    <div>
+      <h2 style={{ fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)', fontSize: '1.77rem', fontWeight: 600, color: 'var(--c-dark)', margin: '0 0 1rem' }}>
+        Nachbereitung & Selfcare
+      </h2>
+
+      <h3 style={{ fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)', fontSize: '1.45rem', fontWeight: 600, color: 'var(--c-dark)', margin: '0 0 0.75rem' }}>
+        Gesprächsnachbereitung – was dokumentieren?
+      </h3>
+      <p style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.7, margin: '0 0 1rem' }}>
+        Eine kurze Dokumentation schützt Sie, schafft Klarheit für Folgegespräche und ist bei Eskalationen rechtlich relevant.
+      </p>
+      <ul style={{ paddingLeft: '1.25rem', margin: '0 0 1.25rem' }}>
+        {[
+          'Datum und Uhrzeit',
+          'Teilnehmende Personen (wer war anwesend?)',
+          'Gesprächsanlass / Thema',
+          'Wesentliche besprochene Punkte',
+          'Vereinbarte Maßnahmen (wer, was, bis wann?)',
+          'Nächster Kontakt oder Termin (falls vereinbart)',
+          'Besonderheiten / Spannungsmomente',
+        ].map(item => (
+          <li key={item} style={{ marginBottom: '0.4rem', fontSize: '0.9rem', color: 'rgba(0,0,0,0.65)' }}>
+            {item}
+          </li>
+        ))}
+      </ul>
+      <InfoBox>
+        <strong>Wann Schulleitung informieren?</strong> Wenn Gefährdungshinweise vorliegen, wenn Eltern rechtliche Schritte ankündigen, bei wiederholten Eskalationen oder wenn externe Stellen einbezogen werden müssen.
+      </InfoBox>
+
+      <h3 style={{ fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)', fontSize: '1.45rem', fontWeight: 600, color: 'var(--c-dark)', margin: '2rem 0 0.5rem' }}>
+        Selfcare – warum das zählt
+      </h3>
+      <p style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.7, margin: '0 0 1rem' }}>
+        Schwierige Elterngespräche sind kognitiv und emotional anspruchsvoll. Das zehrt – und braucht einen bewussten Abschluss.
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
+        {[
+          ['Mentales Abschluss-Ritual', 'Schreib eine kurze Notiz: Was war gut? Was nimmst du mit? Dann: Akte schließen – bildlich wie physisch.'],
+          ['Körperliche Unterbrechung', 'Kurzer Spaziergang, Raumwechsel, Wasser trinken. Der Körper signalisiert dem Gehirn: andere Situation.'],
+          ['Atemübung (4–7–8)', 'Einatmen: 4 Sekunden. Halten: 7 Sekunden. Ausatmen: 8 Sekunden. Zweimal wiederholen.'],
+        ].map(([titel, text]) => (
+          <div key={titel} style={{
+            background: 'rgba(15,123,108,0.04)', borderRadius: '8px',
+            border: '1px solid rgba(15,123,108,0.12)', padding: '1rem',
+          }}>
+            <strong style={{ fontSize: '0.875rem', color: 'var(--c-dark)', display: 'block', marginBottom: '0.4rem' }}>
+              {titel}
+            </strong>
+            <p style={{ fontSize: '0.83rem', color: 'rgba(0,0,0,0.55)', margin: 0, lineHeight: 1.5 }}>
+              {text}
+            </p>
+          </div>
+        ))}
+      </div>
+      <p style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.6)', lineHeight: 1.6, margin: 0 }}>
+        Schulpsychologischer Dienst, kollegiale Beratung oder Supervision sind keine Zeichen von Schwäche – sondern kluge Nutzung verfügbarer Ressourcen. Besonders nach wiederholt belastenden Gesprächen lohnt sich ein professioneller Austausch.
+      </p>
+    </div>
+  )
+}
+
 // ─── Haupt-Komponente ─────────────────────────────────────────────────────────
 
 export default function InfoPage() {
@@ -400,6 +465,7 @@ export default function InfoPage() {
           {activeTab === 'koerpersprache' && <KoerperspracheTab />}
           {activeTab === 'recht'          && <RechtlichesTab />}
           {activeTab === 'schwierig'      && <SchwierigeSituationenTab />}
+          {activeTab === 'nachbereitung'  && <NachbereitungTab />}
         </div>
       </main>
     </>
