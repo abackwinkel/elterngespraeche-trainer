@@ -182,16 +182,25 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
       sprachbarriere:      sprachbarriere !== 'deutsch' ? sprachbarriere : undefined,
     }
 
-    // S10 – Fall speichern (fire-and-forget)
+    // S10 – Fall speichern (awaited, damit Fehler im Vercel-Log sichtbar sind)
     if (fallSpeichern) {
-      fetch('/api/gespraech/konfiguration', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...config,
-          kind_initial: kindName.trim() ? truncateToInitial(kindName) : null,
-        }),
-      }).catch(() => { /* Speicherfehler schweigend ignorieren */ })
+      try {
+        const saveRes = await fetch('/api/gespraech/konfiguration', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...config,
+            kind_initial: kindName.trim() ? truncateToInitial(kindName) : null,
+          }),
+        })
+        if (!saveRes.ok) {
+          const detail = await saveRes.json().catch(() => ({}))
+          console.error('[Konfiguration speichern] HTTP', saveRes.status, detail)
+        }
+      } catch (err) {
+        console.error('[Konfiguration speichern] Netzwerkfehler:', err)
+      }
     }
 
     onStart(config)

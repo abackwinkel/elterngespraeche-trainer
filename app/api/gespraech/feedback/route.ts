@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
 import { buildFeedbackPrompt } from '@/prompts/evaluation'
+import { normalizeGermanQuotes } from '@/lib/text-sanitizer'
 import type { FeedbackRequest, FeedbackResponse, Elterntyp, Schwierigkeit } from '@/types'
 
 function validateRequest(body: unknown): body is FeedbackRequest & { elterntyp: Elterntyp; schwierigkeit: Schwierigkeit } {
@@ -59,6 +60,13 @@ export async function POST(req: NextRequest) {
       besser: null,
       alternativ: null,
     }
+  }
+
+  // Anführungszeichen normalisieren (KI gibt teils englische Curly- oder ASCII-Quotes aus)
+  feedback = {
+    gut:       normalizeGermanQuotes(feedback.gut),
+    besser:    feedback.besser    ? normalizeGermanQuotes(feedback.besser)    : null,
+    alternativ:feedback.alternativ? normalizeGermanQuotes(feedback.alternativ): null,
   }
 
   return NextResponse.json(feedback)

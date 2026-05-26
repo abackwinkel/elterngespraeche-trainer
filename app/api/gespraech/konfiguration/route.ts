@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
-import type { GespraechsKonfiguration } from '@/types'
+import { ANLASS_LABEL, KLASSENSTUFE_LABEL } from '@/lib/szenarien-data'
+import type { GespraechsKonfiguration, Gespraechsanlass, Klassenstufe } from '@/types'
 
 // ─── GET /api/gespraech/konfiguration?schultyp=gymnasium ──────────────────────
 
@@ -85,12 +86,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Nicht authentifiziert' }, { status: 401 })
   }
 
-  // Auto-Label: "{kind_initial}, Kl. {klassenstufe} – {anlass}"
+  // Auto-Label: "{kind_initial}, {klassenstufe} – {anlass}"  (mit lesbaren Labels)
+  const anlassLabel = ANLASS_LABEL[body.anlass as Gespraechsanlass] ?? body.anlass
+  const klassLabel  = KLASSENSTUFE_LABEL[body.klassenstufe as Klassenstufe] ?? `Kl. ${body.klassenstufe}`
   const label = [
     body.kind_initial ? `${body.kind_initial},` : null,
-    `Kl. ${body.klassenstufe}`,
+    klassLabel,
     '–',
-    body.anlass,
+    anlassLabel,
   ].filter(Boolean).join(' ')
 
   const { error } = await supabase

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx'
 import type { GespraechsKonfiguration, Turn, FeedbackResponse } from '@/types'
 import { buildSzenarioKontext, findSzenario, SITUATIONSBESCHREIBUNGEN_POOL, SZENARIEN, SCHWIERIGKEIT_LABEL, ELTERNTYP_LABEL } from '@/lib/szenarien-data'
+import { normalizeGermanQuotes } from '@/lib/text-sanitizer'
 import AuswertungsPanel from './AuswertungsPanel'
 
 interface Props {
@@ -114,7 +115,19 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       textareaRef.current?.focus()
     }
 
-    return elternText
+    // Anführungszeichen nach Streaming-Ende normalisieren
+    const normalizedElternText = normalizeGermanQuotes(elternText)
+    if (normalizedElternText !== elternText) {
+      setTurns(prev => {
+        const updated = [...prev]
+        const last = updated[updated.length - 1]
+        if (last?.role === 'elternteil') {
+          updated[updated.length - 1] = { ...last, content: normalizedElternText }
+        }
+        return updated
+      })
+    }
+    return normalizedElternText
   }
 
   const handleSend = useCallback(async () => {
@@ -200,6 +213,8 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       }
     } finally {
       setIsStreamingReflexion(false)
+      // Anführungszeichen nach Streaming-Ende normalisieren
+      if (reflexionText) setReflexion(normalizeGermanQuotes(reflexionText))
     }
 
     try {
