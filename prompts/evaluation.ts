@@ -136,8 +136,11 @@ export function buildElternteilSystemPrompt(
   let coupleRules: string
   if (twoPersonMatch) {
     // Formular-Konfiguration: konkrete Rollen bekannt
-    const primär = twoPersonMatch[1]
-    const sekundär = twoPersonMatch[2]
+    const primärRaw = twoPersonMatch[1]
+    const sekundärRaw = twoPersonMatch[2]
+    // Wenn beide die gleiche Rollenbezeichnung haben (z. B. zwei Mütter), nummerieren
+    const primär = primärRaw === sekundärRaw ? `${primärRaw} 1` : primärRaw
+    const sekundär = primärRaw === sekundärRaw ? `${sekundärRaw} 2` : sekundärRaw
     coupleRules = `
 - Beide Elternteile sind anwesend. ${primär} ist die Primärperson und spricht häufiger; ${sekundär} schaltet sich gelegentlich ein.
 - Zeige an, wer spricht: Beginne den jeweiligen Redebeitrag mit „${primär}:" oder „${sekundär}:" gefolgt von der Aussage.
@@ -163,7 +166,8 @@ export function buildElternteilSystemPrompt(
 - Anführungszeichen nach deutschem Standard: „…" (öffnend unten, schließend oben)
 - Stage Directions (*…*) immer in der dritten Person formulieren: *Er lehnt sich zurück*, *Sie atmet kurz aus*, *Er schüttelt leicht den Kopf* – niemals in der Ich-Form wie *Ich lehne mich zurück*
 - Vor … (Auslassungszeichen) immer ein Leerzeichen setzen: „Ich weiß nicht …", „Das ist doch …" – Ausnahme: mitten im Wort abgebrochener Text wie „Das ist un…glaublich" oder „Ich ver…" (kein Leerzeichen vor dem Abbruch)
-- Alle Sätze vollständig und grammatikalisch korrekt${coupleRules}
+- Alle Sätze vollständig und grammatikalisch korrekt
+- Verwende für das Kind ausschließlich den Namen oder das Initial aus dem Kontext (z. B. „M.") – erfinde niemals einen anderen oder vollständigen Namen${coupleRules}
 
 ### Deine konkrete Situation in diesem Gespräch
 
