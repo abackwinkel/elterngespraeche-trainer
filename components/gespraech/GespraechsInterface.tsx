@@ -11,11 +11,12 @@ import AuswertungsPanel from './AuswertungsPanel'
 interface Props {
   config: GespraechsKonfiguration
   onNeustart: () => void
+  fallVorherGespeichert?: boolean
 }
 
 const SITUATION_INTERVAL = 3
 
-export default function GespraechsInterface({ config, onNeustart }: Props) {
+export default function GespraechsInterface({ config, onNeustart, fallVorherGespeichert = false }: Props) {
   const [turns, setTurns] = useState<Turn[]>([])
   const [input, setInput] = useState('')
   const [isStreaming, setIsStreaming] = useState(false)
@@ -29,6 +30,8 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
   const [sessionEnded, setSessionEnded] = useState(false)
   const [initialized, setInitialized] = useState(false)
   const [notizen, setNotizen] = useState('')
+  const [fallNachtraeglichGespeichert, setFallNachtraeglichGespeichert] = useState(false)
+  const [isSavingFall, setIsSavingFall] = useState(false)
 
   const szenario = findSzenario(config.schultyp, config.elterntyp, config.anlass, config.klassenstufe, config.familie)
   const szenarioKontext = buildSzenarioKontext(szenario ?? SZENARIEN[0], config)
@@ -235,6 +238,36 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
       if (res.ok) setSessionSaved(true)
     } catch {
       // Session-Speicherung schweigend ignorieren
+    }
+  }
+
+  async function saveKonfigurationNachtraeglich() {
+    if (isSavingFall || fallNachtraeglichGespeichert) return
+    setIsSavingFall(true)
+    try {
+      const res = await fetch('/api/gespraech/konfiguration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          schultyp:            config.schultyp,
+          klassenstufe:        config.klassenstufe,
+          person1:             config.person1 ?? null,
+          person2:             config.person2 ?? null,
+          elterntyp:           config.elterntyp,
+          familie:             config.familie,
+          gespraechsinitiative: config.gespraechsinitiative ?? null,
+          anlass:              config.anlass,
+          situationText:       config.situationText ?? null,
+          kind_initial:        config.kindName ?? null,
+          kindGeschlecht:      config.kindGeschlecht ?? null,
+          sprachbarriere:      config.sprachbarriere ?? null,
+        }),
+      })
+      if (res.ok) setFallNachtraeglichGespeichert(true)
+    } catch {
+      // Speichern schweigend ignorieren
+    } finally {
+      setIsSavingFall(false)
     }
   }
 
@@ -462,6 +495,19 @@ export default function GespraechsInterface({ config, onNeustart }: Props) {
                 >
                   ↓ Gesprächsprotokoll
                 </button>
+                {fallVorherGespeichert || fallNachtraeglichGespeichert ? (
+                  <div className="flex-1 py-3 rounded-xl text-sm font-semibold text-center text-[var(--c-teal)] bg-[var(--c-mint)] border border-[var(--c-teal)]">
+                    ✓ Fall gespeichert
+                  </div>
+                ) : (
+                  <button
+                    onClick={saveKonfigurationNachtraeglich}
+                    disabled={isSavingFall}
+                    className="flex-1 py-3 border border-[var(--c-gray-light)] rounded-xl text-sm font-semibold text-[var(--c-gray)] hover:bg-[var(--c-offwhite)] transition-colors disabled:opacity-50"
+                  >
+                    {isSavingFall ? '…' : '＋ Fall speichern'}
+                  </button>
+                )}
                 <a
                   href="/fortschritt"
                   className="flex-1 py-3 bg-[var(--c-teal)] text-white rounded-xl text-sm font-semibold text-center hover:bg-[var(--c-teal-light)] transition-colors"

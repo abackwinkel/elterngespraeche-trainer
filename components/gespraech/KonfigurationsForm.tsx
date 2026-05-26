@@ -72,7 +72,7 @@ function truncateToInitial(name: string): string {
 
 interface Props {
   schultyp: Schultyp
-  onStart: (config: GespraechsKonfiguration) => void
+  onStart: (config: GespraechsKonfiguration, fallGespeichert: boolean) => void
 }
 
 // ─── Hauptkomponente ──────────────────────────────────────────────────────────
@@ -242,7 +242,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
       }
     }
 
-    onStart(config)
+    onStart(config, fallSpeichern)
   }
 
   return (
