@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Sidebar from '@/components/layout/Sidebar'
 import { createClient } from '@/lib/supabase'
 
@@ -164,6 +165,12 @@ export default function AdminPage() {
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <Sidebar />
       <main style={mainStyle}>
+
+        {/* Admin-Tabs */}
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+          <Link href="/admin" style={adminTab(true)}>Einladungscodes</Link>
+          <Link href="/admin/feedback" style={adminTab(false)}>Feedback</Link>
+        </div>
 
         {/* Header */}
         <div style={{ marginBottom: '1.75rem' }}>
@@ -422,6 +429,16 @@ function btnOutline(disabled: boolean): React.CSSProperties {
     fontWeight: 600, fontSize: '0.85rem',
     border: `1.5px solid ${disabled ? 'var(--c-lightgray)' : 'var(--c-teal)'}`,
     borderRadius: 6, cursor: disabled ? 'not-allowed' : 'pointer',
+  }
+}
+
+function adminTab(active: boolean): React.CSSProperties {
+  return {
+    padding: '0.4rem 0.9rem', fontSize: '0.8rem', fontWeight: 600,
+    textDecoration: 'none', borderRadius: 6,
+    color: active ? '#fff' : 'var(--c-teal)',
+    background: active ? 'var(--c-teal)' : 'transparent',
+    border: `1.5px solid ${active ? 'var(--c-teal)' : 'var(--c-lightgray)'}`,
   }
 }
 
