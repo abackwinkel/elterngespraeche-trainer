@@ -58,6 +58,11 @@ Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
 
 ${RECHTSCHREIB_REGEL_JSON}
 
+Wenn du innerhalb eines Textwertes ein Wort zitierst, benutze IMMER das vollständige
+Paar „…“ – also öffnend „ und schließend “. Ein gerades " darf innerhalb eines
+Textwertes NIE vorkommen: Es würde den JSON-String vorzeitig beenden und deine
+gesamte Antwort unlesbar machen. Im Zweifel zitiere ohne Anführungszeichen.
+
 ${TYPOGRAFIE_REGEL}`
 }
 

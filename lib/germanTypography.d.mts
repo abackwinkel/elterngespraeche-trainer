@@ -21,6 +21,7 @@ export declare function sanitizeGermanText(input: string, opts?: SanitizeOpts): 
 export declare function sanitizeGermanTextSafe(input: string, opts?: SanitizeOpts): string
 export declare function sanitizeJsonDeep<T>(value: T, opts?: SanitizeOpts): T
 export declare function repairGermanQuotedJson(s: string): string
+export declare function repairMixedQuotesInJson(s: string): string
 export declare function normalizeStreamChunk(input: string): string
 export declare function checkGermanTypography(
   text: string

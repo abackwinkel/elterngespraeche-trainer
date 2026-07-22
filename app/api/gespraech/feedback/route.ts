@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
 import { requireAiUser, tooLong, tooLongResponse } from '@/lib/api-guard'
 import { buildFeedbackPrompt } from '@/prompts/evaluation'
-import { sanitizeJsonDeep, repairGermanQuotedJson } from '@/lib/germanTypography.mjs'
+import { sanitizeJsonDeep, repairGermanQuotedJson, repairMixedQuotesInJson } from '@/lib/germanTypography.mjs'
 import type { FeedbackRequest, FeedbackResponse, Elterntyp, Schwierigkeit } from '@/types'
 
 function validateRequest(body: unknown): body is FeedbackRequest & { elterntyp: Elterntyp; schwierigkeit: Schwierigkeit } {
@@ -57,21 +57,25 @@ export async function POST(req: NextRequest) {
   let feedback: FeedbackResponse
   try {
     const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    // Try direct parse, then fallback to extracting the first JSON object,
-    // zuletzt die Reparatur für den Fall, dass das Modell deutsche
-    // Anführungszeichen als String-Begrenzer gesetzt hat (bekannte Schwäche
-    // dieses Prompts, siehe CLAUDE.md).
+    // Reihenfolge: direkt parsen -> erstes JSON-Objekt herausschneiden -> zwei
+    // Reparaturen für die zwei bekannten Modell-Fehler. Der häufigste (gemessen
+    // 22.07.: 3 von 4 Läufen) ist ein Mischpaar IM Wert – „gemeinsam" – dessen
+    // gerades Zeichen den JSON-String vorzeitig beendet. Der seltenere sind
+    // deutsche AZ als Begrenzer. Beide Reparaturen laufen NUR auf dem Fehlerpfad,
+    // gültiges JSON wird nie angefasst.
+    const parseOrRepair = (s: string): unknown => {
+      try { return JSON.parse(s) } catch { /* weiter mit Reparatur */ }
+      try { return JSON.parse(repairMixedQuotesInJson(s)) } catch { /* weiter */ }
+      return JSON.parse(repairGermanQuotedJson(s))
+    }
+
     let parsed: unknown
     try {
-      parsed = JSON.parse(stripped)
+      parsed = parseOrRepair(stripped)
     } catch {
       const match = stripped.match(/\{[\s\S]*\}/)
       if (!match) throw new Error('no JSON found')
-      try {
-        parsed = JSON.parse(match[0])
-      } catch {
-        parsed = JSON.parse(repairGermanQuotedJson(match[0]))
-      }
+      parsed = parseOrRepair(match[0])
     }
     feedback = parsed as FeedbackResponse
   } catch {
