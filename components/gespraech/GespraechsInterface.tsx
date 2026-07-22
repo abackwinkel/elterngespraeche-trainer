@@ -139,12 +139,56 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
     return normalizedElternText
   }
 
+  async function fetchFeedback(userTurn: string, elternTurn: string) {
+    setIsLoadingFeedback(true)
+    try {
+      const res = await fetch('/api/gespraech/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userTurn,
+          elternTurn,
+          szenarioKontext,
+          elterntyp: config.elterntyp,
+          schwierigkeit: config.schwierigkeit,
+        }),
+      })
+      if (res.ok) {
+        setFeedback(await res.json())
+      } else {
+        // Auth-/Limit-Fall sichtbar machen statt still zu schlucken.
+        let detail = ''
+        try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
+        setFeedback({
+          gut: res.status === 401
+            ? 'Die Anmeldung ist abgelaufen – bitte neu anmelden.'
+            : detail || 'Die Auswertung konnte nicht geladen werden.',
+          besser: null,
+          alternativ: null,
+        })
+      }
+    } catch {
+      // Feedback schweigend ignorieren
+    } finally {
+      setIsLoadingFeedback(false)
+    }
+  }
+
   const handleSend = useCallback(async () => {
     const trimmed = input.trim()
     if (!trimmed || isStreaming || sessionEnded) return
 
     setInput('')
     turnCountRef.current += 1
+
+    // Sofort-Auswertung: nur den Gesprächsstand ZUM ZEITPUNKT der Eingabe bewerten —
+    // Bezugspunkt ist die letzte Elternteil-Äußerung VOR der Lehrkraft-Aussage,
+    // nie die erst danach eintreffende Antwort. Deshalb aus `turns` lesen, bevor
+    // der Lehrkraft-Turn angehängt wird, und 'situation'-Turns überspringen.
+    if (feedbackEnabled) {
+      const vorherigerElternTurn = [...turns].reverse().find(t => t.role === 'elternteil')?.content ?? ''
+      void fetchFeedback(trimmed, vorherigerElternTurn)
+    }
 
     // Build nextTurns directly from `turns` (which is in the dependency array) to
     // avoid a React 18 batching race where the setState updater runs after
@@ -162,42 +206,7 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
       setTurns(nextTurns)
     }
 
-    const elternText = await fetchElternteilResponse(nextTurns)
-
-    if (feedbackEnabled && elternText) {
-      setIsLoadingFeedback(true)
-      try {
-        const res = await fetch('/api/gespraech/feedback', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userTurn: trimmed,
-            elternTurn: elternText,
-            szenarioKontext,
-            elterntyp: config.elterntyp,
-            schwierigkeit: config.schwierigkeit,
-          }),
-        })
-        if (res.ok) {
-          setFeedback(await res.json())
-        } else {
-          // Auth-/Limit-Fall sichtbar machen statt still zu schlucken.
-          let detail = ''
-          try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
-          setFeedback({
-            gut: res.status === 401
-              ? 'Die Anmeldung ist abgelaufen – bitte neu anmelden.'
-              : detail || 'Die Auswertung konnte nicht geladen werden.',
-            besser: null,
-            alternativ: null,
-          })
-        }
-      } catch {
-        // Feedback schweigend ignorieren
-      } finally {
-        setIsLoadingFeedback(false)
-      }
-    }
+    await fetchElternteilResponse(nextTurns)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input, isStreaming, sessionEnded, feedbackEnabled, szenarioKontext, turns])
 

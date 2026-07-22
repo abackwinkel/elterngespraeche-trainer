@@ -16,7 +16,7 @@ ${szenarioKontext}
 Elterntyp: ${elterntyp}
 Schwierigkeitsstufe: ${schwierigkeit}
 
-## Was das Elternteil gerade gesagt hat
+## Was das Elternteil VOR dieser Antwort zuletzt gesagt hat
 ${elternTurn}
 
 ## Was die Lehrkraft darauf geantwortet hat
@@ -43,6 +43,7 @@ Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
 
 ## Wichtig
 
+- Du kennst NUR den Gesprächsstand bis einschließlich dieser Lehrkraft-Aussage. Wie das Elternteil darauf reagiert, weißt du nicht – beziehe dich ausschließlich auf das, was oben steht, und erfinde keine Reaktion oder spätere Information
 - "gut" darf nie leer sein – finde immer etwas Positives, auch wenn es nur die Haltung oder der Versuch ist
 - "besser" und "alternativ" dürfen null sein, wenn die Aussage gut war
 - Keine NLP- oder GFK-Fachbegriffe verwenden
