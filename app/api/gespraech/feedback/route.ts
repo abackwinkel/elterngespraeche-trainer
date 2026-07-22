@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
+import { requireAiUser, tooLong, tooLongResponse } from '@/lib/api-guard'
 import { buildFeedbackPrompt } from '@/prompts/evaluation'
 import { normalizeGermanQuotes } from '@/lib/text-sanitizer'
 import type { FeedbackRequest, FeedbackResponse, Elterntyp, Schwierigkeit } from '@/types'
@@ -17,6 +18,9 @@ function validateRequest(body: unknown): body is FeedbackRequest & { elterntyp: 
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAiUser()
+  if ('error' in auth) return auth.error
+
   let body: unknown
   try {
     body = await req.json()
@@ -30,16 +34,25 @@ export async function POST(req: NextRequest) {
 
   const { userTurn, elternTurn, szenarioKontext, elterntyp, schwierigkeit } = body as FeedbackRequest & { elterntyp: Elterntyp; schwierigkeit: Schwierigkeit }
 
+  if (tooLong(userTurn) || tooLong(elternTurn) || tooLong(szenarioKontext)) {
+    return tooLongResponse()
+  }
+
   const prompt = buildFeedbackPrompt(userTurn, elternTurn, szenarioKontext, elterntyp, schwierigkeit)
 
-  const anthropic = getAnthropicClient()
-  const message = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 400,
-    messages: [{ role: 'user', content: prompt }],
-  })
-
-  const text = message.content[0].type === 'text' ? message.content[0].text : ''
+  let text: string
+  try {
+    const anthropic = getAnthropicClient()
+    const message = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    text = message.content[0].type === 'text' ? message.content[0].text : ''
+  } catch (err) {
+    console.error('[feedback] Anthropic-Fehler:', err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: 'Die Auswertung konnte nicht geladen werden.' }, { status: 502 })
+  }
 
   let feedback: FeedbackResponse
   try {

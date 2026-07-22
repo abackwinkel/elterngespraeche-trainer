@@ -90,7 +90,13 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
       if (!res.ok) {
         let detail = ''
         try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
-        const errMsg = `Serverfehler (${res.status})${detail ? ': ' + detail : ''} – bitte Seite neu laden.`
+        // 401: Sitzung abgelaufen, 429: Rate-Limit – beide brauchen keinen „Serverfehler“-Ton.
+        const errMsg =
+          res.status === 401
+            ? 'Die Anmeldung ist abgelaufen – bitte neu anmelden, dann geht es weiter.'
+            : res.status === 429
+              ? detail || 'Zu viele Anfragen in kurzer Zeit – bitte einen Moment warten.'
+              : `Serverfehler (${res.status})${detail ? ': ' + detail : ''} – bitte Seite neu laden.`
         setTurns(prev => {
           const updated = [...prev]
           updated[updated.length - 1] = { role: 'elternteil', content: errMsg, timestamp: new Date().toISOString() }
@@ -172,8 +178,20 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
             schwierigkeit: config.schwierigkeit,
           }),
         })
-        const data = await res.json()
-        setFeedback(data)
+        if (res.ok) {
+          setFeedback(await res.json())
+        } else {
+          // Auth-/Limit-Fall sichtbar machen statt still zu schlucken.
+          let detail = ''
+          try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
+          setFeedback({
+            gut: res.status === 401
+              ? 'Die Anmeldung ist abgelaufen – bitte neu anmelden.'
+              : detail || 'Die Auswertung konnte nicht geladen werden.',
+            besser: null,
+            alternativ: null,
+          })
+        }
       } catch {
         // Feedback schweigend ignorieren
       } finally {
@@ -203,6 +221,16 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
           schwierigkeit: config.schwierigkeit,
         }),
       })
+
+      if (!res.ok) {
+        let detail = ''
+        try { const j = await res.json(); detail = j?.error ?? '' } catch { /* ignore */ }
+        reflexionText = res.status === 401
+          ? 'Die Anmeldung ist abgelaufen – bitte neu anmelden, dann lässt sich die Auswertung erneut abrufen.'
+          : detail || 'Die Auswertung konnte nicht geladen werden.'
+        setReflexion(reflexionText)
+        return
+      }
 
       const reader = res.body?.getReader()
       const decoder = new TextDecoder()

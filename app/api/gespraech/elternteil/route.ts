@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
+import { requireAiUser, tooLong, tooLongResponse, turnsTooLong } from '@/lib/api-guard'
 import { getElternteilPrompt, getSchwierigkeitsModifier } from '@/prompts/elterntypen/index'
 import { buildElternteilSystemPrompt } from '@/prompts/evaluation'
 import type { ElternteilRequest, Elterntyp, Schwierigkeit } from '@/types'
@@ -16,6 +17,9 @@ function validateRequest(body: unknown): body is ElternteilRequest {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAiUser()
+  if ('error' in auth) return auth.error
+
   let body: unknown
   try {
     body = await req.json()
@@ -28,6 +32,10 @@ export async function POST(req: NextRequest) {
   }
 
   const { messages, elterntyp, schwierigkeit, szenarioKontext, sessionStart, opener } = body
+
+  if (turnsTooLong(messages) || tooLong(szenarioKontext) || tooLong(opener)) {
+    return tooLongResponse()
+  }
 
   const basePrompt = getElternteilPrompt(elterntyp as Elterntyp)
   const modifier = getSchwierigkeitsModifier(elterntyp as Elterntyp, schwierigkeit as Schwierigkeit)
@@ -80,7 +88,8 @@ export async function POST(req: NextRequest) {
         } catch (streamErr) {
           const msg = streamErr instanceof Error ? streamErr.message : String(streamErr)
           console.error('[elternteil] Stream-Fehler:', msg)
-          controller.enqueue(encoder.encode(`\n\n[Fehler beim Streaming: ${msg}]`))
+          // Nur eine allgemeine Meldung nach aussen – Details bleiben im Server-Log.
+          controller.enqueue(encoder.encode('\n\n[Die Antwort wurde unterbrochen – bitte erneut senden.]'))
         } finally {
           controller.close()
         }
@@ -93,6 +102,6 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[elternteil] Anthropic-Fehler:', msg)
-    return NextResponse.json({ error: msg }, { status: 502 })
+    return NextResponse.json({ error: 'Die KI-Antwort konnte nicht geladen werden.' }, { status: 502 })
   }
 }
