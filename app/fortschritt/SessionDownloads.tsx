@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Document, Packer, Paragraph, TextRun } from 'docx'
+import { sanitizeGermanTextSafe } from '@/lib/germanTypography.mjs'
 
 export interface SessionData {
   id: string
@@ -100,10 +101,13 @@ async function buildSessionDocx(session: SessionData): Promise<Blob> {
     }),
   ]
 
+  // Ausgabegrenze Download: hier kommen auch Sitzungen aus der Zeit VOR dem
+  // Typografie-Sprint aus der Datenbank – deshalb beim Rendern sanieren.
   for (const turn of session.turns) {
+    const content = sanitizeGermanTextSafe(turn.content)
     if (turn.role === 'situation') {
       children.push(new Paragraph({
-        children: [new TextRun({ text: `[${turn.content}]`, italics: true, color: '888888', size: S - 2 })],
+        children: [new TextRun({ text: `[${content}]`, italics: true, color: '888888', size: S - 2 })],
         spacing: { before: 160, after: 160, line: LS.line, lineRule: LS.lineRule },
       }))
     } else if (turn.role === 'elternteil') {
@@ -111,13 +115,13 @@ async function buildSessionDocx(session: SessionData): Promise<Blob> {
         children: [new TextRun({ text: 'Elternteil:', bold: true, size: S })],
         spacing: { before: 280, after: 60, line: LS.line, lineRule: LS.lineRule },
       }))
-      children.push(...parsedElternteilParagraphs(turn.content))
+      children.push(...parsedElternteilParagraphs(content))
     } else {
       children.push(new Paragraph({
         children: [new TextRun({ text: 'Lehrkraft:', bold: true, size: S })],
         spacing: { before: 280, after: 60, line: LS.line, lineRule: LS.lineRule },
       }))
-      for (const line of turn.content.split('\n')) {
+      for (const line of content.split('\n')) {
         children.push(new Paragraph({
           children: [new TextRun({ text: line, size: S })],
           spacing: { after: 60, line: LS.line, lineRule: LS.lineRule },
@@ -131,7 +135,7 @@ async function buildSessionDocx(session: SessionData): Promise<Blob> {
       children: [new TextRun({ text: 'Reflexion', bold: true, size: 26, color: TEAL })],
       spacing: { before: 480, after: 80, line: LS.line, lineRule: LS.lineRule },
     }))
-    children.push(...markdownParagraphs(session.reflexion))
+    children.push(...markdownParagraphs(sanitizeGermanTextSafe(session.reflexion)))
   }
 
   return Packer.toBlob(new Document({ sections: [{ children }] }))

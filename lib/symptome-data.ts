@@ -41,7 +41,7 @@ export const SYMPTOME: Symptom[] = [
   {
     id: 's03',
     label: 'Konzentrationsprobleme, klinkt sich aus',
-    subtitle: 'Wirkt abwesend, „taucht ab"',
+    subtitle: 'Wirkt abwesend, „taucht ab“',
     measures: {
       a: ['a01', 'a02', 'a03', 'a04', 'a12'],
       b: ['b06', 'b07'],
@@ -61,7 +61,7 @@ export const SYMPTOME: Symptom[] = [
   {
     id: 's05',
     label: 'Demotivation, Resignation',
-    subtitle: 'Wirkt entmutigt, sagt „Ich kann das eh nicht"',
+    subtitle: 'Wirkt entmutigt, sagt „Ich kann das eh nicht“',
     measures: {
       a: ['a13', 'a14', 'a02', 'a12', 'a03'],
       b: ['b11', 'b06', 'b07'],
@@ -101,7 +101,7 @@ export const SYMPTOME: Symptom[] = [
   {
     id: 's09',
     label: 'Anerkannte LRS, ADHS, Förderbedarf',
-    subtitle: 'Diagnose liegt vor — wie weitergehen?',
+    subtitle: 'Diagnose liegt vor – wie weitergehen?',
     measures: {
       a: ['a03', 'a04', 'a13'],
       b: ['b07', 'b10', 'b04', 'b01'],
@@ -111,7 +111,7 @@ export const SYMPTOME: Symptom[] = [
   {
     id: 's10',
     label: 'Familiäre Belastung, Eltern überfordert',
-    subtitle: 'Trennung, Krise, „Ich weiß nicht mehr weiter"',
+    subtitle: 'Trennung, Krise, „Ich weiß nicht mehr weiter“',
     measures: {
       a: ['a05', 'a04', 'a14'],
       b: ['b05', 'b04', 'b03', 'b06'],
@@ -133,7 +133,7 @@ export const SYMPTOME: Symptom[] = [
     label: 'Verdacht auf Kindeswohlgefährdung',
     subtitle: 'Blaue Flecken, Vernachlässigung, häusliche Gewalt',
     priority: 'urgent',
-    topNotice: 'Schulleitung zwingend einbeziehen. Nicht allein handeln. § 8a SGB VIII.',
+    topNotice: 'Schulleitung zwingend einbeziehen. Nicht allein handeln. § 8a SGB VIII.',
     measures: {
       a: ['a04'],
       b: ['b08', 'b05', 'b06'],
@@ -143,7 +143,7 @@ export const SYMPTOME: Symptom[] = [
   {
     id: 's13',
     label: 'Akute psychische Krise, Suizidäußerungen',
-    subtitle: 'Sagt „alles keinen Sinn", Selbstverletzung',
+    subtitle: 'Sagt „alles keinen Sinn“, Selbstverletzung',
     priority: 'urgent',
     topNotice: 'Bei akuter Suizidgefahr: Krisendienst, Notarzt oder KJP-Notaufnahme sofort. Empfehlung allein reicht nicht.',
     measures: {

@@ -63,8 +63,12 @@ async function rateLimitScope(userId: string): Promise<'minute' | 'day' | null> 
     return null
   }
 
-  const minuteKey = `rl:m:${userId}:${Math.floor(Date.now() / 60_000)}`
-  const dayKey = `rl:d:${userId}:${new Date().toISOString().slice(0, 10)}`
+  // Projekt-Praefix: der Upstash-Free-Tarif erlaubt nur EINE Datenbank pro Konto,
+  // NLP-Trainer und Elterngespraeche-Trainer teilen sich also denselben Store.
+  // Die Trennung galt bisher nur zufaellig ueber unterschiedliche Supabase-UUIDs.
+  const APP = 'egt'
+  const minuteKey = `${APP}:rl:m:${userId}:${Math.floor(Date.now() / 60_000)}`
+  const dayKey = `${APP}:rl:d:${userId}:${new Date().toISOString().slice(0, 10)}`
 
   try {
     const res = await fetch(`${cfg.url}/pipeline`, {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
 import { requireAiUser, tooLong, tooLongResponse, turnsTooLong } from '@/lib/api-guard'
 import { buildReflexionPrompt } from '@/prompts/evaluation'
+import { normalizeStreamChunk } from '@/lib/germanTypography.mjs'
 import type { ReflexionRequest } from '@/types'
 
 function validateRequest(body: unknown): body is ReflexionRequest {
@@ -55,7 +56,8 @@ export async function POST(req: NextRequest) {
               chunk.type === 'content_block_delta' &&
               chunk.delta.type === 'text_delta'
             ) {
-              controller.enqueue(encoder.encode(chunk.delta.text))
+              // Pro Chunk nur em->en; Vollnormalisierung clientseitig am Ende.
+              controller.enqueue(encoder.encode(normalizeStreamChunk(chunk.delta.text)))
             }
           }
         } catch (streamErr) {

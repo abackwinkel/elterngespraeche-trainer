@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx'
 import type { GespraechsKonfiguration, Turn, FeedbackResponse } from '@/types'
 import { buildSzenarioKontext, findSzenario, SITUATIONSBESCHREIBUNGEN_POOL, SZENARIEN, SCHWIERIGKEIT_LABEL, ELTERNTYP_LABEL } from '@/lib/szenarien-data'
-import { normalizeGermanQuotes } from '@/lib/text-sanitizer'
+import { sanitizeGermanText, sanitizeGermanTextSafe } from '@/lib/germanTypography.mjs'
 import AuswertungsPanel from './AuswertungsPanel'
 
 interface Props {
@@ -124,8 +124,9 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
       textareaRef.current?.focus()
     }
 
-    // Anführungszeichen nach Streaming-Ende normalisieren
-    const normalizedElternText = normalizeGermanQuotes(elternText)
+    // Volle Typografie erst über den fertigen Text – während des Streams ist der
+    // Anführungszeichen-Kontext zerrissen (die Route hat pro Chunk nur em->en gemacht).
+    const normalizedElternText = sanitizeGermanText(elternText)
     if (normalizedElternText !== elternText) {
       setTurns(prev => {
         const updated = [...prev]
@@ -253,8 +254,11 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
       }
     } finally {
       setIsStreamingReflexion(false)
-      // Anführungszeichen nach Streaming-Ende normalisieren
-      if (reflexionText) setReflexion(normalizeGermanQuotes(reflexionText))
+      // Reflexion ist Markdown (**fett**) – deshalb die Safe-Variante.
+      if (reflexionText) {
+        reflexionText = sanitizeGermanTextSafe(reflexionText)
+        setReflexion(reflexionText)
+      }
     }
 
     try {
@@ -318,15 +322,18 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
       docMeta(`Datum: ${datum}  ·  Elterntyp: ${elternLabel}  ·  Schwierigkeit: ${schwLabel}`),
     ]
 
+    // Ausgabegrenze Download: Typografie unmittelbar vor dem Rendern – auch auf
+    // die selbst getippten Lehrkraft-Turns und Notizen.
     for (const turn of turns) {
+      const content = sanitizeGermanTextSafe(turn.content)
       if (turn.role === 'situation') {
-        children.push(docSituationParagraph(turn.content))
+        children.push(docSituationParagraph(content))
       } else if (turn.role === 'elternteil') {
         children.push(docLabel('Elternteil:'))
-        children.push(...elternteilContentToDocxParagraphs(turn.content))
+        children.push(...elternteilContentToDocxParagraphs(content))
       } else {
         children.push(docLabel('Lehrkraft:'))
-        for (const line of turn.content.split('\n')) {
+        for (const line of content.split('\n')) {
           children.push(docBody(line))
         }
       }
@@ -334,7 +341,7 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
 
     if (notizen.trim()) {
       children.push(docSubheading('Meine Notizen'))
-      for (const line of notizen.split('\n')) {
+      for (const line of sanitizeGermanTextSafe(notizen).split('\n')) {
         children.push(docBody(line))
       }
     }
@@ -351,12 +358,12 @@ export default function GespraechsInterface({ config, onNeustart, fallVorherGesp
     const children: Paragraph[] = [
       docHeading('Reflexion'),
       docMeta(`Datum: ${datum}  ·  Elterntyp: ${elternLabel}`),
-      ...markdownToDocxParagraphs(reflexionText),
+      ...markdownToDocxParagraphs(sanitizeGermanTextSafe(reflexionText)),
     ]
 
     if (notizen.trim()) {
       children.push(docSubheading('Meine Notizen'))
-      for (const line of notizen.split('\n')) {
+      for (const line of sanitizeGermanTextSafe(notizen).split('\n')) {
         children.push(docBody(line))
       }
     }

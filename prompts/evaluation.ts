@@ -1,4 +1,5 @@
 import type { Elterntyp, Schwierigkeit } from '@/types'
+import { RECHTSCHREIB_REGEL, RECHTSCHREIB_REGEL_JSON, TYPOGRAFIE_REGEL } from '@/lib/germanTypography.mjs'
 
 // ─── Sofort-Feedback (Haiku, nach jeder Lehrkraft-Eingabe) ────────────────────
 
@@ -51,7 +52,13 @@ Antworte ausschließlich als JSON in diesem Format – kein weiterer Text:
 - Kurze, klare Sprache – keine langen Erklärungen
 - Ausschließlich Deutsch – keine englischen Wörter (z. B. defensiv statt defensive)
 - Die Antwort muss exakt das JSON-Format erfüllen – kein weiterer Text davor oder danach
-- Sätze müssen grammatikalisch vollständig und korrekt sein`
+- Sätze müssen grammatikalisch vollständig und korrekt sein
+
+## Sprache und Schreibweise
+
+${RECHTSCHREIB_REGEL_JSON}
+
+${TYPOGRAFIE_REGEL}`
 }
 
 // ─── Gesamtreflexion (Sonnet, am Ende des Gesprächs) ─────────────────────────
@@ -112,9 +119,13 @@ Ein konkreter Tipp für das nächste Gespräch mit diesem Elterntyp.
 - Ca. 250-350 Wörter
 - Keine Dokumentüberschrift – beginne direkt mit dem ersten Abschnitt **Was gut gelungen ist**
 - Abschnittstitel als **fett** in einer eigenen Zeile, kein #
-- Deutsche Anführungszeichen: „..." (öffnend unten, schließend oben)
-- Einfache Anführungszeichen ebenfalls: ‚...' (öffnend unten, schließend oben)
-- Alle Sätze grammatikalisch vollständig`
+- Alle Sätze grammatikalisch vollständig
+
+## Sprache und Schreibweise
+
+${RECHTSCHREIB_REGEL}
+
+${TYPOGRAFIE_REGEL}`
 }
 
 // ─── System-Prompt für Elternteil-Rolle ──────────────────────────────────────
@@ -129,7 +140,7 @@ export function buildElternteilSystemPrompt(
     : ''
 
   // Zwei-Personen-Erkennung: entweder [PRIMÄR]-Marker (Formular-Konfiguration)
-  // oder „und" in der ersten Zeile (vorgefertigte Szenarien wie „Herr und Frau Berger")
+  // oder „und“ in der ersten Zeile (vorgefertigte Szenarien wie „Herr und Frau Berger“)
   const firstLine = szenarioKontext.split('\n')[0] ?? ''
   const twoPersonMatch = firstLine.match(/Elternteil\(e\):\s*(.+?)\s*\[PRIMÄR\]\s*und\s*(.+?)\s*\[SEKUNDÄR\]/)
   const isCouple = twoPersonMatch !== null || /\bund\b/.test(firstLine)
@@ -144,13 +155,13 @@ export function buildElternteilSystemPrompt(
     const sekundär = primärRaw === sekundärRaw ? `${sekundärRaw} 2` : sekundärRaw
     coupleRules = `
 - Beide Elternteile sind anwesend. ${primär} ist die Primärperson und spricht häufiger; ${sekundär} schaltet sich gelegentlich ein.
-- Zeige an, wer spricht: Beginne den jeweiligen Redebeitrag mit „${primär}:" oder „${sekundär}:" gefolgt von der Aussage.
+- Zeige an, wer spricht: Beginne den jeweiligen Redebeitrag mit „${primär}:“ oder „${sekundär}:“ gefolgt von der Aussage.
 - Stage Directions (*…*) für gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
 - Im allerersten Turn: Zeige zuerst als Körpersignal wie beide eintreten und sich setzen (Plural), dann spricht ${primär}.`
   } else if (isCouple) {
     // Vorgefertigtes Szenario mit Namensangabe
     coupleRules = `
-- Beide Elternteile sind anwesend. Beginne jede Antwort mit „Herr [Name]:" oder „Frau [Name]:" (wer spricht) und wechsle realistisch.
+- Beide Elternteile sind anwesend. Beginne jede Antwort mit „Herr [Name]:“ oder „Frau [Name]:“ (wer spricht) und wechsle realistisch.
 - Stage Directions (*…*) für gemeinsame Aktionen in der Mehrzahl: *betreten den Raum*, *setzen sich*, *tauschen einen Blick*.
 - Im allerersten Turn: Zeige zuerst als Körpersignal wie beide eintreten und sich setzen (Plural), dann spricht eine Person.`
   } else {
@@ -162,13 +173,17 @@ export function buildElternteilSystemPrompt(
 
 ### Gesprächsregeln (immer einhalten)
 
-- Sprich die Lehrkraft ausschließlich mit „Sie" an – niemals mit „du"
+- Sprich die Lehrkraft ausschließlich mit „Sie“ an – niemals mit „du“
 - Beachte das Geschlecht des Kindes genau (Sohn = er/sein/Schüler, Tochter = sie/ihr/Schülerin) und verwende es durchgehend korrekt
-- Anführungszeichen nach deutschem Standard: „…" (öffnend unten, schließend oben)
 - Stage Directions (*…*) immer in der dritten Person formulieren: *Er lehnt sich zurück*, *Sie atmet kurz aus*, *Er schüttelt leicht den Kopf* – niemals in der Ich-Form wie *Ich lehne mich zurück*
-- Vor … (Auslassungszeichen) immer ein Leerzeichen setzen: „Ich weiß nicht …", „Das ist doch …" – Ausnahme: mitten im Wort abgebrochener Text wie „Das ist un…glaublich" oder „Ich ver…" (kein Leerzeichen vor dem Abbruch)
 - Alle Sätze vollständig und grammatikalisch korrekt
-- Verwende für das Kind ausschließlich den Namen oder das Initial aus dem Kontext (z. B. „M.") – erfinde niemals einen anderen oder vollständigen Namen${coupleRules}
+- Verwende für das Kind ausschließlich den Namen oder das Initial aus dem Kontext (z. B. „M.“) – erfinde niemals einen anderen oder vollständigen Namen${coupleRules}
+
+### Sprache und Schreibweise
+
+${RECHTSCHREIB_REGEL}
+
+${TYPOGRAFIE_REGEL}
 
 ### Deine konkrete Situation in diesem Gespräch
 

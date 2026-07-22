@@ -44,7 +44,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Eltern unterbrechen Sie mehrfach mit eigenen Kommentaren. In welcher Phase ist das am häufigsten problematisch?',
     antworten: ['Begrüßung', 'Themeneinführung', 'Dialog & Zuhören', 'Abschluss'],
     korrektIndex: 2,
-    erklaerung: 'Im Dialog sind gegenseitiges Zuhören und Respekt entscheidend. Unterbrechungen hier stören den Vertrauensaufbau. Eine ruhige, nicht konfrontative Reaktion ("Ich höre Sie – darf ich kurz zu Ende sprechen?") ist meist wirksam.',
+    erklaerung: 'Im Dialog sind gegenseitiges Zuhören und Respekt entscheidend. Unterbrechungen hier stören den Vertrauensaufbau. Eine ruhige, nicht konfrontative Reaktion („Ich höre Sie – darf ich kurz zu Ende sprechen?“) ist meist wirksam.',
   },
   {
     id: 'gp-04',
@@ -66,7 +66,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     id: 're-01',
     modul: 'reaktionen',
     schwierigkeit: 'ruhige-see',
-    frage: 'Ein Elternteil sagt: "Zuhause ist er aber ganz anders!" Was ist die beste erste Reaktion?',
+    frage: 'Ein Elternteil sagt: „Zuhause ist er aber ganz anders!“ Was ist die beste erste Reaktion?',
     antworten: [
       'Widersprechen und auf eigene Beobachtungen bestehen',
       'Die Elternperspektive anerkennen und nachfragen',
@@ -74,7 +74,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Zahlen und Fakten präsentieren',
     ],
     korrektIndex: 1,
-    erklaerung: 'Die Aussage signalisiert defensives Verhalten. Anerkennen ("Das kann ich gut verstehen, dass er zuhause anders ist") und neugieriges Nachfragen öffnet Eltern mehr als Gegenbeweis.',
+    erklaerung: 'Die Aussage signalisiert defensives Verhalten. Anerkennen („Das kann ich gut verstehen, dass er zuhause anders ist“) und neugieriges Nachfragen öffnet Eltern mehr als Gegenbeweis.',
   },
   {
     id: 're-02',
@@ -82,13 +82,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gegenwind',
     frage: 'Eltern werden aggressiver und machen Sie persönlich verantwortlich. Was hilft in diesem Moment am meisten?',
     antworten: [
-      'Ruhig bleiben und Deeskalationsformeln einsetzen („Ich höre, dass Sie das sehr belastet …")',
+      'Ruhig bleiben und Deeskalationsformeln einsetzen („Ich höre, dass Sie das sehr belastet …“)',
       'Sofort sachliche Gegenargumente nennen',
       'Das Gespräch für beendet erklären',
       'Die Schulleitung zum Gespräch hinzubitten',
     ],
     korrektIndex: 0,
-    erklaerung: 'Bei Aggression gilt: Ruhe bewahren und Verständnis zeigen, ohne zu kapitulieren. "Ich höre, dass Sie sich Sorgen machen" ist kein Schuldeingeständnis, aber nimmt Druck aus der Situation.',
+    erklaerung: 'Bei Aggression gilt: Ruhe bewahren und Verständnis zeigen, ohne zu kapitulieren. „Ich höre, dass Sie sich Sorgen machen“ ist kein Schuldeingeständnis, aber nimmt Druck aus der Situation.',
   },
   {
     id: 're-03',
@@ -102,7 +102,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Ihr anbieten, alles später per Mail zu klären',
     ],
     korrektIndex: 0,
-    erklaerung: 'Mitgefühl ist wichtig – aber die eigene Rolle darf nicht wechseln. Eine ruhige Rückführung ("Ich merke, dass das gerade viel ist. Darf ich kurz zu Sophie kommen – was braucht sie jetzt am meisten?") hilft.',
+    erklaerung: 'Mitgefühl ist wichtig – aber die eigene Rolle darf nicht wechseln. Eine ruhige Rückführung („Ich merke, dass das gerade viel ist. Darf ich kurz zu Sophie kommen – was braucht sie jetzt am meisten?“) hilft.',
   },
   {
     id: 're-04',
@@ -110,7 +110,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gewitterfront',
     frage: 'Eltern fordern lautstark eine Notenänderung und drohen mit Klage. Was ist jetzt die richtige Reaktion?',
     antworten: [
-      'Klar und freundlich Grenzen setzen: "Eine Notenänderung liegt nicht in meinem Ermessen – das erkläre ich Ihnen gerne."',
+      'Klar und freundlich Grenzen setzen: „Eine Notenänderung liegt nicht in meinem Ermessen – das erkläre ich Ihnen gerne.“',
       'Nachgeben, um die Situation zu beruhigen',
       'Sofort die Schulleitung anrufen',
       'Das Gespräch wortlos beenden',
@@ -124,13 +124,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gewitterfront',
     frage: 'Ein schweigendes Elternteil gibt nur Einsilber-Antworten. Wie locken Sie es aus der Reserve?',
     antworten: [
-      'Mit offenen Fragen und Pausen: "Was ist Ihnen bei diesem Thema besonders wichtig?"',
+      'Mit offenen Fragen und Pausen: „Was ist Ihnen bei diesem Thema besonders wichtig?“',
       'Mehr und mehr erklären, bis eine Reaktion kommt',
       'Das Schweigen als Zustimmung werten',
       'Die Fragen schriftlich mitgeben und später per Mail beantworten lassen',
     ],
     korrektIndex: 0,
-    erklaerung: 'Offene Fragen ohne Druck sind der Schlüssel. Pausen aushalten. Das Schweigen könnte Überforderung, Sprachbarriere oder Angst signalisieren – Neugier statt Konfrontation.',
+    erklaerung: 'Offene Fragen ohne Druck sind der Schlüssel. Pausen aushalten. Das Schweigen könnte Überforderung, Sprachbarriere oder Angst signalisieren – Neugier statt Konfrontation.',
   },
 
   // ── Rechtswissen ─────────────────────────────────────────────────────────────
@@ -138,7 +138,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     id: 'rw-01',
     modul: 'rechtswissen',
     schwierigkeit: 'ruhige-see',
-    frage: 'Was regelt § 8a SGB VIII für Lehrkräfte?',
+    frage: 'Was regelt § 8a SGB VIII für Lehrkräfte?',
     antworten: [
       'Das Recht, Eltern Hausbesuche zu machen',
       'Die Pflicht, bei gewichtigen Anhaltspunkten für Kindeswohlgefährdung tätig zu werden',
@@ -146,13 +146,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Den Datenschutz bei Elterngesprächen',
     ],
     korrektIndex: 1,
-    erklaerung: '§ 8a SGB VIII verpflichtet Fachkräfte, bei gewichtigen Anhaltspunkten für Kindeswohlgefährdung eine Gefährdungseinschätzung vorzunehmen und ggf. das Jugendamt einzuschalten.',
+    erklaerung: '§ 8a SGB VIII verpflichtet Fachkräfte, bei gewichtigen Anhaltspunkten für Kindeswohlgefährdung eine Gefährdungseinschätzung vorzunehmen und ggf. das Jugendamt einzuschalten.',
   },
   {
     id: 'rw-02',
     modul: 'rechtswissen',
     schwierigkeit: 'gegenwind',
-    frage: 'Was dürfen Sie im Elterngespräch einem Elternteil über das Gespräch mit dem anderen Elternteil mitteilen – bei getrennt lebenden Eltern?',
+    frage: 'Was dürfen Sie im Elterngespräch einem Elternteil über das Gespräch mit dem anderen Elternteil mitteilen – bei getrennt lebenden Eltern?',
     antworten: [
       'Alles, da beide sorgeberechtigt sind',
       'Nichts, da Datenschutz gilt',
@@ -183,12 +183,12 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Eltern verlangen Einsicht in die Notizen anderer Schüler aus Ihrem Unterricht. Was gilt?',
     antworten: [
       'Eltern haben grundsätzlich das Recht auf alle Unterlagen',
-      'Datenschutz schützt Daten anderer Schüler – Einsicht in Fremdunterlagen ist nicht zulässig',
+      'Datenschutz schützt Daten anderer Schüler – Einsicht in Fremdunterlagen ist nicht zulässig',
       'Sie dürfen alles zeigen, was Sie selbst notiert haben',
       'Das ist nur mit Genehmigung der Schulleitung möglich',
     ],
     korrektIndex: 1,
-    erklaerung: 'Datenschutz (DSGVO + Schulrecht) schützt personenbezogene Daten anderer Schüler. Eltern haben Einsicht in die Leistungsdaten ihres eigenen Kindes – nicht in die anderer.',
+    erklaerung: 'Datenschutz (DSGVO + Schulrecht) schützt personenbezogene Daten anderer Schüler. Eltern haben Einsicht in die Leistungsdaten ihres eigenen Kindes – nicht in die anderer.',
   },
 
   // ── Klärende Kommunikation ────────────────────────────────────────────────────
@@ -196,15 +196,15 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     id: 'gfk-01',
     modul: 'gfk',
     schwierigkeit: 'ruhige-see',
-    frage: 'Was beschreibt, was in einem Gespräch konkret wahrgenommen wurde – ohne Bewertung?',
+    frage: 'Was beschreibt, was in einem Gespräch konkret wahrgenommen wurde – ohne Bewertung?',
     antworten: [
-      '"Max ist faul."',
-      '"Max hat in den letzten drei Wochen keine Hausaufgaben abgegeben."',
-      '"Max scheint sich nicht zu kümmern."',
-      '"Max will Ihre Autorität nicht anerkennen."',
+      '„Max ist faul.“',
+      '„Max hat in den letzten drei Wochen keine Hausaufgaben abgegeben.“',
+      '„Max scheint sich nicht zu kümmern.“',
+      '„Max will Ihre Autorität nicht anerkennen.“',
     ],
     korrektIndex: 1,
-    erklaerung: 'Eine konkrete Beschreibung nennt, was tatsächlich passiert ist – ohne Bewertung oder Interpretation. "Keine Hausaufgaben abgegeben" ist beobachtbar und nachvollziehbar. "Faul" oder "kümmert sich nicht" sind Urteile.',
+    erklaerung: 'Eine konkrete Beschreibung nennt, was tatsächlich passiert ist – ohne Bewertung oder Interpretation. „Keine Hausaufgaben abgegeben“ ist beobachtbar und nachvollziehbar. „Faul“ oder „kümmert sich nicht“ sind Urteile.',
   },
   {
     id: 'gfk-02',
@@ -212,27 +212,27 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'ruhige-see',
     frage: 'Welche der folgenden Aussagen formuliert eine klare, einladende Bitte?',
     antworten: [
-      '"Sie müssen Lena jeden Abend beim Lernen helfen."',
-      '"Ich bitte Sie, Lena abends 20 Minuten beim Lernen zu begleiten."',
-      '"Lena braucht mehr Unterstützung von zuhause."',
-      '"Das liegt in Ihrer Verantwortung als Eltern."',
+      '„Sie müssen Lena jeden Abend beim Lernen helfen.“',
+      '„Ich bitte Sie, Lena abends 20 Minuten beim Lernen zu begleiten.“',
+      '„Lena braucht mehr Unterstützung von zuhause.“',
+      '„Das liegt in Ihrer Verantwortung als Eltern.“',
     ],
     korrektIndex: 1,
-    erklaerung: 'Eine klare Bitte ist konkret, positiv formuliert und offen für ein Nein. "Ich bitte Sie, X zu tun" schafft Klarheit ohne Druck – anders als "Sie müssen" oder vage Erwartungen.',
+    erklaerung: 'Eine klare Bitte ist konkret, positiv formuliert und offen für ein Nein. „Ich bitte Sie, X zu tun“ schafft Klarheit ohne Druck – anders als „Sie müssen“ oder vage Erwartungen.',
   },
   {
     id: 'gfk-03',
     modul: 'gfk',
     schwierigkeit: 'gegenwind',
-    frage: 'Eltern sagen: "Ihr Unterricht ist langweilig – kein Wunder, dass Tobias nichts lernt." Welche Reaktion wäre hier gesprächsfördernd?',
+    frage: 'Eltern sagen: „Ihr Unterricht ist langweilig – kein Wunder, dass Tobias nichts lernt.“ Welche Reaktion wäre hier gesprächsfördernd?',
     antworten: [
-      'Zurückweisen: "Das stimmt nicht, mein Unterricht ist gut vorbereitet."',
-      'Anerkennen und hinter die Aussage schauen: "Ich höre, dass Sie sich Sorgen machen, wie Tobias den Unterricht erlebt."',
+      'Zurückweisen: „Das stimmt nicht, mein Unterricht ist gut vorbereitet.“',
+      'Anerkennen und hinter die Aussage schauen: „Ich höre, dass Sie sich Sorgen machen, wie Tobias den Unterricht erlebt.“',
       'Keine Reaktion zeigen',
       'Die Eltern darauf hinweisen, dass sie Tobias selbst befragen sollen',
     ],
     korrektIndex: 1,
-    erklaerung: 'Hinter einer Aussage wie dieser steckt oft eine echte Sorge. Das anzusprechen – statt sich zu verteidigen – öffnet das Gespräch und schafft Vertrauen.',
+    erklaerung: 'Hinter einer Aussage wie dieser steckt oft eine echte Sorge. Das anzusprechen – statt sich zu verteidigen – öffnet das Gespräch und schafft Vertrauen.',
   },
   {
     id: 'gfk-04',
@@ -240,13 +240,13 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gewitterfront',
     frage: 'Welche Formulierung benennt klar, was sich die Lehrkraft für das Gespräch wünscht?',
     antworten: [
-      '"Sie machen das immer falsch."',
-      '"Ich brauche in diesem Gespräch, dass wir gemeinsam nach Lösungen für Jonas suchen."',
-      '"Jonas braucht einfach mehr Disziplin."',
-      '"Wir sind uns hier offensichtlich nicht einig."',
+      '„Sie machen das immer falsch.“',
+      '„Ich brauche in diesem Gespräch, dass wir gemeinsam nach Lösungen für Jonas suchen.“',
+      '„Jonas braucht einfach mehr Disziplin.“',
+      '„Wir sind uns hier offensichtlich nicht einig.“',
     ],
     korrektIndex: 1,
-    erklaerung: 'In der Ich-Form lässt sich klar und ohne Vorwurf sagen, was man sich für das Gespräch wünscht. „Ich brauche …" schafft Transparenz und bleibt lösungsorientiert.',
+    erklaerung: 'In der Ich-Form lässt sich klar und ohne Vorwurf sagen, was man sich für das Gespräch wünscht. „Ich brauche …“ schafft Transparenz und bleibt lösungsorientiert.',
   },
 
   // ── Körpersignale ─────────────────────────────────────────────────────────────
@@ -262,7 +262,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Er oder sie ist sehr nervös.',
     ],
     korrektIndex: 1,
-    erklaerung: 'Blickkontakt, Nicken und Vorbeugen signalisieren aktives Zuhören und Offenheit – aber noch keine inhaltliche Zustimmung. Wichtig: Trotz kooperativer Körperhaltung weiterhin nachfragen, ob das Gesagte wirklich verstanden wurde.',
+    erklaerung: 'Blickkontakt, Nicken und Vorbeugen signalisieren aktives Zuhören und Offenheit – aber noch keine inhaltliche Zustimmung. Wichtig: Trotz kooperativer Körperhaltung weiterhin nachfragen, ob das Gesagte wirklich verstanden wurde.',
   },
   {
     id: 'ks-q02',
@@ -271,12 +271,12 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Eltern lehnen sich beide zurück und die Antworten werden einsilbiger. Was signalisiert das?',
     antworten: [
       'Sie sind mit dem Gespräch zufrieden und entspannen sich.',
-      'Zunehmende Abwehrhaltung – das Gespräch hat möglicherweise einen als bedrohlich empfundenen Punkt erreicht.',
+      'Zunehmende Abwehrhaltung – das Gespräch hat möglicherweise einen als bedrohlich empfundenen Punkt erreicht.',
       'Sie wollen das Gespräch bald beenden, weil sie einen anderen Termin haben.',
-      'Das ist bedeutungslos – Körperhaltung und Gesprächsinhalt hängen nicht zusammen.',
+      'Das ist bedeutungslos – Körperhaltung und Gesprächsinhalt hängen nicht zusammen.',
     ],
     korrektIndex: 1,
-    erklaerung: 'Rückwärtslehnen und Einsilbigkeit zusammen signalisieren Rückzug. Jetzt ist es sinnvoll, den Druck aus dem Gespräch zu nehmen: "Mir ist wichtig, dass wir heute gemeinsam zu einem guten Ergebnis kommen." Dann eine offene Frage stellen.',
+    erklaerung: 'Rückwärtslehnen und Einsilbigkeit zusammen signalisieren Rückzug. Jetzt ist es sinnvoll, den Druck aus dem Gespräch zu nehmen: „Mir ist wichtig, dass wir heute gemeinsam zu einem guten Ergebnis kommen.“ Dann eine offene Frage stellen.',
   },
   {
     id: 'ks-q03',
@@ -286,11 +286,11 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     antworten: [
       'Ebenfalls lauter werden, um Präsenz zu zeigen.',
       'Das Gespräch unterbrechen und die Schulleitung hinzuholen.',
-      'Ruhig und langsam sprechen – der eigene Tonfall wirkt oft regulierend.',
+      'Ruhig und langsam sprechen – der eigene Tonfall wirkt oft regulierend.',
       'Die Aussagen ignorieren und zum nächsten Thema übergehen.',
     ],
     korrektIndex: 2,
-    erklaerung: 'Vorneigen und lauter werden zeigt hohes Erregungsniveau. Nicht spiegeln – das eskaliert. Stattdessen: Eigenes Sprechtempo und Lautstärke bewusst senken. "Ich höre, dass Ihnen das wichtig ist – darf ich kurz antworten?" gibt dem Gespräch Raum.',
+    erklaerung: 'Vorneigen und lauter werden zeigt hohes Erregungsniveau. Nicht spiegeln – das eskaliert. Stattdessen: Eigenes Sprechtempo und Lautstärke bewusst senken. „Ich höre, dass Ihnen das wichtig ist – darf ich kurz antworten?“ gibt dem Gespräch Raum.',
   },
   {
     id: 'ks-q04',
@@ -299,12 +299,12 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Eine Mutter lächelt häufig und nickt, macht aber kaum eigene Aussagen und weicht konkreten Fragen aus. Was tun?',
     antworten: [
       'Das Lächeln als Zustimmung werten und die Vereinbarungen festhalten.',
-      'Das Gespräch abkürzen – sie ist offensichtlich einverstanden.',
+      'Das Gespräch abkürzen – sie ist offensichtlich einverstanden.',
       'Einfache, offene Fragen stellen und echte Pausen aushalten.',
       'Die Situation der Schulleitung melden, da das Verhalten verdächtig ist.',
     ],
     korrektIndex: 2,
-    erklaerung: 'Lächeln ohne Inhalt kann soziale Höflichkeit, Unsicherheit oder eine Sprachbarriere signalisieren – keine echte Zustimmung. Konkrete, einfache offene Fragen stellen ("Was ist Ihnen heute besonders wichtig?") und Pausen wirklich aushalten, ohne sofort weiterzusprechen.',
+    erklaerung: 'Lächeln ohne Inhalt kann soziale Höflichkeit, Unsicherheit oder eine Sprachbarriere signalisieren – keine echte Zustimmung. Konkrete, einfache offene Fragen stellen („Was ist Ihnen heute besonders wichtig?“) und Pausen wirklich aushalten, ohne sofort weiterzusprechen.',
   },
 
   // ── Vorbereitung ──────────────────────────────────────────────────────────────
@@ -320,7 +320,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Die letzte Klassenarbeit des Kindes dabei haben',
     ],
     korrektIndex: 1,
-    erklaerung: 'Ohne klares Ziel verliert das Gespräch die Richtung. Das Ziel sollte konkret und lösungsorientiert sein – "Was soll nach dem Gespräch für das Kind besser sein?"',
+    erklaerung: 'Ohne klares Ziel verliert das Gespräch die Richtung. Das Ziel sollte konkret und lösungsorientiert sein – „Was soll nach dem Gespräch für das Kind besser sein?“',
   },
   {
     id: 'vb-02',
@@ -334,7 +334,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Wenn Eltern eine Notenänderung fordern',
     ],
     korrektIndex: 2,
-    erklaerung: 'Schulleitung und Beratungslehrkraft sind keine Eskalationsstufe, sondern Ressourcen. Bei ernsteren Fällen – Eskalation, Rechtsandrohungen, Gefährdung – ist das Hinzuziehen professionell und angemessen.',
+    erklaerung: 'Schulleitung und Beratungslehrkraft sind keine Eskalationsstufe, sondern Ressourcen. Bei ernsteren Fällen – Eskalation, Rechtsandrohungen, Gefährdung – ist das Hinzuziehen professionell und angemessen.',
   },
   {
     id: 'vb-03',
@@ -359,7 +359,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     frage: 'Eine Schülerin kommt regelmäßig zu spät. Welche Maßnahme ist sofort und allein umsetzbar?',
     antworten: [
       'Schulleitung informieren',
-      'Klare Regel für Verspätungen kommunizieren – mündlich und schriftlich',
+      'Klare Regel für Verspätungen kommunizieren – mündlich und schriftlich',
       'Förderplan erstellen',
       'Jugendamt einschalten',
     ],
@@ -378,7 +378,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Nachteilsausgleich beantragen',
     ],
     korrektIndex: 2,
-    erklaerung: 'Ein Hausaufgaben-Heft ist die am wenigsten invasive Maßnahme mit der höchsten Wirkwahrscheinlichkeit. Erst wenn das nicht hilft, folgen weitere Schritte. Nachteilsausgleich gilt nur bei anerkannter Lernschwäche – nicht bei Vergesslichkeit.',
+    erklaerung: 'Ein Hausaufgaben-Heft ist die am wenigsten invasive Maßnahme mit der höchsten Wirkwahrscheinlichkeit. Erst wenn das nicht hilft, folgen weitere Schritte. Nachteilsausgleich gilt nur bei anerkannter Lernschwäche – nicht bei Vergesslichkeit.',
   },
   {
     id: 'mas-03',
@@ -392,7 +392,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Das ist nur bei Problemkindern wichtig',
     ],
     korrektIndex: 1,
-    erklaerung: 'Kontakt nur bei Problemen prägt das Bild, das Eltern von der Schule haben. Wer auch mal Positives rückmeldet, baut Vertrauen auf – und wird bei schwierigen Gesprächen als Partner wahrgenommen, nicht als Ankläger.',
+    erklaerung: 'Kontakt nur bei Problemen prägt das Bild, das Eltern von der Schule haben. Wer auch mal Positives rückmeldet, baut Vertrauen auf – und wird bei schwierigen Gesprächen als Partner wahrgenommen, nicht als Ankläger.',
   },
   {
     id: 'mas-04',
@@ -420,7 +420,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Immer vor einem schwierigen Elterngespräch',
     ],
     korrektIndex: 1,
-    erklaerung: 'Die Klassenkonferenz bringt den gemeinsamen Blick aller Fachlehrkräfte ein – das ist besonders wertvoll, wenn ein Kind in einem Fach auffällig ist, in anderen aber nicht. Das klärt oft, ob es sich um ein fachspezifisches oder übergreifendes Problem handelt.',
+    erklaerung: 'Die Klassenkonferenz bringt den gemeinsamen Blick aller Fachlehrkräfte ein – das ist besonders wertvoll, wenn ein Kind in einem Fach auffällig ist, in anderen aber nicht. Das klärt oft, ob es sich um ein fachspezifisches oder übergreifendes Problem handelt.',
   },
   {
     id: 'mas-06',
@@ -430,11 +430,11 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     antworten: [
       'Nur die Unterschrift der Lehrkraft genügt',
       'Eine Liste aller aktuellen Noten des Kindes',
-      'Klare Formulierung, wer was bis wann tut – beide Seiten unterschreiben',
+      'Klare Formulierung, wer was bis wann tut – beide Seiten unterschreiben',
       'Ein rechtlich geprüftes Dokument vom Schulamt',
     ],
     korrektIndex: 2,
-    erklaerung: 'Eine gute Vereinbarung ist klar, konkret und bilateral: wer tut was, bis wann, und wie wird es überprüft. Das schützt alle Beteiligten und schafft Verbindlichkeit – ohne dass es rechtlich aufwendig sein muss.',
+    erklaerung: 'Eine gute Vereinbarung ist klar, konkret und bilateral: wer tut was, bis wann, und wie wird es überprüft. Das schützt alle Beteiligten und schafft Verbindlichkeit – ohne dass es rechtlich aufwendig sein muss.',
   },
   {
     id: 'mas-07',
@@ -442,19 +442,19 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     schwierigkeit: 'gegenwind',
     frage: 'Wann ist es besonders sinnvoll, den Schüler selbst in ein Gespräch mit Eltern und Lehrkraft einzubeziehen?',
     antworten: [
-      'Immer – bei jedem Elterngespräch',
+      'Immer – bei jedem Elterngespräch',
       'Nur bei Schülerinnen und Schülern ab Klasse 7',
       'Wenn das Kind zwischen Schule und Eltern eingeklemmt wirkt und eine eigene Stimme braucht',
       'Wenn die Eltern nicht kooperieren wollen',
     ],
     korrektIndex: 2,
-    erklaerung: 'Das Dreiergespräch – Kind, Elternteil, Lehrkraft – ist besonders dann hilfreich, wenn das Kind in Loyalitätskonflikte gerät oder wenn seine Perspektive im Gespräch zwischen Erwachsenen unterzugehen droht. Es gibt dem Kind Handlungsfähigkeit.',
+    erklaerung: 'Das Dreiergespräch – Kind, Elternteil, Lehrkraft – ist besonders dann hilfreich, wenn das Kind in Loyalitätskonflikte gerät oder wenn seine Perspektive im Gespräch zwischen Erwachsenen unterzugehen droht. Es gibt dem Kind Handlungsfähigkeit.',
   },
   {
     id: 'mas-08',
     modul: 'massnahmen',
     schwierigkeit: 'gewitterfront',
-    frage: 'Ein Kind kommt mehrfach mit unklaren blauen Flecken in die Schule. Welcher Ablauf entspricht § 8a SGB VIII?',
+    frage: 'Ein Kind kommt mehrfach mit unklaren blauen Flecken in die Schule. Welcher Ablauf entspricht § 8a SGB VIII?',
     antworten: [
       'Sofort das Jugendamt anrufen, ohne die Schulleitung zu informieren',
       'Beobachtungen dokumentieren, Schulleitung informieren, Risikoeinschätzung, ggf. Eltern informieren, bei dringendem Verdacht Meldung ans Jugendamt',
@@ -462,7 +462,7 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
       'Abwarten, ob sich die Situation wiederholt',
     ],
     korrektIndex: 1,
-    erklaerung: '§ 8a SGB VIII sieht einen strukturierten Ablauf vor, der die Schule als Institution einbindet – nicht nur die einzelne Lehrkraft. Die Schulleitung muss immer einbezogen werden. Eltern werden informiert, außer wenn das Gespräch das Kind gefährden würde.',
+    erklaerung: '§ 8a SGB VIII sieht einen strukturierten Ablauf vor, der die Schule als Institution einbindet – nicht nur die einzelne Lehrkraft. Die Schulleitung muss immer einbezogen werden. Eltern werden informiert, außer wenn das Gespräch das Kind gefährden würde.',
   },
   {
     id: 'mas-09',
@@ -472,25 +472,25 @@ export const QUIZ_FRAGEN: QuizFrage[] = [
     antworten: [
       'Die Note selbst anpassen, ohne Dokumentation',
       'Warten, bis die Eltern den Antrag stellen',
-      'Den Nachteilsausgleich formal beantragen – die Regelungen sind bundeslandspezifisch',
+      'Den Nachteilsausgleich formal beantragen – die Regelungen sind bundeslandspezifisch',
       'Das Kind von der Prüfung befreien',
     ],
     korrektIndex: 2,
-    erklaerung: 'Nachteilsausgleich (z. B. Zeitverlängerung oder alternative Aufgabenformate) muss formal beantragt werden und basiert auf der Diagnose. Die genauen Regelungen unterscheiden sich je nach Bundesland erheblich. Eigenmächtiges Anpassen ohne Antrag schützt die Lehrkraft rechtlich nicht.',
+    erklaerung: 'Nachteilsausgleich (z. B. Zeitverlängerung oder alternative Aufgabenformate) muss formal beantragt werden und basiert auf der Diagnose. Die genauen Regelungen unterscheiden sich je nach Bundesland erheblich. Eigenmächtiges Anpassen ohne Antrag schützt die Lehrkraft rechtlich nicht.',
   },
   {
     id: 'mas-10',
     modul: 'massnahmen',
     schwierigkeit: 'gewitterfront',
-    frage: 'Eine Mutter ist offensichtlich am Limit – sie weint, schildert eigene Belastungen, das Gespräch droht zum Seelsorgegespräch zu werden. Was ist die richtige Reaktion?',
+    frage: 'Eine Mutter ist offensichtlich am Limit – sie weint, schildert eigene Belastungen, das Gespräch droht zum Seelsorgegespräch zu werden. Was ist die richtige Reaktion?',
     antworten: [
       'Das Gespräch sofort abbrechen und einen neuen Termin vereinbaren',
-      'Mitgefühl zeigen, ohne die Rolle zu wechseln – und behutsam zur Ausgangsfrage des Gesprächs zurückführen',
+      'Mitgefühl zeigen, ohne die Rolle zu wechseln – und behutsam zur Ausgangsfrage des Gesprächs zurückführen',
       'Eine Psychologin empfehlen und das Gespräch für beendet erklären',
       'Die eigenen Gefühle ebenfalls offenbaren, um Nähe herzustellen',
     ],
     korrektIndex: 1,
-    erklaerung: 'Mitgefühl zeigen ist richtig und wichtig – aber die Lehrkraft ist keine Therapeutin. Die Kunst liegt darin, Verständnis zu signalisieren, ohne die Gesprächsführung abzugeben. Eine Erziehungsberatungsstelle könnte als Hinweis gegeben werden – aber das Kind als Thema sollte im Zentrum bleiben.',
+    erklaerung: 'Mitgefühl zeigen ist richtig und wichtig – aber die Lehrkraft ist keine Therapeutin. Die Kunst liegt darin, Verständnis zu signalisieren, ohne die Gesprächsführung abzugeben. Eine Erziehungsberatungsstelle könnte als Hinweis gegeben werden – aber das Kind als Thema sollte im Zentrum bleiben.',
   },
 ]
 

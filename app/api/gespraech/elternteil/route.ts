@@ -3,6 +3,7 @@ import { getAnthropicClient } from '@/lib/anthropic'
 import { requireAiUser, tooLong, tooLongResponse, turnsTooLong } from '@/lib/api-guard'
 import { getElternteilPrompt, getSchwierigkeitsModifier } from '@/prompts/elterntypen/index'
 import { buildElternteilSystemPrompt } from '@/prompts/evaluation'
+import { normalizeStreamChunk } from '@/lib/germanTypography.mjs'
 import type { ElternteilRequest, Elterntyp, Schwierigkeit } from '@/types'
 
 function validateRequest(body: unknown): body is ElternteilRequest {
@@ -45,9 +46,11 @@ export async function POST(req: NextRequest) {
   let messagesForAPI: { role: 'user' | 'assistant'; content: string }[]
 
   if (isOpening) {
+    // Typografie beginnt im Prompt: das Modell spiegelt die Schreibweise, deshalb
+    // hier durchgehend korrekte deutsche Anführungszeichen („…“).
     const openerInstruction = opener
-      ? `(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag" oder „Hallo" – und eröffne dann das Gespräch mit folgendem Satz oder einer natürlichen Variation davon: "${opener}" – nicht mehr als 2-3 Sätze insgesamt.)`
-      : '(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag" oder „Hallo" – und sage dann, wer du bist und worum es dir geht. Nicht mehr als 2-3 Sätze insgesamt.)'
+      ? `(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag“ oder „Hallo“ – und eröffne dann das Gespräch mit folgendem Satz oder einer natürlichen Variation davon: „${opener}“ – nicht mehr als 2-3 Sätze insgesamt.)`
+      : '(Das Gespräch beginnt jetzt. Du betrittst den Raum. Beginne mit einer kurzen Begrüßung – z. B. „Guten Tag“ oder „Hallo“ – und sage dann, wer du bist und worum es dir geht. Nicht mehr als 2-3 Sätze insgesamt.)'
 
     messagesForAPI = [{ role: 'user', content: openerInstruction }]
   } else {
@@ -82,7 +85,10 @@ export async function POST(req: NextRequest) {
               chunk.type === 'content_block_delta' &&
               chunk.delta.type === 'text_delta'
             ) {
-              controller.enqueue(encoder.encode(chunk.delta.text))
+              // Pro Chunk nur die kontextfreie em->en-Ersetzung; die
+              // Vollnormalisierung läuft clientseitig über den fertigen Text
+              // (Chunks zerreißen den Anführungszeichen-Kontext).
+              controller.enqueue(encoder.encode(normalizeStreamChunk(chunk.delta.text)))
             }
           }
         } catch (streamErr) {

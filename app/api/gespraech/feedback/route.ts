@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAnthropicClient } from '@/lib/anthropic'
 import { requireAiUser, tooLong, tooLongResponse } from '@/lib/api-guard'
 import { buildFeedbackPrompt } from '@/prompts/evaluation'
-import { normalizeGermanQuotes } from '@/lib/text-sanitizer'
+import { sanitizeJsonDeep, repairGermanQuotedJson } from '@/lib/germanTypography.mjs'
 import type { FeedbackRequest, FeedbackResponse, Elterntyp, Schwierigkeit } from '@/types'
 
 function validateRequest(body: unknown): body is FeedbackRequest & { elterntyp: Elterntyp; schwierigkeit: Schwierigkeit } {
@@ -57,14 +57,21 @@ export async function POST(req: NextRequest) {
   let feedback: FeedbackResponse
   try {
     const stripped = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    // Try direct parse, then fallback to extracting the first JSON object
+    // Try direct parse, then fallback to extracting the first JSON object,
+    // zuletzt die Reparatur für den Fall, dass das Modell deutsche
+    // Anführungszeichen als String-Begrenzer gesetzt hat (bekannte Schwäche
+    // dieses Prompts, siehe CLAUDE.md).
     let parsed: unknown
     try {
       parsed = JSON.parse(stripped)
     } catch {
       const match = stripped.match(/\{[\s\S]*\}/)
       if (!match) throw new Error('no JSON found')
-      parsed = JSON.parse(match[0])
+      try {
+        parsed = JSON.parse(match[0])
+      } catch {
+        parsed = JSON.parse(repairGermanQuotedJson(match[0]))
+      }
     }
     feedback = parsed as FeedbackResponse
   } catch {
@@ -75,12 +82,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // Anführungszeichen normalisieren (KI gibt teils englische Curly- oder ASCII-Quotes aus)
-  feedback = {
-    gut:       normalizeGermanQuotes(feedback.gut),
-    besser:    feedback.besser    ? normalizeGermanQuotes(feedback.besser)    : null,
-    alternativ:feedback.alternativ? normalizeGermanQuotes(feedback.alternativ): null,
-  }
+  // Typografie NACH dem Parsen auf die String-Werte anwenden – nie auf den rohen
+  // JSON-Text, sonst würden die geraden Begrenzer zu „…“ und das JSON bricht.
+  feedback = sanitizeJsonDeep(feedback)
 
   return NextResponse.json(feedback)
 }
