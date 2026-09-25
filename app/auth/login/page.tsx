@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import PasswortFeld from '@/components/ui/PasswortFeld'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -62,11 +63,11 @@ export default function LoginPage() {
 
         <div style={{ marginBottom: '1.5rem' }}>
           <label style={labelStyle}>Passwort</label>
-          <input
-            type="password"
+          <PasswortFeld
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Dein Passwort"
+            autoComplete="current-password"
             style={inputStyle}
             onFocus={e => { e.target.style.borderColor = 'var(--c-teal)' }}
             onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.18)' }}
