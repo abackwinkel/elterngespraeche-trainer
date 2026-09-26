@@ -1,14 +1,18 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Impressum – NLP trainieren mit KI',
+  title: 'Impressum – Elterngespräche trainieren',
   robots: 'noindex,follow',
 }
 
+// Stand September 2026: Angaben nach § 5 DDG (löste im Mai 2024 das TMG ab). Der Hinweis
+// auf die EU-Plattform zur Online-Streitbeilegung entfällt – sie ist seit 20.07.2025
+// abgeschaltet (Verordnung (EU) 2024/3228).
+
 export default function ImpressumPage() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--c-offwhite)', fontFamily: 'var(--font-montserrat, "Montserrat", sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--c-offwhite)', fontFamily: 'var(--font-inter, "Inter", sans-serif)' }}>
 
       {/* Top-Bar */}
       <header style={{
@@ -23,14 +27,15 @@ export default function ImpressumPage() {
         top: 0,
         zIndex: 10,
       }}>
-        <span style={{
+        <Link href="/" style={{
           fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
           fontSize: '1.1rem',
           fontWeight: 500,
           color: 'var(--c-dark)',
+          textDecoration: 'none',
         }}>
-          NLP trainieren <span style={{ color: 'var(--c-teal)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' }}>mit KI</span>
-        </span>
+          Elterngespräche trainieren
+        </Link>
         <Link href="/" style={{
           fontSize: '0.65rem',
           fontWeight: 600,
@@ -38,9 +43,6 @@ export default function ImpressumPage() {
           textTransform: 'uppercase',
           color: 'var(--c-dark)',
           textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.3rem',
         }}>
           ← Zur App
         </Link>
@@ -61,7 +63,7 @@ export default function ImpressumPage() {
           color: 'var(--c-teal)',
           marginBottom: '0.8rem',
         }}>
-          NLP trainieren mit KI · Rechtliches
+          Elterngespräche trainieren · Rechtliches
         </span>
         <h1 style={{
           fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
@@ -93,9 +95,9 @@ export default function ImpressumPage() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: 'var(--page-py) var(--page-px) calc(var(--page-py) * 1.25)' }}>
 
         <section style={sectionStyle}>
-          <h2 style={h2Style}>Impressum <em style={{ color: 'var(--c-teal)', fontStyle: 'italic' }}>(§&nbsp;5 TMG)</em></h2>
+          <h2 style={h2Style}>Impressum <em style={{ color: 'var(--c-teal)', fontStyle: 'italic' }}>(§&nbsp;5 DDG)</em></h2>
 
-          <h3 style={h3Style}>Angaben zur Person</h3>
+          <h3 style={h3Style}>Anbieterin</h3>
           <address style={addressStyle}>
             Antje Backwinkel<br />
             Am Marienpfad 17<br />
@@ -107,13 +109,13 @@ export default function ImpressumPage() {
           <p style={pStyle}>
             Telefon: 06131-3271674<br />
             E-Mail: <a href="mailto:antje@antje-backwinkel.de" style={linkStyle}>antje@antje-backwinkel.de</a><br />
-            Website: <a href="https://nlp-trainieren-mit-ki.de" target="_blank" rel="noopener noreferrer" style={linkStyle}>nlp-trainieren-mit-ki.de</a>
+            Website: <a href="https://www.elterngespraeche-trainieren.de" target="_blank" rel="noopener noreferrer" style={linkStyle}>elterngespraeche-trainieren.de</a>
           </p>
 
           <h4 style={h4Style}>Kleinunternehmerregelung</h4>
-          <p style={pStyle}>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet und ausgewiesen.</p>
+          <p style={pStyle}>Gemäß §&nbsp;19 UStG wird keine Umsatzsteuer berechnet und ausgewiesen.</p>
 
-          <h4 style={h4Style}>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h4>
+          <h4 style={h4Style}>Verantwortlich für den Inhalt nach §&nbsp;18 Abs.&nbsp;2 MStV</h4>
           <address style={addressStyle}>
             Antje Backwinkel<br />
             Am Marienpfad 17<br />
@@ -122,29 +124,29 @@ export default function ImpressumPage() {
         </section>
 
         <section style={sectionStyle}>
-          <h3 style={h3Style}>Streitschlichtung</h3>
-          <p style={pStyle}>
-            Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{' '}
-            <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
-              https://ec.europa.eu/consumers/odr/
-            </a>
-          </p>
+          <h3 style={h3Style}>Verbraucherstreitbeilegung</h3>
           <p style={pStyle}>Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
         </section>
 
         <section style={sectionStyle}>
-          <h3 style={h3Style}>Haftung für Inhalte</h3>
-          <p style={pStyle}>Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.</p>
+          <h3 style={h3Style}>Hinweis zu den Inhalten</h3>
+          <p style={pStyle}>
+            Die Inhalte dieser Plattform&nbsp;– auch die Gesprächsbeiträge, Rückmeldungen und Reflexionen, die eine KI erzeugt&nbsp;– dienen der Übung und Vorbereitung. Sie ersetzen keine rechtliche, schulrechtliche oder psychologische Beratung. Für eigene Inhalte bin ich nach den allgemeinen Gesetzen verantwortlich.
+          </p>
         </section>
 
         <section style={sectionStyle}>
-          <h3 style={h3Style}>Haftung für Links</h3>
-          <p style={pStyle}>Mein Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.</p>
+          <h3 style={h3Style}>Links auf andere Websites</h3>
+          <p style={pStyle}>
+            Diese Plattform enthält Links zu Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Für diese Inhalte ist der jeweilige Anbieter verantwortlich. Werden mir Rechtsverletzungen bekannt, entferne ich den betreffenden Link umgehend.
+          </p>
         </section>
 
         <section style={{ ...sectionStyle, borderBottom: 'none', marginBottom: 0, paddingBottom: 0 }}>
           <h3 style={h3Style}>Urheberrecht</h3>
-          <p style={pStyle}>Die durch die Seitenbetreiberin erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung der jeweiligen Autorin. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+          <p style={pStyle}>
+            Die Inhalte und Werke auf dieser Plattform unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung und jede Verwertung außerhalb der Grenzen des Urheberrechts bedürfen meiner schriftlichen Zustimmung.
+          </p>
         </section>
 
       </div>
@@ -184,7 +186,7 @@ const h3Style: React.CSSProperties = {
   fontSize: '1.4rem',
   fontWeight: 400,
   color: 'var(--c-dark)',
-  margin: '2rem 0 0.8rem',
+  margin: '0 0 0.8rem',
   lineHeight: 1.25,
 }
 

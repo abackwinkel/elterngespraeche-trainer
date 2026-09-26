@@ -51,14 +51,22 @@ const SCHWIERIGKEIT_BESCHREIBUNG: Record<Schwierigkeit, string> = {
   'gewitterfront': 'Hochkonflikthaftes Gespräch, maximale Herausforderung',
 }
 
+// Stand 26.09.2026. Beide Absätze müssen dasselbe sagen wie der Code und wie
+// app/datenschutz/page.tsx (Abschnitte 4 und 5): Die Eingaben gehen an Anthropic,
+// das beendete Gespräch wird im Konto gespeichert (/api/gespraech/session).
 const DATENSCHUTZ_ABSATZ_1 =
-  'Für die Simulation können Sie einen Vornamen des Kindes eingeben – das macht das Training realistischer. ' +
-  'Ihre Eingaben werden nicht auf unseren Servern gespeichert und nur für diese Sitzung verwendet. ' +
-  'Sie werden jedoch an die KI-Schnittstelle übermittelt, die das Gespräch generiert.'
+  'Was du für die Simulation eingibst – die Angaben zum Fall, deine Beschreibung der Situation und deine Gesprächsbeiträge –, ' +
+  'geht an die KI von Anthropic (USA), die daraus das Elterngespräch erzeugt. ' +
+  'Wenn du das Gespräch beendest, wird es mit der Reflexion in deinem Konto gespeichert, damit du es später nachlesen kannst. ' +
+  'Löschen kannst du es jederzeit.'
 
 const DATENSCHUTZ_ABSATZ_2 =
-  'Wenn Sie keinen echten Namen eingeben möchten, kürzen wir ihn automatisch auf den Anfangsbuchstaben. ' +
-  'So bleibt das Gespräch trotzdem persönlich – ohne dass ein Klarname übertragen wird.'
+  'Gib deshalb bitte keine echten Namen ein und nichts, woran man ein Kind, eine Familie oder eine Schule erkennen kann. ' +
+  'Den Vornamen des Kindes kürzt die App auf den Anfangsbuchstaben – außer du bestätigst am Namensfeld, dass er erfunden ist.'
+
+// Merkt sich nur, dass der Hinweis gelesen wurde – keine Einwilligung. Die Version im
+// Namen sorgt dafür, dass ein geänderter Hinweis wieder erscheint.
+const HINWEIS_SCHLUESSEL = 'datenschutz-hinweis-v2'
 
 // ─── Hilfsfunktion ────────────────────────────────────────────────────────────
 
@@ -79,34 +87,32 @@ interface Props {
 
 export default function KonfigurationsForm({ schultyp, onStart }: Props) {
 
-  // S5a – Datenschutz-Modal
+  // S5a – Datenschutz-Hinweis (nur Information, keine Einwilligung)
   const [showDatenschutz, setShowDatenschutz] = useState(false)
-  const [datenschutzAkzeptiert, setDatenschutzAkzeptiert] = useState(false)
   const [nichtMehrZeigen, setNichtMehrZeigen] = useState(false)
 
   useEffect(() => {
-    // localStorage: dauerhaft unterdrückt (z. B. nach „Nicht mehr anzeigen")
-    const permanent = localStorage.getItem('datenschutz-permanent')
-    if (permanent) {
-      setDatenschutzAkzeptiert(permanent === 'consent')
-      setShowDatenschutz(false)
-      return
-    }
-    // sessionStorage: für diese Browser-Session bereits bestätigt
-    if (sessionStorage.getItem('datenschutz-bestaetigt')) {
-      setDatenschutzAkzeptiert(true)
-      setShowDatenschutz(false)
-      return
+    try {
+      // Schlüssel der Fassung bis 25.09.2026 entfernen: Sie speicherten eine Zustimmung
+      // „für diese Sitzung“ dauerhaft – Wortlaut und Verhalten passten nicht zusammen.
+      localStorage.removeItem('datenschutz-permanent')
+      sessionStorage.removeItem('datenschutz-bestaetigt')
+      if (localStorage.getItem(HINWEIS_SCHLUESSEL) || sessionStorage.getItem(HINWEIS_SCHLUESSEL)) {
+        setShowDatenschutz(false)
+        return
+      }
+    } catch {
+      // Speicher gesperrt (z. B. privates Fenster): Hinweis zeigen
     }
     setShowDatenschutz(true)
   }, [])
 
-  function handleDatenschutzWeiter() {
-    if (datenschutzAkzeptiert) {
-      sessionStorage.setItem('datenschutz-bestaetigt', '1')
-    }
-    if (nichtMehrZeigen) {
-      localStorage.setItem('datenschutz-permanent', datenschutzAkzeptiert ? 'consent' : 'no-consent')
+  function handleDatenschutzGelesen() {
+    try {
+      sessionStorage.setItem(HINWEIS_SCHLUESSEL, 'gelesen')
+      if (nichtMehrZeigen) localStorage.setItem(HINWEIS_SCHLUESSEL, 'gelesen')
+    } catch {
+      // Speicher gesperrt: Der Hinweis erscheint beim nächsten Mal wieder
     }
     setShowDatenschutz(false)
   }
@@ -115,8 +121,10 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
   const [person1, setPerson1] = useState<ElternPerson | ''>('')
   const [person2, setPerson2] = useState<ElternPerson | '–'>('–')
 
-  // S5b / S5c – Kind
+  // S5b / S5c – Kind. Der volle Vorname geht nur an die KI, wenn für GENAU diesen
+  // Namen bestätigt ist, dass er erfunden ist – jede Änderung am Namen hebt das auf.
   const [kindName, setKindName] = useState('')
+  const [nameErfunden, setNameErfunden] = useState(false)
   const [kindGeschlecht, setKindGeschlecht] = useState<KindGeschlecht>('keine-angabe')
 
   // S6 – Initiative
@@ -152,6 +160,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
     if (fall.gespraechsinitiative) setGespraechsinitiative(fall.gespraechsinitiative)
     setSituationText(fall.situation_text ?? '')
     if (fall.kind_initial) setKindName(fall.kind_initial)
+    setNameErfunden(false)
     if (fall.kind_geschlecht) setKindGeschlecht(fall.kind_geschlecht)
     if (fall.sprachbarriere) setSprachbarriere(fall.sprachbarriere as Sprachbarriere)
   }
@@ -173,7 +182,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
 
   function getEffectiveKindName(): string | undefined {
     if (!kindName.trim()) return undefined
-    return datenschutzAkzeptiert ? kindName.trim() : truncateToInitial(kindName)
+    return nameErfunden ? kindName.trim() : truncateToInitial(kindName)
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -268,20 +277,20 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-3">
               {DATENSCHUTZ_ABSATZ_1}
             </p>
-            <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-6">
+            <p className="text-sm text-[var(--c-dark)] leading-relaxed mb-3">
               {DATENSCHUTZ_ABSATZ_2}
             </p>
-            <label className="flex items-start gap-3 mb-4 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={datenschutzAkzeptiert}
-                onChange={e => setDatenschutzAkzeptiert(e.target.checked)}
-                className="mt-0.5 w-4 h-4 accent-[var(--c-teal)]"
-              />
-              <span className="text-sm text-[var(--c-dark)]">
-                Ich bin mir bewusst, dass ich einen echten Vornamen eingebe, und stimme der Übermittlung für diese Sitzung zu.
-              </span>
-            </label>
+            <p className="text-sm text-[var(--c-gray)] leading-relaxed mb-6">
+              Einzelheiten und die Möglichkeit zum Löschen:{' '}
+              <a
+                href="/datenschutz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--c-teal)] underline"
+              >
+                Datenschutzerklärung
+              </a>
+            </p>
             <label className="flex items-center gap-3 mb-6 cursor-pointer">
               <input
                 type="checkbox"
@@ -290,14 +299,14 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
                 className="w-4 h-4 accent-[var(--c-teal)]"
               />
               <span className="text-sm text-[var(--c-gray)]">
-                Diesen Hinweis nicht mehr anzeigen
+                Diesen Hinweis in diesem Browser nicht mehr anzeigen
               </span>
             </label>
             <button
-              onClick={handleDatenschutzWeiter}
+              onClick={handleDatenschutzGelesen}
               className="w-full py-3 bg-[var(--c-teal)] text-white rounded-xl text-sm font-semibold hover:bg-[var(--c-teal-light)] transition-colors"
             >
-              Weiter
+              Verstanden
             </button>
           </div>
         </div>
@@ -313,7 +322,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
               Gesprächsschmiede
             </h1>
             <p className="mt-2 text-base text-[var(--c-gray)]">
-              Konfiguriere dein Szenario – dann übernimmt die KI die Elternrolle.
+              Konfiguriere dein Szenario&nbsp;– dann übernimmt die KI die Elternrolle.
             </p>
           </div>
           <button
@@ -354,7 +363,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
                   onChange={e => setPerson1(e.target.value as ElternPerson | '')}
                   className="w-full border border-[var(--c-gray-light)] rounded-lg px-3 py-2 text-base text-[var(--c-dark)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--c-teal)] focus:border-transparent"
                 >
-                  <option value="" disabled>Bitte wählen …</option>
+                  <option value="" disabled>Bitte wählen&nbsp;…</option>
                   {PERSONEN_OPTIONEN.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
               </div>
@@ -380,20 +389,35 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             <div>
               <label className="block text-sm font-medium text-[var(--c-dark)] mb-1">
                 Vorname des Kindes{' '}
-                <span className="text-xs text-[var(--c-gray)] font-normal">(optional)</span>
+                <span className="text-xs text-[var(--c-gray)] font-normal">(optional, bitte erfunden)</span>
               </label>
               <input
                 type="text"
                 value={kindName}
-                onChange={e => setKindName(e.target.value)}
-                placeholder={datenschutzAkzeptiert ? 'z. B. Marie' : 'Nur Anfangsbuchstabe wird verwendet'}
+                onChange={e => { setKindName(e.target.value); setNameErfunden(false) }}
+                placeholder={'z. B. Marie'}
                 maxLength={50}
                 className="w-full border border-[var(--c-gray-light)] rounded-lg px-3 py-2 text-base text-[var(--c-dark)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--c-teal)] focus:border-transparent"
               />
-              {kindName.trim() && !datenschutzAkzeptiert && (
-                <p className="text-xs text-[var(--c-gray)] mt-1">
-                  Wird als „{truncateToInitial(kindName)}" verwendet.
-                </p>
+              {kindName.trim() && (
+                <>
+                  <label className="flex items-start gap-2 mt-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={nameErfunden}
+                      onChange={e => setNameErfunden(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 accent-[var(--c-teal)]"
+                    />
+                    <span className="text-xs text-[var(--c-dark)]">
+                      Der Name ist erfunden&nbsp;– vollständig verwenden
+                    </span>
+                  </label>
+                  {!nameErfunden && (
+                    <p className="text-xs text-[var(--c-gray)] mt-1">
+                      Wird als „{truncateToInitial(kindName)}“ verwendet.
+                    </p>
+                  )}
+                </>
               )}
             </div>
             <SelectField
@@ -452,7 +476,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
 
           {elterntyp === 'unbekannt' && (
             <p className="text-xs text-[var(--c-gray)] -mt-3">
-              Bei „Nicht bekannt" leitet die KI das Elternverhalten aus dem Situationsfeld ab. Wenn auch das leer ist, spielt sie einen neutralen Gesprächspartner.
+              Bei „Nicht bekannt“ leitet die KI das Elternverhalten aus dem Situationsfeld ab. Wenn auch das leer ist, spielt sie einen neutralen Gesprächspartner.
             </p>
           )}
 
@@ -475,12 +499,12 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
               onChange={e => setSituationText(e.target.value)}
               maxLength={1000}
               rows={4}
-              placeholder="Beschreiben Sie, was Sie über die Situation und Vorgeschichte wissen – je konkreter Ihre Angaben, desto gezielter kann die Simulation auf Ihren Fall eingehen. Zum Beispiel: Wie ist das Kind bisher aufgefallen? Gab es bereits Kontakte mit den Eltern? Was wissen Sie über die Familiendynamik? Was ist Ihr Ziel für dieses Gespräch?"
+              placeholder={'Beschreib, was du über die Situation und die Vorgeschichte weißt – je konkreter, desto gezielter geht die Simulation auf deinen Fall ein. Zum Beispiel: Wie ist das Kind bisher aufgefallen? Gab es schon Kontakte mit den Eltern? Was weißt du über die Familiendynamik? Was ist dein Ziel für dieses Gespräch?'}
               className="w-full border border-[var(--c-gray-light)] rounded-lg px-3 py-2 text-base text-[var(--c-dark)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--c-teal)] focus:border-transparent resize-none"
             />
             <div className="flex items-center justify-between mt-1">
               <span className="text-xs text-[var(--c-gray)]">
-                Bitte geben Sie hier keine echten Namen ein – beschreiben Sie die Situation ohne Klarnamen.
+                Bitte keine echten Namen und nichts, woran man das Kind, die Familie oder die Schule erkennt&nbsp;– beschreib die Situation verfremdet.
               </span>
               <span className="text-xs text-[var(--c-gray)] ml-2 shrink-0">
                 {situationText.length}/1000
@@ -538,7 +562,7 @@ export default function KonfigurationsForm({ schultyp, onStart }: Props) {
             </button>
             {!person1 && (
               <p className="text-xs text-[var(--c-gray)] mt-2 text-center">
-                Bitte wählen Sie mindestens eine Person aus (Person 1).
+                Bitte wähl mindestens eine Person aus (Person 1).
               </p>
             )}
           </div>

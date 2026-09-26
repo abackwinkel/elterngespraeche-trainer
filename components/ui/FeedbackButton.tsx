@@ -121,11 +121,16 @@ export default function FeedbackButton() {
                 style={textarea}
                 autoFocus
               />
+              {/* Muss zu Abschnitt 7 in app/datenschutz/page.tsx passen */}
+              <p style={{ ...msg, color: '#6b7280', marginTop: '0.4rem' }}>
+                Deine E-Mail-Adresse wird mitgeschickt, damit eine Antwort möglich ist.{' '}
+                <a href="/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--c-teal)' }}>Datenschutz</a>
+              </p>
             </div>
 
             {state === 'error' && (
               <p style={{ ...msg, color: '#c95b50' }}>
-                Fehler – bitte erneut versuchen.
+                Fehler&nbsp;– bitte erneut versuchen.
               </p>
             )}
             {state === 'done' && (
@@ -144,7 +149,7 @@ export default function FeedbackButton() {
                 style={btnPrimary(state === 'sending' || state === 'done' || !message.trim())}
                 type="button"
               >
-                {state === 'sending' ? 'Senden …' : 'Absenden'}
+                {state === 'sending' ? 'Senden …' : 'Absenden'}
               </button>
             </div>
           </div>

@@ -1,15 +1,22 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import DataDeleteButton from './DataDeleteButton'
 
 export const metadata: Metadata = {
-  title: 'Datenschutzerklärung – NLP trainieren mit KI',
+  title: 'Datenschutzerklärung – Elterngespräche trainieren',
   robots: 'noindex,follow',
 }
 
+// Stand September 2026. Jede Aussage hier muss zum Code passen – und umgekehrt:
+// Datenschutz-Hinweis und Namensfeld in components/gespraech/KonfigurationsForm.tsx,
+// Speichern in app/api/gespraech/session/route.ts, Löschen in app/api/daten/loeschen/route.ts,
+// Überlastungsschutz in lib/api-guard.ts, Feedback in components/ui/FeedbackButton.tsx
+// und app/api/feedback-digest/route.ts. Neue Dienste (etwa ThriveCart beim Start des
+// Abos) brauchen VORHER einen eigenen Abschnitt.
+
 export default function DatenschutzPage() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--c-offwhite)', fontFamily: 'var(--font-montserrat, "Montserrat", sans-serif)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--c-offwhite)', fontFamily: 'var(--font-inter, "Inter", sans-serif)' }}>
 
       {/* Top-Bar */}
       <header style={{
@@ -24,14 +31,15 @@ export default function DatenschutzPage() {
         top: 0,
         zIndex: 10,
       }}>
-        <span style={{
+        <Link href="/" style={{
           fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
           fontSize: '1.1rem',
           fontWeight: 500,
           color: 'var(--c-dark)',
+          textDecoration: 'none',
         }}>
-          NLP trainieren <span style={{ color: 'var(--c-teal)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' }}>mit KI</span>
-        </span>
+          Elterngespräche trainieren
+        </Link>
         <Link href="/" style={{
           fontSize: '0.65rem',
           fontWeight: 600,
@@ -59,7 +67,7 @@ export default function DatenschutzPage() {
           color: 'var(--c-teal)',
           marginBottom: '0.8rem',
         }}>
-          NLP trainieren mit KI · Rechtliches
+          Elterngespräche trainieren · Rechtliches
         </span>
         <h1 style={{
           fontFamily: 'var(--font-cormorant, "Cormorant Garamond", serif)',
@@ -95,25 +103,34 @@ export default function DatenschutzPage() {
           <h2 style={h2Style}>Deine Daten im Überblick</h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-            <DataCard icon="📧" title="E-Mail-Adresse & Account">
-              Für Anmeldung und Zugangscode-Zuordnung. Niemals an Dritte weitergegeben.
+            <DataCard icon="📧" title="E-Mail-Adresse & Konto">
+              Für Anmeldung und Zugang. Keine Weitergabe zu Werbezwecken.
             </DataCard>
-            <DataCard icon="🎓" title="Übungs-Sessions">
-              Coaching-Gespräch, Chat-Verlauf und Auswertungsergebnisse. Gespeichert für deinen persönlichen Lernfortschritt. Nur für dich sichtbar.
+            <DataCard icon="🗣️" title="Gesprächsverläufe">
+              Deine Übungsgespräche mit Reflexion&nbsp;– nach dem Gesprächsende automatisch gespeichert, damit du sie nachlesen kannst.
             </DataCard>
-            <DataCard icon="📊" title="Lernfortschritt">
-              Erkannte Muster, Scores und Übungsstatistiken. Nur für dich sichtbar, niemals für KI-Training verwendet.
+            <DataCard icon="📁" title="Gespeicherte Fälle">
+              Nur wenn du „Fall speichern“ wählst. Den Vornamen des Kindes nur als Anfangsbuchstaben.
             </DataCard>
-            <DataCard icon="🔑" title="Zugangscode">
-              Welcher Code für deine Registrierung verwendet wurde. Zur Zugangsverwaltung.
+            <DataCard icon="📊" title="Quiz-Ergebnisse">
+              Welche Fragen du richtig beantwortet hast&nbsp;– für deinen Lernfortschritt.
+            </DataCard>
+            <DataCard icon="💬" title="Feedback">
+              Nur wenn du es abschickst: Nachricht, Bewertung, Seite, Browserangabe und deine E-Mail-Adresse.
             </DataCard>
           </div>
 
           <div style={{ ...infoBoxStyle, background: 'rgba(95,211,200,0.08)', borderColor: 'var(--c-mint)' }}>
             <p style={{ ...pStyle, marginBottom: '1rem', fontSize: '0.84rem' }}>
-              <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Datenlöschung:</strong> Du kannst jederzeit alle deine gespeicherten Übungs-Sessions löschen. Dein Account und deine Login-Daten bleiben dabei erhalten.
+              <strong style={strongStyle}>Datenlöschung:</strong> Du kannst deine Gesprächsverläufe, Quiz-Ergebnisse und gespeicherten Fälle hier jederzeit selbst löschen. Dein Konto und deine Anmeldedaten bleiben dabei erhalten; das Konto lösche ich auf Anfrage per E-Mail.
             </p>
             <DataDeleteButton />
+          </div>
+
+          <div style={infoBoxStyle}>
+            <p style={{ ...pStyle, marginBottom: 0, fontSize: '0.84rem' }}>
+              <strong style={strongStyle}>Bitte keine echten Personen:</strong>{' '}Die Plattform ist für erfundene Fälle gedacht. Gib keine echten Namen von Schülerinnen, Schülern oder Eltern ein und nichts, woran man ein Kind, eine Familie oder eine Schule erkennen kann&nbsp;– weder im Namensfeld noch in der Situationsbeschreibung oder im Gespräch. Den Vornamen des Kindes kürzt die App auf den Anfangsbuchstaben, solange du nicht ausdrücklich bestätigst, dass er erfunden ist. Für echte Fälle aus deiner Schule gelten außerdem die Datenschutzregeln deines Bundeslandes und deiner Schule.
+            </p>
           </div>
         </section>
 
@@ -121,20 +138,20 @@ export default function DatenschutzPage() {
         <section style={sectionStyle}>
           <h2 style={h2Style}>Datenschutz&shy;erklärung</h2>
           <p style={pStyle}>
-            Der Schutz deiner persönlichen Daten ist mir ein wichtiges Anliegen. Diese Erklärung informiert dich darüber, welche Daten beim Besuch und der Nutzung von <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>NLP trainieren mit KI</strong> verarbeitet werden, zu welchem Zweck und auf welcher Rechtsgrundlage.
+            Der Schutz deiner Daten ist mir wichtig. Diese Erklärung informiert dich darüber, welche personenbezogenen Daten bei der Nutzung von <strong style={strongStyle}>Elterngespräche trainieren</strong> verarbeitet werden, zu welchem Zweck, auf welcher Rechtsgrundlage und wie lange.
           </p>
           <p style={pStyle}>
-            Die Verarbeitung personenbezogener Daten erfolgt stets im Einklang mit der Datenschutz-Grundverordnung (DS-GVO) sowie den geltenden nationalen Datenschutzbestimmungen.
+            Grundlage sind die Datenschutz-Grundverordnung (DS-GVO), das Bundesdatenschutzgesetz und das Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG).
           </p>
 
           <div style={infoBoxStyle}>
             <p style={{ ...pStyle, marginBottom: 0, fontSize: '0.84rem' }}>
-              <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Kurzfassung:</strong> Diese App verwendet kein Analytics, kein Tracking und keine Werbe-Cookies. Die einzige gesetzte Session besteht durch die Authentifizierung via Supabase. Coaching-Gespräche werden nach der Auswertung als Lernprotokoll gespeichert und sind nur für dich sichtbar.
+              <strong style={strongStyle}>Kurzfassung:</strong> Kein Tracking, keine Analyse- und keine Werbe-Cookies. Für die Gesprächssimulation gehen deine Eingaben an die KI von Anthropic (USA). Deine Übungsdaten liegen in einer Datenbank in Frankfurt am Main und sind in der App nur für dich sichtbar.
             </p>
           </div>
         </section>
 
-        {/* Verantwortliche */}
+        {/* 1. Verantwortliche */}
         <section style={sectionStyle}>
           <h3 style={h3Style}>1. Verantwortliche Person</h3>
           <p style={pStyle}>Verantwortlich im Sinne der DS-GVO:</p>
@@ -148,138 +165,204 @@ export default function DatenschutzPage() {
           </address>
         </section>
 
-        {/* Zugang & Auth */}
+        {/* 2. Konto */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>2. Zugang und Authentifizierung</h3>
+          <h3 style={h3Style}>2. Konto und Zugang</h3>
           <p style={pStyle}>
-            Die Nutzung dieser Plattform setzt eine Registrierung per Einladungscode voraus. Dabei werden Ihre <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>E-Mail-Adresse</strong> und ein <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Passwort</strong> erhoben. Diese Daten werden ausschließlich zur Authentifizierung und Zugangssteuerung verwendet.
+            Für die Nutzung legst du ein Konto mit deiner <strong style={strongStyle}>E-Mail-Adresse</strong> und einem <strong style={strongStyle}>Passwort</strong> an. Das Passwort wird nur als Hashwert gespeichert, nicht im Klartext. Außerdem werden der Zeitpunkt der Registrierung, der Beginn deines 7-tägigen Probezeitraums und dein Zugangsstatus (Probezeit, Beta-Zugang oder Abo) gespeichert. Löst du einen Beta-Code ein, wird festgehalten, welcher Code wann mit deinem Konto eingelöst wurde; zu jedem Beta-Code kann ich mir notieren, an wen ich ihn vergeben habe.
           </p>
           <p style={pStyle}>
-            Rechtsgrundlage: Art. 6 Abs. 1 lit. b DS-GVO (Vertragserfüllung / vorvertragliche Maßnahmen).
+            Die Daten dienen dazu, dein Konto zu führen und dir den Zugang zu gewähren. Ohne E-Mail-Adresse und Passwort kann kein Konto angelegt werden.
           </p>
           <p style={pStyle}>
-            Nach Ihrer Abmeldung oder auf Anfrage können Ihre Zugangsdaten gelöscht werden. Wenden Sie sich dafür an <a href="mailto:antje@antje-backwinkel.de" style={linkStyle}>antje@antje-backwinkel.de</a>.
+            Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DS-GVO (Vertrag über die Nutzung der Plattform).
           </p>
         </section>
 
-        {/* Cookies */}
+        {/* 3. Cookies und Browser-Speicher */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>3. Cookies und Sitzungsdaten</h3>
+          <h3 style={h3Style}>3. Cookies und Speicher im Browser</h3>
           <p style={pStyle}>
-            Diese App verwendet <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>keine Tracking-Cookies</strong> und kein Analytics. Es wird ausschließlich ein technisch notwendiges Session-Cookie gesetzt, das von Supabase Auth zur Aufrechterhaltung Ihrer Anmeldung benötigt wird.
+            Diese App setzt <strong style={strongStyle}>keine Tracking-, Analyse- oder Werbe-Cookies</strong>. Auf deinem Gerät werden nur zwei Arten von Einträgen gespeichert:
+          </p>
+
+          <h4 style={h4Style}>Anmelde-Cookies</h4>
+          <p style={pStyle}>
+            Supabase setzt Cookies, die deine Anmeldung aufrechterhalten. Ohne sie kannst du die Plattform nicht nutzen.
+          </p>
+
+          <h4 style={h4Style}>Hinweis gelesen</h4>
+          <p style={pStyle}>
+            Bestätigst du den Datenschutz-Hinweis vor einem Gespräch, merkt sich dein Browser das für die laufende Sitzung. Wählst du „Diesen Hinweis in diesem Browser nicht mehr anzeigen“, bleibt der Eintrag gespeichert, bis du die Browserdaten löschst. Er enthält nur die Information, dass der Hinweis gelesen wurde.
+          </p>
+
+          <p style={pStyle}>
+            Beide Einträge sind für den Dienst, den du nutzt, unbedingt erforderlich (§&nbsp;25 Abs.&nbsp;2 Nr.&nbsp;2 TDDDG); eine Einwilligung ist dafür nicht nötig. Rechtsgrundlage für die weitere Verarbeitung: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DS-GVO.
           </p>
           <p style={pStyle}>
-            Dieses Cookie ist für den Betrieb der App erforderlich und kann nicht deaktiviert werden, ohne die Nutzung der Plattform zu verhindern. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DS-GVO (berechtigtes Interesse am sicheren Betrieb).
+            Die Schriften werden zusammen mit der Seite ausgeliefert; beim Aufruf wird keine Verbindung zu Google-Servern aufgebaut.
           </p>
         </section>
 
-        {/* KI-Verarbeitung */}
+        {/* 4. KI */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>4. KI-gestützte Funktionen (Anthropic API)</h3>
+          <h3 style={h3Style}>4. Gesprächssimulation mit KI (Anthropic)</h3>
           <p style={pStyle}>
-            Für die interaktiven Übungsfunktionen dieser Plattform wird die API von <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Anthropic, PBC</strong> (548 Market St., San Francisco, CA 94104, USA) eingesetzt. Dabei werden folgende Funktionen genutzt:
+            Die Gesprächssimulation nutzt die KI-Schnittstelle von <strong style={strongStyle}>Anthropic, PBC</strong> (548 Market St., San Francisco, CA 94104, USA). Übermittelt werden:
           </p>
+          <ul style={ulStyle}>
+            <li>die Angaben zum Fall, z.&nbsp;B. Schulform, Klassenstufe, Anlass, Elternprofil, Familiensituation, Gesprächsinitiative, Sprachbarriere, Schwierigkeitsgrad und Geschlecht des Kindes,</li>
+            <li>deine Beschreibung der Situation, falls du eine eingibst,</li>
+            <li>der Vorname des Kindes&nbsp;– als Anfangsbuchstabe oder, wenn du bestätigst, dass er erfunden ist, vollständig,</li>
+            <li>der Gesprächsverlauf, also deine Beiträge und die Antworten des simulierten Elternteils.</li>
+          </ul>
 
-          <h4 style={h4Style}>Übungs-Coaching (Claude Haiku)</h4>
-          <p style={pStyle}>
-            Deine Eingaben im Coaching-Gespräch werden an die Anthropic API übertragen, um eine simulierte Klientenantwort zu erzeugen. Der laufende Gesprächsverlauf wird im Browser gehalten und erst nach Abschluss der Auswertung dauerhaft als Lernprotokoll gespeichert (siehe Abschnitt 5).
-          </p>
+          <h4 style={h4Style}>Wofür</h4>
+          <ul style={ulStyle}>
+            <li>Antworten des simulierten Elternteils und Sofort-Feedback zu deinen Beiträgen (Claude Haiku),</li>
+            <li>Reflexion zum Abschluss des Gesprächs (Claude Sonnet).</li>
+          </ul>
 
-          <h4 style={h4Style}>Auswertung (Claude Sonnet)</h4>
           <p style={pStyle}>
-            Nach Abschluss eines Coaching-Gesprächs wird der Gesprächsverlauf zur Analyse an die Anthropic API übertragen. Die Auswertung identifiziert erkannte Sprachmuster und gibt strukturiertes Feedback. Gesprächsverlauf und Auswertungsergebnis werden anschließend als Lernprotokoll in der Datenbank gespeichert und sind ausschließlich für dich sichtbar. Du kannst diese Daten jederzeit löschen.
-          </p>
-
-          <h4 style={h4Style}>Übungs-Tools (Claude Haiku)</h4>
-          <p style={pStyle}>
-            Die Feedback-Funktionen in den Bereichen Metaprogramme-Generator, Meta-Modell-Herausforderung und Metaphern-Umdeuten übertragen Ihre eingegebenen Texte zur Verarbeitung an die Anthropic API. Es erfolgt keine dauerhafte Speicherung Ihrer Eingaben.
+            Die Übermittlung in die USA erfolgt auf Grundlage der EU-Standardvertragsklauseln. Nach den <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener noreferrer" style={linkStyle}>Vertragsbedingungen von Anthropic</a> werden Eingaben über die Schnittstelle nicht zum Training der KI-Modelle verwendet. Weitere Informationen: <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener noreferrer" style={linkStyle}>anthropic.com/legal/privacy</a>
           </p>
 
           <div style={infoBoxStyle}>
             <p style={{ ...pStyle, marginBottom: 0, fontSize: '0.84rem' }}>
-              Anthropic verarbeitet Daten auf Grundlage der EU-Standardvertragsklauseln (SCCs). Weitere Informationen: <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" style={linkStyle}>anthropic.com/privacy</a>
+              <strong style={strongStyle}>Hinweis:</strong> Die Antworten des simulierten Elternteils, das Feedback und die Reflexion erzeugt eine KI. Sie können unzutreffend sein und ersetzen keine rechtliche, schulrechtliche oder psychologische Beratung.
             </p>
           </div>
 
           <p style={{ ...pStyle, marginTop: '1rem' }}>
-            Rechtsgrundlage: Art. 6 Abs. 1 lit. b DS-GVO (Vertragserfüllung – die KI-Verarbeitung ist zentraler Bestandteil des Dienstleistungsangebots).
+            Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DS-GVO&nbsp;– die Simulation ist der Kern des Angebots.
           </p>
         </section>
 
-        {/* Supabase */}
+        {/* 5. Supabase */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>5. Authentifizierung und Datenbank (Supabase)</h3>
+          <h3 style={h3Style}>5. Gespeicherte Übungsdaten (Supabase)</h3>
           <p style={pStyle}>
-            Für die Verwaltung von Benutzerkonten, Zugangscodes und Lernprotokollen wird <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Supabase</strong> (Supabase Inc., 970 Toa Payoh North, #07-04, Singapur 318992) eingesetzt. Supabase verarbeitet E-Mail-Adressen, Passwörter (gehasht), die Nutzungsdaten des Einladungscodes sowie die gespeicherten Übungs-Sessions (Gesprächsverlauf, Auswertung, Lernstatistiken). Alle gespeicherten Sessions sind über Row Level Security ausschließlich für den jeweiligen Account sichtbar.
+            Konto und Übungsdaten liegen bei <strong style={strongStyle}>Supabase</strong> (Supabase Inc., 970 Toa Payoh North, #07-04, Singapur 318992) in einem Rechenzentrum von Amazon Web Services in Frankfurt am Main. Gespeichert werden:
+          </p>
+          <ul style={ulStyle}>
+            <li><strong style={strongStyle}>Gesprächsverläufe:</strong> nach dem Ende eines Gesprächs automatisch die Angaben zum Fall (Schulform, Klassenstufe, Anlass, Familiensituation, Elternprofil, Schwierigkeitsgrad), der vollständige Gesprächsverlauf und die Reflexion,</li>
+            <li><strong style={strongStyle}>gespeicherte Fälle:</strong> nur wenn du „Fall speichern“ wählst&nbsp;– die Angaben zum Fall einschließlich deiner Situationsbeschreibung, den Vornamen des Kindes nur als Anfangsbuchstaben,</li>
+            <li><strong style={strongStyle}>Quiz-Ergebnisse:</strong> Modul, Frage, ob die Antwort richtig war, und der Schwierigkeitsgrad.</li>
+          </ul>
+          <p style={pStyle}>
+            In der App sieht nur dein eigenes Konto diese Daten; die Datenbank setzt das mit Zugriffsregeln je Konto durch. Als Betreiberin habe ich technisch Zugriff auf die Datenbank und sehe Übungsdaten nur ein, wenn es für den Betrieb, eine Fehlersuche oder auf deine Anfrage nötig ist.
           </p>
           <p style={pStyle}>
-            Die Datenbankinfrastruktur läuft auf AWS in der Region EU (Frankfurt). Supabase verarbeitet Daten auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" style={linkStyle}>supabase.com/privacy</a>
+            Supabase verarbeitet die Daten als Auftragsverarbeiter auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" style={linkStyle}>supabase.com/privacy</a>
           </p>
           <p style={pStyle}>
-            Rechtsgrundlage: Art. 6 Abs. 1 lit. b DS-GVO (Vertragserfüllung).
+            Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;b DS-GVO.
           </p>
         </section>
 
-        {/* Vercel */}
+        {/* 6. Upstash */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>6. Hosting (Vercel)</h3>
+          <h3 style={h3Style}>6. Schutz vor Überlastung (Upstash)</h3>
           <p style={pStyle}>
-            Diese Plattform wird gehostet bei <strong style={{ fontWeight: 500, color: 'var(--c-dark)' }}>Vercel Inc.</strong> (440 N Barranca Ave #4133, Covina, CA 91723, USA). Im Rahmen des Hostings werden technische Zugriffsdaten (IP-Adresse, Browser-Informationen, Datum und Uhrzeit des Zugriffs) in Server-Logfiles verarbeitet.
+            Damit die KI-Funktionen nicht überlastet oder missbraucht werden, zähle ich die KI-Anfragen je Konto und begrenze sie pro Minute und pro Tag. Dafür wird die Kennnummer deines Kontos&nbsp;– nicht deine E-Mail-Adresse&nbsp;– zusammen mit einem Zähler bei <strong style={strongStyle}>Upstash</strong> (Anbieter mit Sitz in den USA) gespeichert. Die Zähler löschen sich nach spätestens zwei Minuten bzw. 26 Stunden von selbst.
           </p>
           <p style={pStyle}>
-            Vercel verarbeitet Daten auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" style={linkStyle}>vercel.com/legal/privacy-policy</a>
+            Die Übermittlung erfolgt auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://upstash.com/trust/privacy.pdf" target="_blank" rel="noopener noreferrer" style={linkStyle}>upstash.com/trust/privacy.pdf</a>
           </p>
           <p style={pStyle}>
-            Rechtsgrundlage: Art. 6 Abs. 1 lit. f DS-GVO (berechtigtes Interesse am sicheren und stabilen Betrieb).
+            Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DS-GVO (berechtigtes Interesse an einem sicheren und bezahlbaren Betrieb).
           </p>
         </section>
 
-        {/* Speicherdauer */}
+        {/* 7. Feedback */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>7. Speicherdauer</h3>
+          <h3 style={h3Style}>7. Feedback-Funktion (Resend)</h3>
           <p style={pStyle}>
-            Personenbezogene Daten werden nur so lange gespeichert, wie es für den jeweiligen Zweck erforderlich ist oder gesetzliche Aufbewahrungsfristen dies verlangen. Accountdaten (E-Mail, Passwort-Hash) werden nach Löschung des Accounts entfernt. Gespeicherte Übungs-Sessions bleiben erhalten, bis du sie selbst löschst oder deinen Account löscht – oder bis auf Anfrage eine manuelle Löschung durch die Betreiberin erfolgt. Du kannst deine Sessions jederzeit über den Button „Sessions löschen" in diesem Bereich entfernen.
+            Angemeldet kannst du mir über den Feedback-Knopf Rückmeldungen schicken. Gespeichert werden deine Nachricht, eine freiwillige Sternebewertung, die Seite, auf der du warst, die technische Kennung deines Browsers (User-Agent) sowie deine E-Mail-Adresse und die Kennnummer deines Kontos, damit ich dir antworten kann.
+          </p>
+          <p style={pStyle}>
+            Einmal täglich bekomme ich neue Rückmeldungen (Nachricht, Seite, Bewertung und E-Mail-Adresse) per E-Mail zugeschickt. Den Versand übernimmt <strong style={strongStyle}>Resend</strong> (Anbieter mit Sitz in den USA) auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" style={linkStyle}>resend.com/legal/privacy-policy</a>
+          </p>
+          <p style={pStyle}>
+            Rückmeldungen bleiben gespeichert, bis ich sie lösche; auf deine Anfrage lösche ich sie sofort. Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DS-GVO (berechtigtes Interesse, die Plattform zu verbessern und auf Rückmeldungen zu antworten).
           </p>
         </section>
 
-        {/* Rechte */}
+        {/* 8. Vercel */}
         <section style={sectionStyle}>
-          <h3 style={h3Style}>8. Ihre Rechte</h3>
-          <p style={pStyle}>Sie haben gegenüber mir folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:</p>
+          <h3 style={h3Style}>8. Hosting (Vercel)</h3>
+          <p style={pStyle}>
+            Die Plattform wird bei <strong style={strongStyle}>Vercel Inc.</strong> (440 N Barranca Ave #4133, Covina, CA 91723, USA) betrieben. Dabei verarbeitet Vercel technische Zugriffsdaten wie IP-Adresse, Browserangaben sowie Datum und Uhrzeit des Zugriffs in Server-Logdateien, die für begrenzte Zeit gespeichert werden.
+          </p>
+          <p style={pStyle}>
+            Vercel verarbeitet die Daten als Auftragsverarbeiter auf Grundlage der EU-Standardvertragsklauseln. Weitere Informationen: <a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener noreferrer" style={linkStyle}>vercel.com/legal/privacy-notice</a>
+          </p>
+          <p style={pStyle}>
+            Rechtsgrundlage: Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DS-GVO (berechtigtes Interesse am sicheren und stabilen Betrieb).
+          </p>
+        </section>
 
-          <h4 style={h4Style}>Auskunft (Art. 15 DS-GVO)</h4>
-          <p style={pStyle}>Sie können Auskunft über die zu Ihrer Person gespeicherten Daten verlangen.</p>
+        {/* 9. Speicherdauer */}
+        <section style={sectionStyle}>
+          <h3 style={h3Style}>9. Speicherdauer</h3>
+          <ul style={ulStyle}>
+            <li><strong style={strongStyle}>Konto:</strong> bis du es löschen lässt; eine Anfrage per E-Mail genügt. Mit dem Konto werden auch Gesprächsverläufe, gespeicherte Fälle und Quiz-Ergebnisse gelöscht.</li>
+            <li><strong style={strongStyle}>Gesprächsverläufe, gespeicherte Fälle, Quiz-Ergebnisse:</strong> bis du sie löschst&nbsp;– alles auf einmal mit dem Knopf oben auf dieser Seite, einzelne Fälle unter „Meine Fälle“.</li>
+            <li><strong style={strongStyle}>Rückmeldungen:</strong> bis ich sie lösche, auf deine Anfrage sofort.</li>
+            <li><strong style={strongStyle}>Zähler des Überlastungsschutzes:</strong> höchstens 26 Stunden.</li>
+            <li><strong style={strongStyle}>Einträge im Browser:</strong> bis zum Ende der Sitzung bzw. bis du die Browserdaten löschst.</li>
+          </ul>
+        </section>
 
-          <h4 style={h4Style}>Berichtigung (Art. 16 DS-GVO)</h4>
-          <p style={pStyle}>Sie haben das Recht, unrichtige Daten berichtigen zu lassen.</p>
+        {/* 10. Pflicht und Automatisierung */}
+        <section style={sectionStyle}>
+          <h3 style={h3Style}>10. Pflichtangaben und automatisierte Entscheidungen</h3>
+          <p style={pStyle}>
+            Für ein Konto brauchst du eine E-Mail-Adresse und ein Passwort. Alle anderen Angaben sind freiwillig; ohne Angaben zum Fall kann die Simulation aber kein Gespräch erzeugen.
+          </p>
+          <p style={pStyle}>
+            Eine automatisierte Entscheidung im Sinne von Art.&nbsp;22 DS-GVO findet nicht statt. Feedback und Reflexion der KI sind Lernhilfen ohne rechtliche Wirkung.
+          </p>
+        </section>
 
-          <h4 style={h4Style}>Löschung (Art. 17 DS-GVO)</h4>
-          <p style={pStyle}>Sie können die Löschung Ihrer Daten verlangen, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+        {/* 11. Rechte */}
+        <section style={sectionStyle}>
+          <h3 style={h3Style}>11. Deine Rechte</h3>
+          <p style={pStyle}>Du hast mir gegenüber folgende Rechte hinsichtlich deiner personenbezogenen Daten:</p>
 
-          <h4 style={h4Style}>Einschränkung der Verarbeitung (Art. 18 DS-GVO)</h4>
-          <p style={pStyle}>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer Daten zu verlangen.</p>
+          <h4 style={h4Style}>Auskunft (Art.&nbsp;15 DS-GVO)</h4>
+          <p style={pStyle}>Du kannst Auskunft über die zu deiner Person gespeicherten Daten verlangen.</p>
 
-          <h4 style={h4Style}>Datenübertragbarkeit (Art. 20 DS-GVO)</h4>
-          <p style={pStyle}>Sie haben das Recht, Ihre Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p>
+          <h4 style={h4Style}>Berichtigung (Art.&nbsp;16 DS-GVO)</h4>
+          <p style={pStyle}>Du hast das Recht, unrichtige Daten berichtigen zu lassen.</p>
 
-          <h4 style={h4Style}>Widerspruch (Art. 21 DS-GVO)</h4>
-          <p style={pStyle}>Sie können der Verarbeitung Ihrer Daten auf Grundlage von Art. 6 Abs. 1 lit. f DS-GVO jederzeit widersprechen.</p>
+          <h4 style={h4Style}>Löschung (Art.&nbsp;17 DS-GVO)</h4>
+          <p style={pStyle}>Du kannst die Löschung deiner Daten verlangen, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+
+          <h4 style={h4Style}>Einschränkung der Verarbeitung (Art.&nbsp;18 DS-GVO)</h4>
+          <p style={pStyle}>Du hast das Recht, die Einschränkung der Verarbeitung deiner Daten zu verlangen.</p>
+
+          <h4 style={h4Style}>Datenübertragbarkeit (Art.&nbsp;20 DS-GVO)</h4>
+          <p style={pStyle}>Du hast das Recht, die Daten, die du bereitgestellt hast, in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p>
+
+          <h4 style={h4Style}>Widerspruch (Art.&nbsp;21 DS-GVO)</h4>
+          <p style={pStyle}>Du kannst der Verarbeitung deiner Daten auf Grundlage von Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DS-GVO jederzeit widersprechen.</p>
 
           <h4 style={h4Style}>Beschwerderecht</h4>
           <p style={pStyle}>
-            Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig für Rheinland-Pfalz ist der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz.
+            Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel bei der für mich zuständigen: dem Landesbeauftragten für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz (<a href="https://www.datenschutz.rlp.de/" target="_blank" rel="noopener noreferrer" style={linkStyle}>datenschutz.rlp.de</a>).
           </p>
 
           <p style={pStyle}>
-            Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: <a href="mailto:antje@antje-backwinkel.de" style={linkStyle}>antje@antje-backwinkel.de</a>
+            Zur Ausübung deiner Rechte genügt eine E-Mail an <a href="mailto:antje@antje-backwinkel.de" style={linkStyle}>antje@antje-backwinkel.de</a>.
           </p>
         </section>
 
-        {/* Stand */}
+        {/* 12. Stand */}
         <section style={{ ...sectionStyle, borderBottom: 'none', marginBottom: 0, paddingBottom: 0 }}>
-          <h3 style={h3Style}>9. Aktualität dieser Erklärung</h3>
+          <h3 style={h3Style}>12. Stand dieser Erklärung</h3>
           <p style={pStyle}>
-            Diese Datenschutzerklärung ist aktuell gültig und hat den Stand Mai 2026. Durch die Weiterentwicklung dieser Plattform oder durch geänderte gesetzliche Vorgaben kann eine Anpassung erforderlich werden. Die jeweils aktuelle Datenschutzerklärung ist stets unter <a href="/datenschutz" style={linkStyle}>/datenschutz</a> abrufbar.
+            Diese Datenschutzerklärung hat den Stand September 2026. Ändern sich die Plattform oder die Rechtslage, passe ich sie an; die aktuelle Fassung steht immer unter <a href="/datenschutz" style={linkStyle}>/datenschutz</a>.
           </p>
         </section>
 
@@ -359,6 +442,17 @@ const pStyle: React.CSSProperties = {
   color: '#444',
   lineHeight: 1.95,
   marginBottom: '0.9rem',
+}
+
+const ulStyle: React.CSSProperties = {
+  ...pStyle,
+  paddingLeft: '1.2rem',
+  listStyle: 'disc',
+}
+
+const strongStyle: React.CSSProperties = {
+  fontWeight: 500,
+  color: 'var(--c-dark)',
 }
 
 const addressStyle: React.CSSProperties = {
