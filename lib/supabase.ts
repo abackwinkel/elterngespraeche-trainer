@@ -9,7 +9,7 @@ export function createClient() {
   )
 }
 
-// Middleware client – call from middleware.ts only
+// Middleware client – call from proxy.ts only
 export function createMiddlewareClient(
   request: NextRequest,
   response: NextResponse
